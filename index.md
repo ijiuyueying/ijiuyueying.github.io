@@ -3,13 +3,22 @@ layout: default
 title: 九月影的技术博客
 ---
 
-<div class="hero">
+<div class="hero decorative-surface">
+  <span class="glow-dot glow-one"></span>
+  <span class="glow-dot glow-two"></span>
   <div class="hero-eyebrow">DATA · ENGINEERING · ANALYTICS</div>
   <h1>九月影的技术博客</h1>
   <p>记录数据开发、数据分析、项目实操和面试知识梳理。把零散学习内容沉淀成可检索、可复用的个人知识库。</p>
+
+  <div class="hero-tags">
+    <span>持续更新</span>
+    <span>{{ site.posts | size }} 篇文章</span>
+    <span>个人知识库</span>
+  </div>
+
   <div class="hero-actions">
     <a class="btn-primary" href="{{ '/articles/' | relative_url }}">浏览文章目录</a>
-    <a class="btn-secondary" href="{{ '/bank/' | relative_url }}">查看银行监管报送</a>
+    <a class="btn-secondary" href="{{ '/about/' | relative_url }}">关于博客</a>
   </div>
 </div>
 
@@ -27,35 +36,30 @@ title: 九月影的技术博客
     <p>1104、G01 / G11 / G12、监管指标口径、Mapping、数据治理与报送开发。</p>
     <span class="card-link">进入栏目 →</span>
   </a>
-
   <a class="topic-card" href="{{ '/manufacturing/' | relative_url }}">
     <span class="topic-icon">🏭</span>
     <h3>制造业数仓</h3>
     <p>ERP / SRM / WMS、数仓分层、DataX、Hive、DolphinScheduler 与项目实操。</p>
     <span class="card-link">进入栏目 →</span>
   </a>
-
   <a class="topic-card" href="{{ '/ecommerce/' | relative_url }}">
     <span class="topic-icon">🛒</span>
     <h3>电商数据分析</h3>
     <p>GMV、转化漏斗、RFM、商品库存、营销活动与经营分析。</p>
     <span class="card-link">进入栏目 →</span>
   </a>
-
   <a class="topic-card" href="{{ '/sql-hive/' | relative_url }}">
     <span class="topic-icon">🗄️</span>
     <h3>SQL / Hive</h3>
     <p>SQL、Hive SQL、窗口函数、数据清洗、质量校验与性能优化。</p>
     <span class="card-link">进入栏目 →</span>
   </a>
-
   <a class="topic-card" href="{{ '/python/' | relative_url }}">
     <span class="topic-icon">🐍</span>
     <h3>Python</h3>
     <p>Python、Pandas、数据处理、数据分析与日常自动化。</p>
     <span class="card-link">进入栏目 →</span>
   </a>
-
   <a class="topic-card" href="{{ '/git/' | relative_url }}">
     <span class="topic-icon">🔧</span>
     <h3>Git / GitHub</h3>
@@ -83,7 +87,5 @@ title: 九月影的技术博客
   {% endfor %}
 </div>
 {% else %}
-<div class="post-card">
-  <p>暂无文章。以后通过 Typora 在 `_posts` 目录中新建文章并发布后，会自动显示在这里。</p>
-</div>
+<div class="post-card"><p>暂无文章。以后通过 Typora 在 `_posts` 目录中新建文章并发布后，会自动显示在这里。</p></div>
 {% endif %}
