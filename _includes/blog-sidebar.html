@@ -1,44 +1,38 @@
-<aside class="blog-sidebar">
-  <section class="sidebar-box sidebar-profile">
-    <div class="sidebar-box-title">关于博客</div>
-    <p>记录数据开发、数据分析、银行监管报送、制造业数仓与项目学习过程。</p>
-    <div class="sidebar-stats">
+<aside class="sidebar-new">
+  <section class="sidebar-card-new profile-card-new">
+    <div class="avatar-mark-new">九</div>
+    <h3>九月影</h3>
+    <p>数据开发 / 数据分析<br>项目实操与面试知识整理</p>
+    <div class="profile-stats-new">
       <div><strong>{{ site.posts | size }}</strong><span>文章</span></div>
       <div><strong>{{ site.categories | size }}</strong><span>分类</span></div>
     </div>
   </section>
 
-  <section class="sidebar-box">
-    <div class="sidebar-box-title">文章分类</div>
-    <div class="sidebar-category-list">
-      <a href="{{ '/articles/' | relative_url }}"><span>全部文章</span><em>{{ site.posts | size }}</em></a>
-      {% assign bank_count = site.categories['bank'] | size %}{% if bank_count > 0 %}<a href="{{ '/bank/' | relative_url }}"><span>银行监管报送</span><em>{{ bank_count }}</em></a>{% endif %}
-      {% assign mfg_count = site.categories['manufacturing'] | size %}{% if mfg_count > 0 %}<a href="{{ '/manufacturing/' | relative_url }}"><span>制造业数仓</span><em>{{ mfg_count }}</em></a>{% endif %}
-      {% assign ecommerce_count = site.categories['ecommerce'] | size %}{% if ecommerce_count > 0 %}<a href="{{ '/ecommerce/' | relative_url }}"><span>电商数据分析</span><em>{{ ecommerce_count }}</em></a>{% endif %}
-      {% assign sql_count = site.categories['sql-hive'] | size %}{% if sql_count > 0 %}<a href="{{ '/sql-hive/' | relative_url }}"><span>SQL / Hive</span><em>{{ sql_count }}</em></a>{% endif %}
-      {% assign python_count = site.categories['python'] | size %}{% if python_count > 0 %}<a href="{{ '/python/' | relative_url }}"><span>Python</span><em>{{ python_count }}</em></a>{% endif %}
-      {% assign git_count = site.categories['git'] | size %}{% if git_count > 0 %}<a href="{{ '/git/' | relative_url }}"><span>Git / GitHub</span><em>{{ git_count }}</em></a>{% endif %}
-    </div>
+  <section class="sidebar-card-new">
+    <div class="sidebar-title-new">文章分类</div>
+    <nav class="category-list-new">
+      <a href="{{ '/articles/' | relative_url }}"><span>全部文章</span><b>{{ site.posts | size }}</b></a>
+      {% assign bank_count = site.categories['bank'] | size %}{% if bank_count > 0 %}<a href="{{ '/bank/' | relative_url }}"><span>银行监管报送</span><b>{{ bank_count }}</b></a>{% endif %}
+      {% assign mfg_count = site.categories['manufacturing'] | size %}{% if mfg_count > 0 %}<a href="{{ '/manufacturing/' | relative_url }}"><span>制造业数仓</span><b>{{ mfg_count }}</b></a>{% endif %}
+      {% assign ecommerce_count = site.categories['ecommerce'] | size %}{% if ecommerce_count > 0 %}<a href="{{ '/ecommerce/' | relative_url }}"><span>电商数据分析</span><b>{{ ecommerce_count }}</b></a>{% endif %}
+      {% assign sql_count = site.categories['sql-hive'] | size %}{% if sql_count > 0 %}<a href="{{ '/sql-hive/' | relative_url }}"><span>SQL / Hive</span><b>{{ sql_count }}</b></a>{% endif %}
+      {% assign python_count = site.categories['python'] | size %}{% if python_count > 0 %}<a href="{{ '/python/' | relative_url }}"><span>Python</span><b>{{ python_count }}</b></a>{% endif %}
+      {% assign git_count = site.categories['git'] | size %}{% if git_count > 0 %}<a href="{{ '/git/' | relative_url }}"><span>Git / GitHub</span><b>{{ git_count }}</b></a>{% endif %}
+    </nav>
   </section>
 
-  <section class="sidebar-box">
-    <div class="sidebar-box-title">最新文章</div>
-    <ol class="sidebar-post-list">
+  <section class="sidebar-card-new">
+    <div class="sidebar-title-new">最近更新</div>
+    <ol class="recent-list-new">
       {% for post in site.posts limit:5 %}
-      <li>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-      </li>
+      <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a><time>{{ post.date | date: "%m-%d" }}</time></li>
       {% endfor %}
     </ol>
   </section>
 
-  <section class="sidebar-box">
-    <div class="sidebar-box-title">常用入口</div>
-    <div class="sidebar-links">
-      <a href="{{ '/articles/' | relative_url }}">文章归档</a>
-      <a href="{{ '/about/' | relative_url }}">关于本站</a>
-      <a href="https://github.com/ijiuyueying/ijiuyueying.github.io">GitHub 仓库</a>
-    </div>
+  <section class="sidebar-card-new">
+    <div class="sidebar-title-new">站点说明</div>
+    <p class="sidebar-note-new">内容以可复用的项目经验、问题排查和知识梳理为主。文章由 Typora 编写并通过 GitHub Pages 发布。</p>
   </section>
 </aside>
