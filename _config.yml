@@ -11,13 +11,9 @@ permalink: /articles/:title.html
 show_excerpts: true
 
 header_pages:
+  - index.md
   - articles.md
-  - bank.md
-  - manufacturing.md
-  - ecommerce.md
-  - sql-hive.md
-  - python.md
-  - git.md
+  - about.md
 
 exclude:
   - README.md
