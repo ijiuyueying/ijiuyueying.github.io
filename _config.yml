@@ -11,6 +11,7 @@ permalink: /articles/:title.html
 show_excerpts: true
 
 header_pages:
+  - articles.md
   - bank.md
   - manufacturing.md
   - ecommerce.md
@@ -23,4 +24,7 @@ exclude:
   - 本地使用说明.md
   - 发布博客.bat
   - 同步博客.bat
+  - 新建博客文章.bat
+  - 新建博客文章.ps1
+  - _scripts
   - .gitignore
