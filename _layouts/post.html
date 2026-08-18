@@ -2,69 +2,19 @@
 layout: default
 ---
 
-<style>
-  .post-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px;
-    gap: 36px;
-    align-items: start;
-  }
-  .post-toc {
-    position: sticky;
-    top: 24px;
-    max-height: calc(100vh - 48px);
-    overflow: auto;
-    padding: 16px 18px;
-    border: 1px solid #e8e8e8;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .post-toc-title {
-    margin: 0 0 10px;
-    font-weight: 700;
-  }
-  .post-toc ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-  .post-toc li {
-    margin: 4px 0;
-  }
-  .post-toc li.toc-h3 {
-    padding-left: 14px;
-    font-size: 13px;
-  }
-  .post-toc a {
-    text-decoration: none;
-  }
-  .post-meta {
-    color: #828282;
-    font-size: 14px;
-    margin-bottom: 24px;
-  }
-  @media (max-width: 980px) {
-    .post-layout {
-      display: block;
-    }
-    .post-toc {
-      position: static;
-      margin: 0 0 28px;
-      max-height: none;
-    }
-  }
-</style>
-
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
+    <div class="hero-eyebrow">ARTICLE</div>
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
         {{ page.date | date: "%Y-%m-%d" }}
       </time>
       {% if page.categories and page.categories.size > 0 %}
-        · {{ page.categories | join: ", " }}
+        · {{ page.categories | join: " / " }}
+      {% endif %}
+      {% if page.tags and page.tags.size > 0 %}
+        · {{ page.tags | join: " · " }}
       {% endif %}
     </p>
   </header>
@@ -80,7 +30,9 @@ layout: default
     </aside>
   </div>
 
-  <p style="margin-top:32px"><a href="{{ '/articles/' | relative_url }}">← 返回文章目录</a></p>
+  <div style="margin-top:28px">
+    <a class="btn-secondary" href="{{ '/articles/' | relative_url }}">← 返回文章目录</a>
+  </div>
 </article>
 
 <script>
@@ -96,19 +48,35 @@ layout: default
     return;
   }
 
+  var links = [];
+
   headings.forEach(function (heading, index) {
-    if (!heading.id) {
-      heading.id = 'section-' + (index + 1);
-    }
+    if (!heading.id) heading.id = 'section-' + (index + 1);
+
     var li = document.createElement('li');
-    if (heading.tagName.toLowerCase() === 'h3') {
-      li.className = 'toc-h3';
-    }
+    if (heading.tagName.toLowerCase() === 'h3') li.className = 'toc-h3';
+
     var a = document.createElement('a');
     a.href = '#' + heading.id;
     a.textContent = heading.textContent;
     li.appendChild(a);
     list.appendChild(li);
+    links.push({ heading: heading, link: a });
   });
+
+  function setActive() {
+    var activeIndex = 0;
+    var offset = 120;
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].heading.getBoundingClientRect().top - offset <= 0) activeIndex = i;
+    }
+    links.forEach(function (item, i) {
+      if (i === activeIndex) item.link.classList.add('active');
+      else item.link.classList.remove('active');
+    });
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
 })();
 </script>
