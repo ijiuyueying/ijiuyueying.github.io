@@ -1,5 +1,26 @@
 title: 九月影
 description: 记录数据开发、数据分析与项目学习过程
 lang: zh-CN
+url: "https://ijiuyueying.github.io"
+baseurl: ""
+timezone: Asia/Shanghai
 
-theme: jekyll-theme-primer
+theme: minima
+markdown: kramdown
+permalink: /articles/:title.html
+show_excerpts: true
+
+header_pages:
+  - bank.md
+  - manufacturing.md
+  - ecommerce.md
+  - sql-hive.md
+  - python.md
+  - git.md
+
+exclude:
+  - README.md
+  - 本地使用说明.md
+  - 发布博客.bat
+  - 同步博客.bat
+  - .gitignore
