@@ -1,0 +1,114 @@
+---
+layout: default
+---
+
+<style>
+  .post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 36px;
+    align-items: start;
+  }
+  .post-toc {
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    padding: 16px 18px;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .post-toc-title {
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+  .post-toc ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .post-toc li {
+    margin: 4px 0;
+  }
+  .post-toc li.toc-h3 {
+    padding-left: 14px;
+    font-size: 13px;
+  }
+  .post-toc a {
+    text-decoration: none;
+  }
+  .post-meta {
+    color: #828282;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 980px) {
+    .post-layout {
+      display: block;
+    }
+    .post-toc {
+      position: static;
+      margin: 0 0 28px;
+      max-height: none;
+    }
+  }
+</style>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: "%Y-%m-%d" }}
+      </time>
+      {% if page.categories and page.categories.size > 0 %}
+        · {{ page.categories | join: ", " }}
+      {% endif %}
+    </p>
+  </header>
+
+  <div class="post-layout">
+    <div class="post-content e-content" itemprop="articleBody" id="post-content">
+      {{ content }}
+    </div>
+
+    <aside class="post-toc" id="post-toc" aria-label="文章目录">
+      <div class="post-toc-title">文章目录</div>
+      <ul id="post-toc-list"></ul>
+    </aside>
+  </div>
+
+  <p style="margin-top:32px"><a href="{{ '/articles/' | relative_url }}">← 返回文章目录</a></p>
+</article>
+
+<script>
+(function () {
+  var content = document.getElementById('post-content');
+  var list = document.getElementById('post-toc-list');
+  var toc = document.getElementById('post-toc');
+  if (!content || !list || !toc) return;
+
+  var headings = content.querySelectorAll('h2, h3');
+  if (!headings.length) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  headings.forEach(function (heading, index) {
+    if (!heading.id) {
+      heading.id = 'section-' + (index + 1);
+    }
+    var li = document.createElement('li');
+    if (heading.tagName.toLowerCase() === 'h3') {
+      li.className = 'toc-h3';
+    }
+    var a = document.createElement('a');
+    a.href = '#' + heading.id;
+    a.textContent = heading.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+})();
+</script>
