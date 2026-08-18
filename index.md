@@ -3,102 +3,64 @@ layout: default
 title: 九月影的技术博客
 ---
 
-<section class="hero decorative-surface">
-  <span class="glow-dot glow-one"></span>
-  <span class="glow-dot glow-two"></span>
-  <div class="hero-eyebrow">DATA · ENGINEERING · ANALYTICS</div>
-  <h1>九月影的技术博客</h1>
-  <p>记录数据开发、数据分析、项目实操和面试知识梳理，把零散学习内容沉淀成可检索、可复用的个人知识库。</p>
-
-  <div class="hero-tags">
-    <span>持续更新</span>
-    <span>{{ site.posts | size }} 篇文章</span>
-    <span>数据开发 / 数据分析</span>
-  </div>
-
-  <div class="hero-actions">
-    <a class="btn-primary" href="{{ '/articles/' | relative_url }}">浏览文章目录</a>
-    <a class="btn-secondary" href="{{ '/about/' | relative_url }}">关于博客</a>
+<section class="home-intro">
+  <div class="home-intro-copy">
+    <div class="hero-eyebrow">DATA · ENGINEERING · ANALYTICS</div>
+    <h1>九月影的技术博客</h1>
+    <p>记录数据开发、数据分析、项目实操和面试知识梳理，把学习过程沉淀成长期可复用的个人知识库。</p>
+    <div class="hero-tags">
+      <span>持续更新</span>
+      <span>{{ site.posts | size }} 篇文章</span>
+      <span>数据开发 / 数据分析</span>
+    </div>
   </div>
 </section>
 
-<div class="section-heading">
-  <div>
-    <h2>学习方向</h2>
-    <p>首页只保留主要方向，完整内容统一进入文章目录。</p>
-  </div>
-</div>
+<div class="home-blog-layout">
+  <aside class="home-sidebar">
+    <div class="home-side-block">
+      <div class="home-side-title">学习方向</div>
+      <a class="home-category-link" href="{{ '/bank/' | relative_url }}"><span>🏦 银行监管报送</span><strong>{{ site.categories['bank'] | size }}</strong></a>
+      <a class="home-category-link" href="{{ '/manufacturing/' | relative_url }}"><span>🏭 制造业数仓</span><strong>{{ site.categories['manufacturing'] | size }}</strong></a>
+      <a class="home-category-link" href="{{ '/ecommerce/' | relative_url }}"><span>🛒 电商数据分析</span><strong>{{ site.categories['ecommerce'] | size }}</strong></a>
+      <a class="home-category-link" href="{{ '/sql-hive/' | relative_url }}"><span>🗄️ SQL / Hive</span><strong>{{ site.categories['sql-hive'] | size }}</strong></a>
+      <a class="home-category-link" href="{{ '/python/' | relative_url }}"><span>🐍 Python</span><strong>{{ site.categories['python'] | size }}</strong></a>
+      <a class="home-category-link" href="{{ '/git/' | relative_url }}"><span>🔧 Git / GitHub</span><strong>{{ site.categories['git'] | size }}</strong></a>
+    </div>
 
-<div class="topic-grid">
-  <a class="topic-card" href="{{ '/bank/' | relative_url }}">
-    <span class="topic-icon">🏦</span>
-    <div>
-      <h3>银行监管报送</h3>
-      <p>1104、G01 / G11 / G12、Mapping、数据治理。</p>
+    <div class="home-side-block home-side-note">
+      <div class="home-side-title">关于这个博客</div>
+      <p>以项目、问题和面试场景为主线整理技术知识，不追求堆砌术语。</p>
+      <a href="{{ '/about/' | relative_url }}">了解更多 →</a>
     </div>
-  </a>
-  <a class="topic-card" href="{{ '/manufacturing/' | relative_url }}">
-    <span class="topic-icon">🏭</span>
-    <div>
-      <h3>制造业数仓</h3>
-      <p>ERP / SRM / WMS、Hive、DataX、调度与数仓分层。</p>
-    </div>
-  </a>
-  <a class="topic-card" href="{{ '/ecommerce/' | relative_url }}">
-    <span class="topic-icon">🛒</span>
-    <div>
-      <h3>电商数据分析</h3>
-      <p>GMV、漏斗、RFM、商品库存与经营分析。</p>
-    </div>
-  </a>
-  <a class="topic-card" href="{{ '/sql-hive/' | relative_url }}">
-    <span class="topic-icon">🗄️</span>
-    <div>
-      <h3>SQL / Hive</h3>
-      <p>SQL、Hive SQL、清洗、质量校验与性能优化。</p>
-    </div>
-  </a>
-  <a class="topic-card" href="{{ '/python/' | relative_url }}">
-    <span class="topic-icon">🐍</span>
-    <div>
-      <h3>Python</h3>
-      <p>Python、Pandas、数据处理与分析自动化。</p>
-    </div>
-  </a>
-  <a class="topic-card" href="{{ '/git/' | relative_url }}">
-    <span class="topic-icon">🔧</span>
-    <div>
-      <h3>Git / GitHub</h3>
-      <p>Typora、Git、GitHub Pages 与博客维护。</p>
-    </div>
-  </a>
-</div>
+  </aside>
 
-<div class="section-heading recent-heading">
-  <div>
-    <h2>最近更新</h2>
-    <p>标题、摘要和日期分层展示，优先提高阅读效率。</p>
-  </div>
-  <a class="section-link" href="{{ '/articles/' | relative_url }}">查看全部 →</a>
-</div>
-
-{% if site.posts.size > 0 %}
-<div class="home-post-list">
-  {% for post in site.posts limit:8 %}
-  <article class="home-post-item">
-    <div class="home-post-body">
-      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-      <p>{% if post.excerpt %}{{ post.excerpt | strip_html | strip_newlines | truncate: 92 }}{% else %}点击查看文章内容。{% endif %}</p>
-      {% if post.categories and post.categories.size > 0 %}
-      <div class="home-post-tags">
-        {% for category in post.categories %}<span>{{ category }}</span>{% endfor %}
+  <main class="home-feed">
+    <div class="feed-heading">
+      <div>
+        <span class="feed-kicker">LATEST</span>
+        <h2>最近文章</h2>
       </div>
-      {% endif %}
+      <a href="{{ '/articles/' | relative_url }}">查看全部 →</a>
     </div>
-    <time class="home-post-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
-  </article>
-  {% endfor %}
+
+    {% if site.posts.size > 0 %}
+      {% for post in site.posts limit:10 %}
+      <article class="feed-post">
+        <div class="feed-post-meta">
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+          {% if post.categories and post.categories.size > 0 %}
+            <span>·</span>
+            <span>{{ post.categories | join: " / " }}</span>
+          {% endif %}
+        </div>
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <p>{% if post.excerpt %}{{ post.excerpt | strip_html | strip_newlines | truncate: 150 }}{% else %}点击查看文章内容。{% endif %}</p>
+        <a class="read-more" href="{{ post.url | relative_url }}">阅读全文 <span>→</span></a>
+      </article>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">暂无文章。以后通过 Typora 发布文章后，会自动显示在这里。</div>
+    {% endif %}
+  </main>
 </div>
-{% else %}
-<div class="empty-state">暂无文章。以后通过 Typora 新建并发布文章后，会自动显示在这里。</div>
-{% endif %}
