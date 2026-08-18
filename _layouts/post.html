@@ -3,20 +3,16 @@ layout: default
 ---
 
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <header class="post-header">
+  <header class="post-header article-head">
     <div class="hero-eyebrow">ARTICLE</div>
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
-    <p class="post-meta">
-      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {{ page.date | date: "%Y-%m-%d" }}
-      </time>
+    <div class="article-meta-line">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%Y-%m-%d" }}</time>
       {% if page.categories and page.categories.size > 0 %}
-        · {{ page.categories | join: " / " }}
+        <span>·</span><span>{{ page.categories | join: " / " }}</span>
       {% endif %}
-      {% if page.tags and page.tags.size > 0 %}
-        · {{ page.tags | join: " · " }}
-      {% endif %}
-    </p>
+      <span>·</span><span id="reading-time">预计阅读 -- 分钟</span>
+    </div>
   </header>
 
   <div class="post-layout">
@@ -25,58 +21,87 @@ layout: default
     </div>
 
     <aside class="post-toc" id="post-toc" aria-label="文章目录">
-      <div class="post-toc-title">文章目录</div>
+      <div class="post-toc-title">本文目录</div>
       <ul id="post-toc-list"></ul>
     </aside>
   </div>
 
-  <div style="margin-top:28px">
-    <a class="btn-secondary" href="{{ '/articles/' | relative_url }}">← 返回文章目录</a>
-  </div>
+  <nav class="post-pagination" aria-label="文章翻页">
+    <div class="post-pagination-item prev">
+      {% if page.previous %}
+        <span>上一篇</span>
+        <a href="{{ page.previous.url | relative_url }}">{{ page.previous.title }}</a>
+      {% endif %}
+    </div>
+    <a class="post-back" href="{{ '/articles/' | relative_url }}">返回文章归档</a>
+    <div class="post-pagination-item next">
+      {% if page.next %}
+        <span>下一篇</span>
+        <a href="{{ page.next.url | relative_url }}">{{ page.next.title }}</a>
+      {% endif %}
+    </div>
+  </nav>
 </article>
+
+<button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部">↑</button>
 
 <script>
 (function () {
   var content = document.getElementById('post-content');
   var list = document.getElementById('post-toc-list');
   var toc = document.getElementById('post-toc');
-  if (!content || !list || !toc) return;
+  var reading = document.getElementById('reading-time');
+  var back = document.getElementById('back-to-top');
 
-  var headings = content.querySelectorAll('h2, h3');
-  if (!headings.length) {
-    toc.style.display = 'none';
-    return;
+  if (content && reading) {
+    var text = (content.innerText || '').replace(/\s+/g, '');
+    var minutes = Math.max(1, Math.ceil(text.length / 500));
+    reading.textContent = '预计阅读 ' + minutes + ' 分钟';
   }
 
-  var links = [];
+  if (content && list && toc) {
+    var headings = content.querySelectorAll('h2, h3');
+    if (!headings.length) {
+      toc.style.display = 'none';
+    } else {
+      var links = [];
+      headings.forEach(function (heading, index) {
+        if (!heading.id) heading.id = 'section-' + (index + 1);
+        var li = document.createElement('li');
+        if (heading.tagName.toLowerCase() === 'h3') li.className = 'toc-h3';
+        var a = document.createElement('a');
+        a.href = '#' + heading.id;
+        a.textContent = heading.textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+        links.push({ heading: heading, link: a });
+      });
 
-  headings.forEach(function (heading, index) {
-    if (!heading.id) heading.id = 'section-' + (index + 1);
+      function setActive() {
+        var activeIndex = 0;
+        var offset = 120;
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].heading.getBoundingClientRect().top - offset <= 0) activeIndex = i;
+        }
+        links.forEach(function (item, i) {
+          item.link.classList.toggle('active', i === activeIndex);
+        });
+      }
 
-    var li = document.createElement('li');
-    if (heading.tagName.toLowerCase() === 'h3') li.className = 'toc-h3';
-
-    var a = document.createElement('a');
-    a.href = '#' + heading.id;
-    a.textContent = heading.textContent;
-    li.appendChild(a);
-    list.appendChild(li);
-    links.push({ heading: heading, link: a });
-  });
-
-  function setActive() {
-    var activeIndex = 0;
-    var offset = 120;
-    for (var i = 0; i < links.length; i++) {
-      if (links[i].heading.getBoundingClientRect().top - offset <= 0) activeIndex = i;
+      window.addEventListener('scroll', setActive, { passive: true });
+      setActive();
     }
-    links.forEach(function (item, i) {
-      if (i === activeIndex) item.link.classList.add('active');
-      else item.link.classList.remove('active');
-    });
   }
 
-  window.addEventListener('scroll', setActive, { passive: true });
-  setActive();
+  if (back) {
+    function toggleBack() {
+      back.classList.toggle('show', window.scrollY > 500);
+    }
+    back.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', toggleBack, { passive: true });
+    toggleBack();
+  }
 })();
 </script>
