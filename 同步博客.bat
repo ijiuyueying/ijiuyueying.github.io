@@ -16,7 +16,7 @@ if errorlevel 1 (
 
 git rev-parse --is-inside-work-tree >nul 2>nul
 if errorlevel 1 (
-    echo 当前目录不是 Git 仓库，请先按“本地使用说明.md”完成首次克隆。
+    echo 当前目录不是 Git 仓库，请先按本地使用说明完成首次克隆。
     pause
     exit /b 1
 )
@@ -31,7 +31,12 @@ set "dirty="
 for /f "delims=" %%i in ('git status --porcelain') do set "dirty=1"
 if defined dirty (
     echo 检测到本地还有未提交的修改。
-    echo 为避免同步时覆盖内容，请先运行“发布博客.bat”提交这些修改。
+    echo 为避免覆盖内容，请先运行 发布博客.bat 提交并上传这些修改。
+    echo 发布成功后，再运行 同步博客.bat 即可。
+    echo.
+    echo 当前未提交文件如下：
+    git status --short
+    echo.
     pause
     exit /b 1
 )
@@ -74,8 +79,8 @@ for /L %%i in (1,1,3) do (
 :pulled
 if "!pulled!"=="0" (
     echo 同步仍然失败。
-    echo 若提示 CONFLICT，请不要随意删除文件，把窗口截图发给 ChatGPT。
-    echo 若只是网络错误，网络恢复后再次双击本脚本即可。
+    echo 如果提示 CONFLICT，请不要随意删除文件，把窗口截图发给 ChatGPT。
+    echo 如果只是网络错误，网络恢复后再次双击本脚本即可。
     pause
     exit /b 1
 )
