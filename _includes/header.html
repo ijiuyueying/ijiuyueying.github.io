@@ -1,9 +1,6 @@
 <header class="site-header" role="banner">
   <div class="wrapper nav-shell">
-    <a class="site-title brand-mark" rel="author" href="{{ '/' | relative_url }}">
-      <span class="brand-dot"></span>
-      <span>九月影</span>
-    </a>
+    <a class="site-title" rel="author" href="{{ '/' | relative_url }}">九月影</a>
 
     <input type="checkbox" id="nav-trigger" class="nav-trigger" />
     <label for="nav-trigger" class="menu-icon" aria-label="打开导航菜单">
@@ -13,20 +10,7 @@
     <nav class="site-nav" aria-label="主导航">
       <div class="trigger">
         <a class="page-link" href="{{ '/' | relative_url }}">首页</a>
-        <a class="page-link" href="{{ '/articles/' | relative_url }}">文章</a>
-
-        <details class="nav-dropdown">
-          <summary>分类</summary>
-          <div class="nav-dropdown-menu">
-            <a href="{{ '/bank/' | relative_url }}"><span>🏦</span> 银行监管报送</a>
-            <a href="{{ '/manufacturing/' | relative_url }}"><span>🏭</span> 制造业数仓</a>
-            <a href="{{ '/ecommerce/' | relative_url }}"><span>🛒</span> 电商数据分析</a>
-            <a href="{{ '/sql-hive/' | relative_url }}"><span>🗄️</span> SQL / Hive</a>
-            <a href="{{ '/python/' | relative_url }}"><span>🐍</span> Python</a>
-            <a href="{{ '/git/' | relative_url }}"><span>🔧</span> Git / GitHub</a>
-          </div>
-        </details>
-
+        <a class="page-link" href="{{ '/articles/' | relative_url }}">文章归档</a>
         <a class="page-link" href="{{ '/about/' | relative_url }}">关于</a>
       </div>
     </nav>
