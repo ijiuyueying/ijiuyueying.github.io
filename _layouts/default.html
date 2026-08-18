@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
+  <link rel="stylesheet" href="{{ '/assets/blog-v2.css' | relative_url }}">
+</head>
+<body>
+  {% include header.html %}
+
+  <main class="site-main">
+    <div class="site-container">
+      {{ content }}
+    </div>
+  </main>
+
+  <footer class="site-footer-new">
+    <div class="site-container footer-inner-new">
+      <div>
+        <strong>九月影</strong>
+        <p>数据开发 · 数据分析 · 项目实操</p>
+      </div>
+      <div class="footer-links-new">
+        <a href="{{ '/' | relative_url }}">首页</a>
+        <a href="{{ '/articles/' | relative_url }}">文章归档</a>
+        <a href="{{ '/about/' | relative_url }}">关于</a>
+        <a href="https://github.com/ijiuyueying/ijiuyueying.github.io">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
