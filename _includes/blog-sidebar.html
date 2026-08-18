@@ -1,0 +1,44 @@
+<aside class="blog-sidebar">
+  <section class="sidebar-box sidebar-profile">
+    <div class="sidebar-box-title">关于博客</div>
+    <p>记录数据开发、数据分析、银行监管报送、制造业数仓与项目学习过程。</p>
+    <div class="sidebar-stats">
+      <div><strong>{{ site.posts | size }}</strong><span>文章</span></div>
+      <div><strong>{{ site.categories | size }}</strong><span>分类</span></div>
+    </div>
+  </section>
+
+  <section class="sidebar-box">
+    <div class="sidebar-box-title">文章分类</div>
+    <div class="sidebar-category-list">
+      <a href="{{ '/articles/' | relative_url }}"><span>全部文章</span><em>{{ site.posts | size }}</em></a>
+      {% assign bank_count = site.categories['bank'] | size %}{% if bank_count > 0 %}<a href="{{ '/bank/' | relative_url }}"><span>银行监管报送</span><em>{{ bank_count }}</em></a>{% endif %}
+      {% assign mfg_count = site.categories['manufacturing'] | size %}{% if mfg_count > 0 %}<a href="{{ '/manufacturing/' | relative_url }}"><span>制造业数仓</span><em>{{ mfg_count }}</em></a>{% endif %}
+      {% assign ecommerce_count = site.categories['ecommerce'] | size %}{% if ecommerce_count > 0 %}<a href="{{ '/ecommerce/' | relative_url }}"><span>电商数据分析</span><em>{{ ecommerce_count }}</em></a>{% endif %}
+      {% assign sql_count = site.categories['sql-hive'] | size %}{% if sql_count > 0 %}<a href="{{ '/sql-hive/' | relative_url }}"><span>SQL / Hive</span><em>{{ sql_count }}</em></a>{% endif %}
+      {% assign python_count = site.categories['python'] | size %}{% if python_count > 0 %}<a href="{{ '/python/' | relative_url }}"><span>Python</span><em>{{ python_count }}</em></a>{% endif %}
+      {% assign git_count = site.categories['git'] | size %}{% if git_count > 0 %}<a href="{{ '/git/' | relative_url }}"><span>Git / GitHub</span><em>{{ git_count }}</em></a>{% endif %}
+    </div>
+  </section>
+
+  <section class="sidebar-box">
+    <div class="sidebar-box-title">最新文章</div>
+    <ol class="sidebar-post-list">
+      {% for post in site.posts limit:5 %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="sidebar-box">
+    <div class="sidebar-box-title">常用入口</div>
+    <div class="sidebar-links">
+      <a href="{{ '/articles/' | relative_url }}">文章归档</a>
+      <a href="{{ '/about/' | relative_url }}">关于本站</a>
+      <a href="https://github.com/ijiuyueying/ijiuyueying.github.io">GitHub 仓库</a>
+    </div>
+  </section>
+</aside>
