@@ -10,18 +10,18 @@ try {
 
     Clear-Host
     Write-Host '========================================' -ForegroundColor Cyan
-    Write-Host '九月影博客 - 新建文章' -ForegroundColor Cyan
+    Write-Host 'Jiuyueying Blog - New Post' -ForegroundColor Cyan
     Write-Host '========================================' -ForegroundColor Cyan
     Write-Host ''
-    Write-Host '1. 银行监管报送     bank'
-    Write-Host '2. 制造业数仓       manufacturing'
-    Write-Host '3. 电商数据分析     ecommerce'
-    Write-Host '4. SQL / Hive       sql-hive'
-    Write-Host '5. Python           python'
-    Write-Host '6. Git / GitHub     git'
+    Write-Host '1. Bank / Regulatory Reporting     bank'
+    Write-Host '2. Manufacturing DW                manufacturing'
+    Write-Host '3. E-commerce Analysis             ecommerce'
+    Write-Host '4. SQL / Hive                      sql-hive'
+    Write-Host '5. Python                          python'
+    Write-Host '6. Git / GitHub                    git'
     Write-Host ''
 
-    $choice = Read-Host '请选择分类 1-6'
+    $choice = Read-Host 'Choose category 1-6'
 
     switch ($choice) {
         '1' { $category = 'bank' }
@@ -30,15 +30,15 @@ try {
         '4' { $category = 'sql-hive' }
         '5' { $category = 'python' }
         '6' { $category = 'git' }
-        default { throw '分类无效，请输入 1-6。' }
+        default { throw 'Invalid category. Enter 1-6.' }
     }
 
-    $title = Read-Host '请输入文章标题'
+    $title = Read-Host 'Enter post title'
     if ([string]::IsNullOrWhiteSpace($title)) {
-        throw '文章标题不能为空。'
+        throw 'Post title cannot be empty.'
     }
 
-    $slug = Read-Host '请输入文件名（建议英文，如 g01-overview；直接回车自动生成）'
+    $slug = Read-Host 'Enter file name (English recommended, e.g. g01-overview; Enter for auto name)'
     if ([string]::IsNullOrWhiteSpace($slug)) {
         $slug = 'post-' + (Get-Date -Format 'HHmmss')
     }
@@ -72,19 +72,19 @@ try {
         'typora-copy-images-to: ../assets/images/${filename}',
         '---',
         '',
-        '## 一、背景 / 问题',
+        '## Background / Question',
         '',
         '',
-        '## 二、核心概念',
+        '## Core Concepts',
         '',
         '',
-        '## 三、实现 / 案例',
+        '## Implementation / Example',
         '',
         '',
-        '## 四、面试怎么回答',
+        '## Interview Notes',
         '',
         '',
-        '## 五、总结',
+        '## Summary',
         ''
     )
 
@@ -93,10 +93,10 @@ try {
     [System.IO.File]::WriteAllText($filePath, $content, $utf8)
 
     Write-Host ''
-    Write-Host '文章创建成功。' -ForegroundColor Green
-    Write-Host ('标题：' + $title) -ForegroundColor Green
-    Write-Host ('分类：' + $category) -ForegroundColor Green
-    Write-Host ('文件：' + $filePath) -ForegroundColor Green
+    Write-Host 'Post created successfully.' -ForegroundColor Green
+    Write-Host ('Title: ' + $title) -ForegroundColor Green
+    Write-Host ('Category: ' + $category) -ForegroundColor Green
+    Write-Host ('File: ' + $filePath) -ForegroundColor Green
     Write-Host ''
 
     $typoraPath = $null
@@ -112,11 +112,11 @@ try {
 
     if ($typoraPath) {
         Start-Process -FilePath $typoraPath -ArgumentList $filePath
-        Write-Host '已自动用 Typora 打开。' -ForegroundColor Cyan
+        Write-Host 'Opened with Typora.' -ForegroundColor Cyan
     }
     else {
         Start-Process $filePath
-        Write-Host '已使用系统默认 Markdown 程序打开。' -ForegroundColor Yellow
+        Write-Host 'Typora path not found. Opened with default Markdown app.' -ForegroundColor Yellow
     }
 
     exit 0
@@ -124,10 +124,10 @@ try {
 catch {
     Write-Host ''
     Write-Host '========================================' -ForegroundColor Red
-    Write-Host '新建文章失败' -ForegroundColor Red
+    Write-Host 'Failed to create post' -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
     Write-Host '========================================' -ForegroundColor Red
     Write-Host ''
-    Read-Host '按回车退出'
+    Read-Host 'Press Enter to exit'
     exit 1
 }
