@@ -1,0 +1,42 @@
+nav:
+  - key: all
+    label: 推荐
+  - key: dev
+    label: 开发工具
+    children:
+      - key: code-hosting
+        label: 代码托管
+  - key: ai
+    label: AI
+    children:
+      - key: llm
+        label: 大模型
+
+music:
+  - key: all
+    label: 全部歌曲
+  - key: guofeng
+    label: 国风
+    children:
+      - key: animation
+        label: 动画音乐
+
+gallery:
+  - key: all
+    label: 全部图片
+  - key: game
+    label: 游戏
+    children:
+      - key: genshin
+        label: 原神
+
+videos:
+  - key: all
+    label: 全部视频
+  - key: anime
+    label: 动漫
+    children:
+      - key: fox-spirit
+        label: 狐妖小红娘
+      - key: huaizhu
+        label: 淮竹篇
