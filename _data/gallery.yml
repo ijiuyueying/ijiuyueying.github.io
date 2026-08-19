@@ -4,121 +4,121 @@
 # =========================
 
 - title: 数仓建设总流程图
-  image: /assets/images/gallery/data-warehouse/01-overview.webp
+  image: /assets/images/gallery/data-warehouse/01-overview.jpg
   description: 数仓项目从数据源、同步、分层、建模到报表应用的总体流程。
   group: data-warehouse
   subgroup: architecture
 
 - title: 数仓全链路
-  image: /assets/images/gallery/data-warehouse/02-full-pipeline.webp
+  image: /assets/images/gallery/data-warehouse/02-full-pipeline.jpg
   description: 数据从源系统进入数仓并最终服务分析和报表的完整链路。
   group: data-warehouse
   subgroup: architecture
 
 - title: 数据治理
-  image: /assets/images/gallery/data-warehouse/03-data-governance.webp
+  image: /assets/images/gallery/data-warehouse/03-data-governance.jpg
   description: 口径、标准、主数据、质量和治理流程梳理。
   group: data-warehouse
   subgroup: governance
 
 - title: 数据质量检测
-  image: /assets/images/gallery/data-warehouse/04-data-quality.webp
+  image: /assets/images/gallery/data-warehouse/04-data-quality.jpg
   description: 完整性、唯一性、准确性、一致性等数据质量检查流程。
   group: data-warehouse
   subgroup: governance
 
 - title: 数仓异常问题分类总览
-  image: /assets/images/gallery/data-warehouse/05-anomaly-overview.webp
+  image: /assets/images/gallery/data-warehouse/05-anomaly-overview.jpg
   description: 数仓开发常见异常问题分类与定位入口。
   group: data-warehouse
   subgroup: troubleshooting
 
 - title: 任务失败与数据异常处理流程
-  image: /assets/images/gallery/data-warehouse/06-task-failure.webp
+  image: /assets/images/gallery/data-warehouse/06-task-failure.jpg
   description: 从任务告警到数据校验、定位和恢复的处理流程。
   group: data-warehouse
   subgroup: troubleshooting
 
 - title: 全链路性能优化流程
-  image: /assets/images/gallery/data-warehouse/07-performance-optimization.webp
+  image: /assets/images/gallery/data-warehouse/07-performance-optimization.jpg
   description: 从同步、计算、存储到报表端的全链路性能优化思路。
   group: data-warehouse
   subgroup: performance
 
 - title: SQL / Hive 优化流程
-  image: /assets/images/gallery/data-warehouse/08-sql-hive-optimization.webp
+  image: /assets/images/gallery/data-warehouse/08-sql-hive-optimization.jpg
   description: SQL 和 Hive SQL 的常见性能排查及优化路径。
   group: data-warehouse
   subgroup: performance
 
 - title: Hive 优化
-  image: /assets/images/gallery/data-warehouse/09-hive-optimization.webp
+  image: /assets/images/gallery/data-warehouse/09-hive-optimization.jpg
   description: Hive 查询、分区、Join、文件和资源相关优化整理。
   group: data-warehouse
   subgroup: performance
 
 - title: Oracle 优化
-  image: /assets/images/gallery/data-warehouse/10-oracle-optimization.webp
+  image: /assets/images/gallery/data-warehouse/10-oracle-optimization.jpg
   description: Oracle SQL、索引、执行计划和数据库性能优化思路。
   group: data-warehouse
   subgroup: performance
 
 - title: 数据倾斜
-  image: /assets/images/gallery/data-warehouse/11-data-skew.webp
+  image: /assets/images/gallery/data-warehouse/11-data-skew.jpg
   description: 数据倾斜判断、定位与常见解决方案。
   group: data-warehouse
   subgroup: performance
 
 - title: Hive 小文件治理
-  image: /assets/images/gallery/data-warehouse/12-small-files.webp
+  image: /assets/images/gallery/data-warehouse/12-small-files.jpg
   description: 小文件产生原因、影响和治理方式。
   group: data-warehouse
   subgroup: performance
 
 - title: 采购分析报表
-  image: /assets/images/gallery/data-warehouse/13-purchase-report.webp
+  image: /assets/images/gallery/data-warehouse/13-purchase-report.jpg
   description: 制造业采购执行与分析报表相关链路。
   group: data-warehouse
   subgroup: reporting
 
 - title: DolphinScheduler 任务调度排查
-  image: /assets/images/gallery/data-warehouse/14-dolphinscheduler.webp
+  image: /assets/images/gallery/data-warehouse/14-dolphinscheduler.jpg
   description: DolphinScheduler 任务失败和调度异常排查流程。
   group: data-warehouse
   subgroup: scheduling
 
 - title: YARN / Hadoop 资源排查
-  image: /assets/images/gallery/data-warehouse/15-yarn-hadoop.webp
+  image: /assets/images/gallery/data-warehouse/15-yarn-hadoop.jpg
   description: YARN 和 Hadoop 资源、队列、内存等问题排查流程。
   group: data-warehouse
   subgroup: troubleshooting
 
 - title: DataX 数据同步排查
-  image: /assets/images/gallery/data-warehouse/16-datax-sync.webp
+  image: /assets/images/gallery/data-warehouse/16-datax-sync.jpg
   description: DataX 同步无数据、失败、字段异常等问题排查流程。
   group: data-warehouse
   subgroup: scheduling
 
 - title: FineReport 报表排查
-  image: /assets/images/gallery/data-warehouse/17-finereport.webp
+  image: /assets/images/gallery/data-warehouse/17-finereport.jpg
   description: FineReport 报表数据、查询和展示异常排查流程。
   group: data-warehouse
   subgroup: reporting
 
 - title: 全链路性能排查主流程
-  image: /assets/images/gallery/data-warehouse/18-performance-troubleshooting.webp
+  image: /assets/images/gallery/data-warehouse/18-performance-troubleshooting.jpg
   description: 性能问题从报表端反查到数仓和源端的主排查流程。
   group: data-warehouse
   subgroup: performance
 
 - title: 数据异常分类
-  image: /assets/images/gallery/data-warehouse/19-data-anomaly-category.webp
+  image: /assets/images/gallery/data-warehouse/19-data-anomaly-category.jpg
   description: 数据异常按类型拆分后的定位与处理思路。
   group: data-warehouse
   subgroup: troubleshooting
 
 - title: 数据异常处理图
-  image: /assets/images/gallery/data-warehouse/20-data-anomaly.webp
+  image: /assets/images/gallery/data-warehouse/20-data-anomaly.jpg
   description: 常见数据异常场景的处理与验证流程。
   group: data-warehouse
   subgroup: troubleshooting
