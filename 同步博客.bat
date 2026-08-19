@@ -1,40 +1,38 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 setlocal EnableExtensions EnableDelayedExpansion
 
 echo ========================================
-echo 九月影博客 - 同步 GitHub 最新内容
+echo Jiuyueying Blog - Sync
 echo ========================================
 
 where git >nul 2>nul
 if errorlevel 1 (
-    echo 未检测到 Git，请先安装 Git for Windows。
+    echo Git was not found. Please install Git for Windows first.
     pause
     exit /b 1
 )
 
 git rev-parse --is-inside-work-tree >nul 2>nul
 if errorlevel 1 (
-    echo 当前目录不是 Git 仓库，请先按本地使用说明完成首次克隆。
+    echo Current folder is not a Git repository.
     pause
     exit /b 1
 )
 
 echo.
-echo [0/3] 检测系统代理...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0_scripts\配置Git代理.ps1"
+echo [0/3] Checking Windows proxy...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0_scripts\configure-git-proxy.ps1"
 
 echo.
-echo [1/3] 检查本地状态...
+echo [1/3] Checking local changes...
 set "dirty="
 for /f "delims=" %%i in ('git status --porcelain') do set "dirty=1"
 if defined dirty (
-    echo 检测到本地还有未提交的修改。
-    echo 为避免覆盖内容，请先运行 发布博客.bat 提交并上传这些修改。
-    echo 发布成功后，再运行 同步博客.bat 即可。
+    echo Local uncommitted changes were found.
+    echo Please run the publish script first so these changes are committed and uploaded.
     echo.
-    echo 当前未提交文件如下：
+    echo Uncommitted files:
     git status --short
     echo.
     pause
@@ -42,10 +40,10 @@ if defined dirty (
 )
 
 echo.
-echo [2/3] 测试 GitHub 连接...
+echo [2/3] Testing GitHub connection...
 set "connected=0"
 for /L %%i in (1,1,3) do (
-    echo 第 %%i 次连接测试...
+    echo Connection attempt %%i...
     git ls-remote origin >nul 2>nul
     if not errorlevel 1 (
         set "connected=1"
@@ -56,15 +54,14 @@ for /L %%i in (1,1,3) do (
 
 :connected
 if "!connected!"=="0" (
-    echo GitHub 连接失败。请检查网络、代理或加速器状态后再次双击本脚本。
+    echo GitHub connection failed. Check network or proxy, then retry.
     pause
     exit /b 1
 )
-
-echo GitHub 连接正常。
+echo GitHub connection OK.
 
 echo.
-echo [3/3] 同步 GitHub 最新内容...
+echo [3/3] Pulling latest changes...
 set "pulled=0"
 for /L %%i in (1,1,3) do (
     git pull --rebase origin main
@@ -72,19 +69,19 @@ for /L %%i in (1,1,3) do (
         set "pulled=1"
         goto :pulled
     )
-    echo 第 %%i 次同步失败，2 秒后重试...
+    echo Pull attempt %%i failed. Retrying in 2 seconds...
     timeout /t 2 /nobreak >nul
 )
 
 :pulled
 if "!pulled!"=="0" (
-    echo 同步仍然失败。
-    echo 如果提示 CONFLICT，请不要随意删除文件，把窗口截图发给 ChatGPT。
-    echo 如果只是网络错误，网络恢复后再次双击本脚本即可。
+    echo Sync failed.
+    echo If Git reports CONFLICT, stop and send the conflict message to ChatGPT.
+    echo If this is only a network error, retry after the network recovers.
     pause
     exit /b 1
 )
 
 echo.
-echo 同步完成，可以打开 Typora 继续写笔记。
+echo Sync completed. You can continue editing in Typora.
 pause
