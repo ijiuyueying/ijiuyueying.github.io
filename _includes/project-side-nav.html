@@ -2,6 +2,24 @@
 {% assign current_category = page.categories | first | default: page.category_key | default: '' %}
 {% assign current_subcategory = page.subcategory | default: '' %}
 
+<style>
+.persistent-project-nav{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}
+.persistent-nav-title{padding:16px 16px;border-bottom:1px solid #eceeef;font-size:18px;font-weight:800}
+.persistent-nav-item{border-bottom:1px solid #f0f1f2}
+.persistent-nav-parent-row{display:flex;align-items:stretch}
+.persistent-nav-parent{flex:1;min-height:48px;padding:12px 14px;border:0;background:#fff;color:#444b52;font-size:16px;text-align:left;cursor:pointer;display:flex;align-items:center;transition:.18s}
+.persistent-nav-parent:hover,.persistent-nav-parent.active{color:#d94b40;background:#fff7f6}
+.persistent-nav-link{display:flex;align-items:center;min-height:48px;padding:12px 14px;color:#444b52;font-size:16px;transition:.18s}
+.persistent-nav-link:hover,.persistent-nav-link.active{color:#d94b40;background:#fff7f6}
+.persistent-nav-toggle{width:38px;border:0;background:#fff;color:#8d959c;cursor:pointer;font-size:21px;transition:.18s}
+.persistent-nav-item.open .persistent-nav-toggle{transform:rotate(90deg)}
+.persistent-nav-children{display:none;padding:5px 0 9px;background:#fafafa}
+.persistent-nav-item.open .persistent-nav-children{display:block;animation:persistentOpen .18s ease both}
+.persistent-nav-child{display:block;padding:9px 14px 9px 28px;color:#68717a;font-size:14px;line-height:1.45}
+.persistent-nav-child:hover,.persistent-nav-child.active{color:#2990df;background:#f2f8fc}
+@keyframes persistentOpen{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
 <aside class="persistent-project-nav" aria-label="项目分类">
   <div class="persistent-nav-title">项目分类</div>
   <div class="persistent-nav-list">
@@ -9,18 +27,20 @@
       {% assign item_active = false %}
       {% if item.key == current_category %}{% assign item_active = true %}{% endif %}
       {% if item.key == 'all' and current_category == '' %}{% assign item_active = true %}{% endif %}
-      <div class="persistent-nav-item{% if item_active %} open{% endif %}">
-        <div class="persistent-nav-parent-row">
-          <a class="persistent-nav-parent{% if item_active %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">{{ item.label }}</a>
-          {% if item.children and item.children.size > 0 %}<button class="persistent-nav-toggle" type="button" aria-label="展开或收起 {{ item.label }}">›</button>{% endif %}
-        </div>
+
+      <div class="persistent-nav-item{% if item_active and item.children and item.children.size > 0 %} open{% endif %}" data-persistent-item>
         {% if item.children and item.children.size > 0 %}
+        <div class="persistent-nav-parent-row">
+          <button class="persistent-nav-parent{% if item_active %} active{% endif %}" type="button" data-persistent-parent>{{ item.label }}</button>
+          <button class="persistent-nav-toggle" type="button" data-persistent-toggle aria-label="展开或收起 {{ item.label }}">›</button>
+        </div>
         <div class="persistent-nav-children">
-          <a class="persistent-nav-child{% if item_active and current_subcategory == '' %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">全部</a>
           {% for child in item.children %}
           <a class="persistent-nav-child{% if item_active and current_subcategory == child.key %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}&subcategory={{ child.key }}#xm-post-list">{{ child.label }}</a>
           {% endfor %}
         </div>
+        {% else %}
+        <a class="persistent-nav-link{% if item_active %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">{{ item.label }}</a>
         {% endif %}
       </div>
     {% endfor %}
@@ -29,17 +49,23 @@
 
 <script>
 (function(){
-  var nav=document.currentScript.previousElementSibling;
+  var script=document.currentScript;
+  var nav=script&&script.previousElementSibling;
   if(!nav||!nav.classList.contains('persistent-project-nav'))return;
-  var rows=[].slice.call(nav.querySelectorAll('.persistent-nav-item'));
+
+  var rows=[].slice.call(nav.querySelectorAll('[data-persistent-item]'));
+
+  function toggleRow(row){
+    var willOpen=!row.classList.contains('open');
+    rows.forEach(function(other){if(other!==row)other.classList.remove('open');});
+    row.classList.toggle('open',willOpen);
+  }
+
   rows.forEach(function(row){
-    var toggle=row.querySelector('.persistent-nav-toggle');
-    if(!toggle)return;
-    toggle.addEventListener('click',function(){
-      var willOpen=!row.classList.contains('open');
-      rows.forEach(function(other){if(other!==row)other.classList.remove('open');});
-      row.classList.toggle('open',willOpen);
-    });
+    var parent=row.querySelector('[data-persistent-parent]');
+    var toggle=row.querySelector('[data-persistent-toggle]');
+    if(parent)parent.addEventListener('click',function(){toggleRow(row);});
+    if(toggle)toggle.addEventListener('click',function(){toggleRow(row);});
   });
 })();
 </script>
