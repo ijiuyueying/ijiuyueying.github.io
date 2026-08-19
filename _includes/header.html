@@ -3,7 +3,8 @@
   <div class="xm-shell xm-header-inner">
     <a class="xm-brand" href="{{ '/' | relative_url }}">
       {% if settings.avatar and settings.avatar != '' %}
-      <img class="xm-logo-image" style="width:46px;height:46px;border-radius:50%;object-fit:cover;display:block" src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}">
+      <img class="xm-logo-image" style="width:46px;height:46px;border-radius:50%;object-fit:cover;display:block" src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="xm-logo" style="display:none">九</span>
       {% else %}
       <span class="xm-logo">九</span>
       {% endif %}
@@ -37,13 +38,10 @@
 document.addEventListener('DOMContentLoaded',function(){
   var input=document.getElementById('xm-global-search-input');
   if(!input)return;
-
-  if(input.dataset.searchMode==='article'){
-    return;
-  }
+  if(input.dataset.searchMode==='article')return;
 
   var params=new URLSearchParams(window.location.search);
-  if(window.location.pathname.indexOf('/search/')>-1){input.value=params.get('q')||'';}
+  if(window.location.pathname.indexOf('/search/')>-1)input.value=params.get('q')||'';
   input.addEventListener('keydown',function(e){
     if(e.key!=='Enter')return;
     var keyword=(input.value||'').trim();
