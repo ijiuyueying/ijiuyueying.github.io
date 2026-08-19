@@ -33,10 +33,10 @@ gallery:
 videos:
   - key: all
     label: 全部视频
-  - key: anime
-    label: 动漫
+  - key: fox-spirit
+    label: 狐妖小红娘
     children:
-      - key: fox-spirit
-        label: 狐妖小红娘
       - key: huaizhu
         label: 淮竹篇
+      - key: general
+        label: 综合剪辑
