@@ -1,0 +1,31 @@
+<style>
+.xm-tree-menu{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.08);overflow:hidden}
+.xm-tree-item{border-bottom:1px solid #f1f2f3}.xm-tree-item:last-child{border-bottom:0}
+.xm-tree-parent{width:100%;min-height:48px;padding:11px 14px;border:0;background:#fff;color:#42474d;font-size:15px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:.18s}
+.xm-tree-parent:hover{background:#f7f8f9}.xm-tree-parent.active{background:#f8d6d2;color:#d94b40;font-weight:800;box-shadow:inset 3px 0 0 #e14f43}
+.xm-tree-arrow{font-size:17px;color:#92989f;transition:transform .2s}.xm-tree-item.open>.xm-tree-parent .xm-tree-arrow{transform:rotate(90deg)}
+.xm-tree-children{display:none;padding:4px 0 7px;background:#fafafa}.xm-tree-item.open>.xm-tree-children{display:block;animation:xmTreeOpen .2s ease both}
+.xm-tree-child{width:100%;padding:8px 14px 8px 28px;border:0;background:transparent;color:#71777e;font-size:13px;text-align:left;cursor:pointer;position:relative;transition:.15s}
+.xm-tree-child:before{content:"";position:absolute;left:17px;top:50%;width:5px;height:5px;border-radius:50%;background:#c7ccd1;transform:translateY(-50%)}
+.xm-tree-child:hover{color:#2990df;background:#f4f8fb}.xm-tree-child.active{color:#2990df;font-weight:700;background:#eef7fd}.xm-tree-child.active:before{background:#2990df}
+@keyframes xmTreeOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.xm-tree-menu{display:flex;overflow:auto}.xm-tree-item{min-width:max-content;border-bottom:0}.xm-tree-parent{min-height:42px;padding:8px 12px}.xm-tree-children{position:absolute;z-index:30;box-shadow:0 6px 16px rgba(0,0,0,.12)}}
+</style>
+
+<div class="xm-tree-menu" data-tree-menu>
+  {% for item in include.menu %}
+  <div class="xm-tree-item{% if forloop.first %} open{% endif %}" data-tree-item>
+    <button class="xm-tree-parent{% if forloop.first %} active{% endif %}" type="button" data-group="{{ item.key }}" data-tree-parent>
+      <span>{{ item.label }}</span>
+      {% if item.children and item.children.size > 0 %}<span class="xm-tree-arrow">›</span>{% endif %}
+    </button>
+    {% if item.children and item.children.size > 0 %}
+    <div class="xm-tree-children">
+      {% for child in item.children %}
+      <button class="xm-tree-child" type="button" data-group="{{ item.key }}" data-subgroup="{{ child.key }}" data-tree-child>{{ child.label }}</button>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
