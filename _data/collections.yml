@@ -1,0 +1,11 @@
+- key: gallery
+  title: 图片收藏
+  description: 学习图、截图、灵感
+  url: /gallery/
+  icon: "🖼"
+
+- key: videos
+  title: 视频收藏
+  description: 教程、演示、项目视频
+  url: /videos/
+  icon: "🎬"
