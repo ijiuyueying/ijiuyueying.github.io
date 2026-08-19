@@ -21,16 +21,16 @@ if errorlevel 1 (
 )
 
 echo.
-echo [0/3] Checking Windows proxy...
+echo [0/5] Checking Windows proxy...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0_scripts\configure-git-proxy.ps1"
 
 echo.
-echo [1/3] Checking local changes...
+echo [1/5] Checking local changes...
 set "dirty="
 for /f "delims=" %%i in ('git status --porcelain') do set "dirty=1"
 if defined dirty (
     echo Local uncommitted changes were found.
-    echo Please run the publish script first so these changes are committed and uploaded.
+    echo Publish or save these changes before syncing.
     echo.
     echo Uncommitted files:
     git status --short
@@ -40,11 +40,11 @@ if defined dirty (
 )
 
 echo.
-echo [2/3] Testing GitHub connection...
+echo [2/5] Testing GitHub connection...
 set "connected=0"
 for /L %%i in (1,1,3) do (
     echo Connection attempt %%i...
-    git ls-remote origin >nul 2>nul
+    git ls-remote origin refs/heads/main >nul 2>nul
     if not errorlevel 1 (
         set "connected=1"
         goto :connected
@@ -61,27 +61,49 @@ if "!connected!"=="0" (
 echo GitHub connection OK.
 
 echo.
-echo [3/3] Pulling latest changes...
-set "pulled=0"
-for /L %%i in (1,1,3) do (
-    git pull --rebase origin main
-    if not errorlevel 1 (
-        set "pulled=1"
-        goto :pulled
-    )
-    echo Pull attempt %%i failed. Retrying in 2 seconds...
-    timeout /t 2 /nobreak >nul
-)
-
-:pulled
-if "!pulled!"=="0" (
-    echo Sync failed.
-    echo If Git reports CONFLICT, stop and send the conflict message to ChatGPT.
-    echo If this is only a network error, retry after the network recovers.
+echo [3/5] Refreshing remote main...
+git fetch origin main:refs/remotes/origin/main
+if errorlevel 1 (
+    echo Failed to fetch origin/main.
     pause
     exit /b 1
 )
 
 echo.
-echo Sync completed. You can continue editing in Typora.
+echo [4/5] Switching to main...
+set "branch="
+for /f "delims=" %%b in ('git branch --show-current') do set "branch=%%b"
+if /I not "!branch!"=="main" (
+    echo Current branch is "!branch!". Switching to main automatically...
+    git show-ref --verify --quiet refs/heads/main
+    if errorlevel 1 (
+        git switch -c main --track origin/main
+    ) else (
+        git switch main
+    )
+    if errorlevel 1 (
+        echo Could not switch to main. No files were deleted.
+        echo Send this window to ChatGPT.
+        pause
+        exit /b 1
+    )
+)
+
+echo.
+echo [5/5] Updating local main...
+git rebase origin/main
+if errorlevel 1 (
+    echo Sync found a rebase conflict. Aborting to keep the local repository safe.
+    git rebase --abort >nul 2>nul
+    echo No files were intentionally deleted. Send the conflict message to ChatGPT.
+    pause
+    exit /b 1
+)
+
+echo.
+set "finalBranch="
+for /f "delims=" %%b in ('git branch --show-current') do set "finalBranch=%%b"
+echo Sync completed successfully.
+echo Current branch: !finalBranch!
+echo You can continue editing or publishing.
 pause
