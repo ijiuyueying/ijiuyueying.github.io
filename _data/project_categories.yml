@@ -1,0 +1,20 @@
+- key: all
+  label: 推荐
+
+- key: bank
+  label: 银行监管
+
+- key: manufacturing
+  label: 制造业数仓
+
+- key: ecommerce
+  label: 电商分析
+
+- key: sql-hive
+  label: SQL / Hive
+
+- key: python
+  label: Python
+
+- key: git
+  label: Git / GitHub
