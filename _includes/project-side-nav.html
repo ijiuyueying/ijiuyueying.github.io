@@ -1,0 +1,45 @@
+{% assign project_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
+{% assign current_category = page.categories | first | default: page.category_key | default: '' %}
+{% assign current_subcategory = page.subcategory | default: '' %}
+
+<aside class="persistent-project-nav" aria-label="项目分类">
+  <div class="persistent-nav-title">项目分类</div>
+  <div class="persistent-nav-list">
+    {% for item in project_menu_doc.items %}
+      {% assign item_active = false %}
+      {% if item.key == current_category %}{% assign item_active = true %}{% endif %}
+      {% if item.key == 'all' and current_category == '' %}{% assign item_active = true %}{% endif %}
+      <div class="persistent-nav-item{% if item_active %} open{% endif %}">
+        <div class="persistent-nav-parent-row">
+          <a class="persistent-nav-parent{% if item_active %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">{{ item.label }}</a>
+          {% if item.children and item.children.size > 0 %}<button class="persistent-nav-toggle" type="button" aria-label="展开或收起 {{ item.label }}">›</button>{% endif %}
+        </div>
+        {% if item.children and item.children.size > 0 %}
+        <div class="persistent-nav-children">
+          <a class="persistent-nav-child{% if item_active and current_subcategory == '' %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">全部</a>
+          {% for child in item.children %}
+          <a class="persistent-nav-child{% if item_active and current_subcategory == child.key %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}&subcategory={{ child.key }}#xm-post-list">{{ child.label }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</aside>
+
+<script>
+(function(){
+  var nav=document.currentScript.previousElementSibling;
+  if(!nav||!nav.classList.contains('persistent-project-nav'))return;
+  var rows=[].slice.call(nav.querySelectorAll('.persistent-nav-item'));
+  rows.forEach(function(row){
+    var toggle=row.querySelector('.persistent-nav-toggle');
+    if(!toggle)return;
+    toggle.addEventListener('click',function(){
+      var willOpen=!row.classList.contains('open');
+      rows.forEach(function(other){if(other!==row)other.classList.remove('open');});
+      row.classList.toggle('open',willOpen);
+    });
+  });
+})();
+</script>
