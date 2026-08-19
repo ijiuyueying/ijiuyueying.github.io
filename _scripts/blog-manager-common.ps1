@@ -64,8 +64,8 @@ function Read-MenuDefinition([string]$FilePath) {
         if (-not $inside) { continue }
 
         if (-not $inItems) {
-            if ($line -match '^module_key:\s*(.+?)\s*$') { $moduleKey=$Matches[1].Trim(); continue }
-            if ($line -match '^top_label:\s*(.+?)\s*$') { $topLabel=$Matches[1].Trim(); continue }
+            if ($line -match '^module_key:\s*(.+?)\s*$') { $moduleKey=$Matches[1].Trim().Trim('"').Trim("'"); continue }
+            if ($line -match '^top_label:\s*(.+?)\s*$') { $topLabel=$Matches[1].Trim().Trim('"').Trim("'"); continue }
             if ($line -match '^top_url:\s*(.+?)\s*$') { $topUrl=$Matches[1].Trim().Trim('"').Trim("'"); continue }
             if ($line -match '^article_enabled:\s*(true|false)\s*$') { $articleEnabled=($Matches[1].ToLower() -eq 'true'); continue }
             if ($line -match '^show_top:\s*(true|false)\s*$') { $showTop=($Matches[1].ToLower() -eq 'true'); continue }
@@ -76,20 +76,27 @@ function Read-MenuDefinition([string]$FilePath) {
 
         if ($line -match '^  - key:\s*(.+?)\s*$') {
             if ($null -ne $current) { [void]$items.Add($current) }
-            $current=[ordered]@{key=$Matches[1].Trim();label='';children=New-Object System.Collections.ArrayList}
+            $current=[pscustomobject]@{
+                key=$Matches[1].Trim().Trim('"').Trim("'")
+                label=''
+                children=(New-Object System.Collections.ArrayList)
+            }
             $inChildren=$false
             continue
         }
         if ($null -eq $current) { continue }
-        if ($line -match '^    label:\s*(.+?)\s*$' -and -not $inChildren) { $current.label=$Matches[1].Trim(); continue }
+        if ($line -match '^    label:\s*(.+?)\s*$' -and -not $inChildren) { $current.label=$Matches[1].Trim().Trim('"').Trim("'"); continue }
         if ($line -match '^    children:\s*$') { $inChildren=$true; continue }
         if ($line -match '^    slides:\s*$') { $inChildren=$false; continue }
         if ($inChildren -and $line -match '^      - key:\s*(.+?)\s*$') {
-            [void]$current.children.Add([ordered]@{key=$Matches[1].Trim();label=''})
+            [void]$current.children.Add([pscustomobject]@{
+                key=$Matches[1].Trim().Trim('"').Trim("'")
+                label=''
+            })
             continue
         }
         if ($inChildren -and $line -match '^        label:\s*(.+?)\s*$' -and $current.children.Count -gt 0) {
-            $current.children[$current.children.Count-1].label=$Matches[1].Trim()
+            $current.children[$current.children.Count-1].label=$Matches[1].Trim().Trim('"').Trim("'")
         }
     }
 
@@ -121,6 +128,16 @@ function Get-ArticleMenus {
     return @(Get-Menus | Where-Object { $_.article_enabled } | Sort-Object top_order,label)
 }
 
+function Get-ObjectField($Object,[string]$Name) {
+    if ($null -eq $Object) { return $null }
+    if ($Object -is [System.Collections.IDictionary]) {
+        if ($Object.Contains($Name)) { return $Object[$Name] }
+    }
+    $prop = $Object.PSObject.Properties[$Name]
+    if ($null -ne $prop) { return $prop.Value }
+    return $null
+}
+
 function Select-One($Items,[string]$Title,[bool]$AllowCancel=$true) {
     $arr=@($Items)
     if ($arr.Count -eq 0) { return $null }
@@ -128,8 +145,14 @@ function Select-One($Items,[string]$Title,[bool]$AllowCancel=$true) {
     Write-Host $Title -ForegroundColor Yellow
     if ($AllowCancel) { Write-Host '0. 返回/取消' }
     for($i=0;$i -lt $arr.Count;$i++) {
-        $name = if ($arr[$i].PSObject.Properties.Name -contains 'label') { $arr[$i].label } elseif ($arr[$i].PSObject.Properties.Name -contains 'title') { $arr[$i].title } else { [string]$arr[$i] }
-        $key = if ($arr[$i].PSObject.Properties.Name -contains 'key') { $arr[$i].key } elseif ($arr[$i].PSObject.Properties.Name -contains 'module_key') { $arr[$i].module_key } else { '' }
+        $name = Get-ObjectField $arr[$i] 'label'
+        if ([string]::IsNullOrWhiteSpace([string]$name)) { $name = Get-ObjectField $arr[$i] 'title' }
+        if ([string]::IsNullOrWhiteSpace([string]$name)) { $name = [string]$arr[$i] }
+
+        $key = Get-ObjectField $arr[$i] 'key'
+        if ([string]::IsNullOrWhiteSpace([string]$key)) { $key = Get-ObjectField $arr[$i] 'module_key' }
+        if ($null -eq $key) { $key = '' }
+
         Write-Host (('{0}. {1} [{2}]' -f ($i+1),$name,$key))
     }
     $raw=Read-Host '请选择'; $n=0
@@ -157,7 +180,7 @@ function Add-Level2([object]$Menu) {
     $lines=New-Object System.Collections.ArrayList
     [void]$lines.AddRange([string[]]((Read-Utf8 $Menu.file) -split "`r?`n"))
     $end=Find-FrontMatterEnd $lines
-    $new=@('','  - key: '+$key,'    label: '+$label)
+    $new=@('', ('  - key: ' + $key), ('    label: ' + $label))
     for($j=0;$j -lt $new.Count;$j++) { $lines.Insert($end+$j,$new[$j]) }
     Save-Lines $Menu.file $lines
     Write-Host ('已新增二级分类：'+$label+' ['+$key+']') -ForegroundColor Green
@@ -187,10 +210,11 @@ function Add-Level3([object]$Menu) {
     if($childrenLine -lt 0) {
         $labelLine=$start+1
         for($i=$start+1;$i -lt $end;$i++) { if($lines[$i] -match '^    label:') { $labelLine=$i; break } }
-        $insert=$labelLine+1; $new=@('    children:','      - key: '+$key,'        label: '+$label)
+        $insert=$labelLine+1
+        $new=@('    children:', ('      - key: ' + $key), ('        label: ' + $label))
     } else {
         $insert=if($slidesLine -ge 0){$slidesLine}else{$end}
-        $new=@('      - key: '+$key,'        label: '+$label)
+        $new=@(('      - key: ' + $key), ('        label: ' + $label))
     }
     for($j=0;$j -lt $new.Count;$j++) { $lines.Insert($insert+$j,$new[$j]) }
     Save-Lines $Menu.file $lines
@@ -319,6 +343,11 @@ function Select-LocalFile([string]$Filter,[string]$Title) {
 }
 
 function Copy-Media([string]$Source,[string]$RelativeDir,[string]$Prefix) {
+    $sourceItem = Get-Item -LiteralPath $Source
+    if ($sourceItem.Length -gt 90MB) {
+        throw '文件超过 90MB，为避免 GitHub 推送失败，请压缩文件或改用外链。'
+    }
+
     $dir=Join-Path $script:BlogRoot $RelativeDir
     if(-not(Test-Path $dir)){New-Item -ItemType Directory -Path $dir -Force|Out-Null}
     $ext=[System.IO.Path]::GetExtension($Source).ToLower()
