@@ -1,14 +1,20 @@
 - title: 原神官方壁纸 · 春日角色插画
   image: "https://upload-bbs.mihoyo.com/upload/2021/04/30/75276550/e38a0f9f012b33cb20e15e4df6ea144a_7920913315883374580.jpg"
   description: 原神官方发布素材收藏。
+  group: game
+  subgroup: genshin
   source: "https://www.hoyolab.com/article/383753"
 
 - title: 原神官方壁纸 · 春日角色插画 02
   image: "https://upload-bbs.mihoyo.com/upload/2021/04/30/75276550/0ef9b5d77953e4e8d33be0a9812898b8_3388430387023172241.jpeg"
   description: 原神官方发布素材收藏。
+  group: game
+  subgroup: genshin
   source: "https://www.hoyolab.com/article/383753"
 
 - title: 原神官方壁纸 · 稻妻主题
   image: "https://webstatic.mihoyo.com/upload/static-resource/2021/09/20/643cacffcc31f2eb5b6111f0813f3c68_568289746311594279.jpg"
   description: 原神官方壁纸素材收藏。
+  group: game
+  subgroup: genshin
   source: "https://www.hoyolab.com/article/383753"
