@@ -1,6 +1,7 @@
 @echo off
 cd /d "%~dp0"
 setlocal EnableExtensions
+set "BLOG_ROOT=%~dp0"
 
 echo ========================================
 echo Jiuyueying Blog - Content Manager
@@ -20,7 +21,7 @@ if not exist "%~dp0blog-manager.ps1" (
     exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0blog-manager.ps1"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$p=Join-Path $env:BLOG_ROOT 'blog-manager.ps1'; $code=[IO.File]::ReadAllText($p,[Text.Encoding]::UTF8); Invoke-Expression $code"
 set "exitcode=%errorlevel%"
 
 if not "%exitcode%"=="0" (
