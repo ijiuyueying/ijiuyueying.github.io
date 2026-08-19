@@ -32,18 +32,22 @@
   </div>
 </header>
 
-{% if page.layout == 'post' or page.layout == 'category' or page.url == '/articles/' %}
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   var input=document.getElementById('xm-search-input');
   if(!input)return;
+  var params=new URLSearchParams(window.location.search);
+  var q=params.get('q')||'';
+  if(q){input.value=q;setTimeout(function(){input.dispatchEvent(new Event('input',{bubbles:true}));},0);}
+
+  {% if page.layout == 'post' or page.layout == 'category' or page.url == '/articles/' %}
   input.placeholder='搜索项目文章';
   input.addEventListener('keydown',function(e){
     if(e.key!=='Enter')return;
-    var q=(input.value||'').trim();
-    if(!q)return;
-    window.location.href='{{ '/' | relative_url }}?q='+encodeURIComponent(q)+'#xm-post-list';
+    var keyword=(input.value||'').trim();
+    if(!keyword)return;
+    window.location.href='{{ '/' | relative_url }}?q='+encodeURIComponent(keyword)+'#xm-post-list';
   });
+  {% endif %}
 });
 </script>
-{% endif %}
