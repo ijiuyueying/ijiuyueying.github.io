@@ -7,15 +7,12 @@ nav_key: music
 
 <div class="xm-home-grid xm-module-grid" data-module="music">
   <aside class="xm-left-menu">
-    {% for item in site.data.module_menus.music %}
-    <button class="xm-filter-btn{% if forloop.first %} active{% endif %}" data-group="{{ item.key }}">{{ item.label }}</button>
-    {% if item.children %}{% for child in item.children %}<button class="xm-filter-btn xm-filter-child" data-group="{{ item.key }}" data-subgroup="{{ child.key }}">└ {{ child.label }}</button>{% endfor %}{% endif %}
-    {% endfor %}
+    {% include collapsible-menu.html menu=site.data.module_menus.music %}
   </aside>
 
   <main class="xm-center">
     <section class="xm-page" style="width:100%">
-      <header class="xm-page-head"><h1>歌曲分类</h1><p>支持正版平台链接，也支持本地音频文件。</p></header>
+      <header class="xm-page-head"><h1>歌曲分类</h1><p>点击二级分类后，再展开对应三级分类；支持正版链接与本地音频。</p></header>
       <div class="xm-page-body"><div class="xm-music-list">
         {% for item in site.data.music %}
         <div class="xm-music-row xm-filter-item" data-group="{{ item.group }}" data-subgroup="{{ item.subgroup }}" data-search="{{ item.title }} {{ item.artist }} {{ item.category }}">
@@ -29,8 +26,5 @@ nav_key: music
   </main>
 
   {% include global-rightbar.html %}
+  {% include tree-filter-script.html %}
 </div>
-
-<script>
-(function(){var root=document.querySelector('[data-module="music"]');if(!root)return;var bs=[].slice.call(root.querySelectorAll('.xm-filter-btn')),items=[].slice.call(root.querySelectorAll('.xm-filter-item')),search=document.getElementById('xm-search-input'),g='all',s='';function apply(){var q=(search&&search.value||'').toLowerCase();items.forEach(function(x){x.style.display=((g==='all'||x.dataset.group===g)&&(!s||x.dataset.subgroup===s)&&(!q||(x.dataset.search||'').toLowerCase().indexOf(q)>-1))?'':'none';});}bs.forEach(function(b){b.onclick=function(){bs.forEach(function(x){x.classList.remove('active');});b.classList.add('active');g=b.dataset.group;s=b.dataset.subgroup||'';apply();};});if(search)search.oninput=apply;apply();})();
-</script>
