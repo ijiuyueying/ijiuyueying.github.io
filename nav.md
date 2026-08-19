@@ -5,9 +5,10 @@ permalink: /nav/
 nav_key: nav
 ---
 
+{% assign menu_doc = site.menu_defs | where: 'module_key', 'nav' | first %}
 <div class="xm-home-grid xm-module-grid" data-module="nav">
   <aside class="xm-left-menu">
-    {% include collapsible-menu.html menu=site.data.module_menus.nav %}
+    {% include collapsible-menu.html menu=menu_doc.items %}
   </aside>
 
   <main class="xm-center">
