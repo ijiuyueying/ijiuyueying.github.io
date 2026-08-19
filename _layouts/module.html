@@ -1,0 +1,46 @@
+---
+layout: default
+---
+
+{% assign menu_doc = site.menu_defs | where: 'module_key', page.module_key | first %}
+<style>
+.module-three-grid{width:min(1420px,calc(100% - 36px));margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr) 300px;gap:20px;align-items:start}
+.module-left-sticky{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow:auto}
+.module-center{min-width:0}.module-head{padding:24px 28px;margin-bottom:14px;background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}
+.module-head h1{margin:0;font-size:30px}.module-head p{margin:6px 0 0;color:#858d95;font-size:13px}.module-post-list{display:grid;gap:14px}
+.module-post-card{padding:22px 26px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}.module-post-card h2{margin:0 0 6px;font-size:21px}.module-post-card h2 a:hover{color:#2990df}.module-meta{color:#9aa1a8;font-size:12px}.module-post-card p{margin:9px 0 0;color:#65707a;font-size:13px;line-height:1.75}
+@media(max-width:1050px){.module-three-grid{grid-template-columns:170px minmax(0,1fr)}.module-three-grid>.xm-rightbar{display:none}}@media(max-width:760px){.module-three-grid{width:min(100% - 20px,1180px);grid-template-columns:1fr}.module-left-sticky{position:static;max-height:none}}
+</style>
+
+<div class="module-three-grid xm-module-grid" data-module="{{ page.module_key }}">
+  <aside class="module-left-sticky xm-left-menu">
+    {% if menu_doc %}{% include collapsible-menu.html menu=menu_doc.items %}{% endif %}
+  </aside>
+
+  <main class="module-center">
+    {% include module-filter.html placeholder='筛选当前模块文章' %}
+    <header class="module-head">
+      <h1>{{ page.title }}</h1>
+      {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+    </header>
+
+    <section class="module-post-list" id="xm-post-list">
+      {% assign module_count = 0 %}
+      {% for post in site.posts %}
+        {% assign post_module = post.module | default: 'project' %}
+        {% if post_module == page.module_key %}
+          {% assign module_count = module_count | plus: 1 %}
+          <article class="module-post-card xm-filter-item" data-group="{{ post.categories | first }}" data-subgroup="{{ post.subcategory | default: '' }}" data-search="{{ post.title | escape }} {{ post.excerpt | strip_html | strip_newlines | escape }} {{ post.tags | join: ' ' | escape }}">
+            <div class="module-meta">{{ post.date | date: "%Y-%m-%d" }}</div>
+            <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+            <p>{% if post.excerpt %}{{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}点击进入文章查看完整内容。{% endif %}</p>
+          </article>
+        {% endif %}
+      {% endfor %}
+      {% if module_count == 0 %}<div class="xm-empty">这个一级大类暂时还没有文章。</div>{% endif %}
+    </section>
+  </main>
+
+  {% include global-rightbar.html %}
+  {% include tree-filter-script.html %}
+</div>
