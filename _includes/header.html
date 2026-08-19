@@ -14,8 +14,9 @@
     <label for="xm-nav-toggle" class="xm-nav-button" aria-label="打开导航"><span></span><span></span><span></span></label>
 
     <nav class="xm-nav" aria-label="主导航">
-      {% for item in site.data.top_nav %}
-      <a href="{{ item.url | relative_url }}"{% if page.nav_key == item.key %} class="active"{% endif %}>{{ item.label }}</a>
+      {% assign top_modules = site.menu_defs | where: 'show_top', true | sort: 'top_order' %}
+      {% for item in top_modules %}
+      <a href="{{ item.top_url | relative_url }}"{% if page.nav_key == item.module_key %} class="active"{% endif %}>{{ item.top_label }}</a>
       {% endfor %}
     </nav>
 
