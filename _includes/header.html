@@ -27,7 +27,8 @@
 
     <label class="xm-search" for="xm-global-search-input" style="align-self:center">
       <svg class="xm-search-icon" style="display:block;width:20px;height:20px;flex:0 0 20px;color:#66717b" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="xm-global-search-input" type="search" placeholder="搜索文章全文" autocomplete="off">
+      <input id="xm-global-search-input" type="search" {% if page.layout == 'post' %}placeholder="搜索本文内容" data-search-mode="article"{% else %}placeholder="搜索文章全文" data-search-mode="global"{% endif %} autocomplete="off">
+      {% if page.layout == 'post' %}<span id="xm-article-search-count" style="display:none;flex:none;color:#8a9198;font-size:12px;white-space:nowrap"></span>{% endif %}
     </label>
   </div>
 </header>
@@ -36,6 +37,11 @@
 document.addEventListener('DOMContentLoaded',function(){
   var input=document.getElementById('xm-global-search-input');
   if(!input)return;
+
+  if(input.dataset.searchMode==='article'){
+    return;
+  }
+
   var params=new URLSearchParams(window.location.search);
   if(window.location.pathname.indexOf('/search/')>-1){input.value=params.get('q')||'';}
   input.addEventListener('keydown',function(e){
