@@ -1,6 +1,7 @@
 ---
 module_key: project
 show_top: true
+article_enabled: true
 top_label: 项目
 top_url: /
 top_order: 10
@@ -133,6 +134,8 @@ items:
 ---
 
 # 项目分类配置
+
+`article_enabled: true` 表示这个一级模块可以通过“新建博客文章.bat”发布文章。
 
 在上面的 `items:` 中维护项目二级分类、三级分类和该分类自己的轮播图。
 
