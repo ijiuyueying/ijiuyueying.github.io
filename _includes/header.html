@@ -16,10 +16,11 @@
 
     <nav class="xm-nav" aria-label="主导航">
       {% assign top_modules = site.menu_defs | where: 'show_top', true | sort: 'top_order' %}
+      {% assign current_post_module = page.module | default: 'project' %}
       {% for item in top_modules %}
         {% assign is_active = false %}
         {% if page.nav_key == item.module_key %}{% assign is_active = true %}{% endif %}
-        {% if item.module_key == 'project' and page.layout == 'post' %}{% assign is_active = true %}{% endif %}
+        {% if page.layout == 'post' and item.module_key == current_post_module %}{% assign is_active = true %}{% endif %}
         {% if item.module_key == 'project' and page.layout == 'category' %}{% assign is_active = true %}{% endif %}
         {% if item.module_key == 'project' and page.url == '/articles/' %}{% assign is_active = true %}{% endif %}
       <a href="{{ item.top_url | relative_url }}"{% if is_active %} class="active"{% endif %}>{{ item.top_label }}</a>
