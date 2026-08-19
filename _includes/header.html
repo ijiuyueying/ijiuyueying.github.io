@@ -1,30 +1,9 @@
 {% assign settings = site.data.site_settings %}
-<style>
-body{
-  background-color:{{ settings.colors.page_background | default: '#f3f4f5' }};
-  {% if settings.backgrounds.page_image and settings.backgrounds.page_image != '' %}background-image:url('{{ settings.backgrounds.page_image | relative_url }}');background-size:cover;background-attachment:fixed;background-position:center;{% endif %}
-}
-.xm-header{
-  background-color:{{ settings.colors.header_background | default: '#ffffff' }};
-  {% if settings.backgrounds.header_image and settings.backgrounds.header_image != '' %}background-image:url('{{ settings.backgrounds.header_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
-}
-.xm-left-menu{
-  background-color:{{ settings.colors.left_menu_background | default: '#ffffff' }};
-  {% if settings.backgrounds.left_menu_image and settings.backgrounds.left_menu_image != '' %}background-image:url('{{ settings.backgrounds.left_menu_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
-}
-.xm-filter-btn{background:transparent}
-.xm-post-card,.xm-page,.article-head-new,.article-body-new{background-color:{{ settings.colors.content_background | default: '#ffffff' }}}
-.xm-side-card{
-  background-color:{{ settings.colors.sidebar_background | default: '#ffffff' }};
-  {% if settings.backgrounds.sidebar_image and settings.backgrounds.sidebar_image != '' %}background-image:url('{{ settings.backgrounds.sidebar_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
-}
-.xm-logo-image{overflow:hidden;padding:0;background:none}.xm-logo-image img{width:100%;height:100%;object-fit:cover;display:block}
-</style>
 <header class="xm-header">
   <div class="xm-shell xm-header-inner">
     <a class="xm-brand" href="{{ '/' | relative_url }}">
       {% if settings.avatar and settings.avatar != '' %}
-      <span class="xm-logo xm-logo-image"><img src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}"></span>
+      <img class="xm-logo-image" src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}">
       {% else %}
       <span class="xm-logo">九</span>
       {% endif %}
@@ -40,9 +19,9 @@ body{
       {% endfor %}
     </nav>
 
-    <div class="xm-search">
-      <span>⌕</span>
-      <input id="xm-search-input" type="search" placeholder="搜索文章">
-    </div>
+    <label class="xm-search" for="xm-search-input">
+      <svg class="xm-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="xm-search-input" type="search" placeholder="搜索当前模块" autocomplete="off">
+    </label>
   </div>
 </header>
