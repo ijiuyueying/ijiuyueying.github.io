@@ -5,9 +5,10 @@ permalink: /music/
 nav_key: music
 ---
 
+{% assign menu_doc = site.menu_defs | where: 'module_key', 'music' | first %}
 <div class="xm-home-grid xm-module-grid" data-module="music">
   <aside class="xm-left-menu">
-    {% include collapsible-menu.html menu=site.data.module_menus.music %}
+    {% include collapsible-menu.html menu=menu_doc.items %}
   </aside>
 
   <main class="xm-center">
