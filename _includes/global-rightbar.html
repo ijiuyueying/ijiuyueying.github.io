@@ -26,7 +26,8 @@
   <section class="xm-side-card">
     <div class="xm-side-title">个人收藏</div>
     <div class="xm-collection-grid">
-      {% for item in site.data.collections %}
+      {% assign collection_items = site.collection_defs | sort: 'order' %}
+      {% for item in collection_items %}
       <a href="{{ item.url | relative_url }}">
         {% if item.icon %}<i class="xm-collection-icon">{{ item.icon }}</i>{% endif %}
         <b>{{ item.title }}</b>
