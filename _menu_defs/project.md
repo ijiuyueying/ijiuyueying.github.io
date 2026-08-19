@@ -1,5 +1,9 @@
 ---
 module_key: project
+show_top: true
+top_label: 项目
+top_url: /
+top_order: 10
 items:
   - key: all
     label: 推荐
