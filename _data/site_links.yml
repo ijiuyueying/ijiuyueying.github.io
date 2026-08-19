@@ -1,0 +1,9 @@
+- title: GitHub
+  url: https://github.com/
+  description: 代码托管与开源项目
+  group: 开发工具
+
+- title: ChatGPT
+  url: https://chatgpt.com/
+  description: AI 学习与辅助工具
+  group: AI
