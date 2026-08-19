@@ -25,10 +25,6 @@ items:
   - key: bank
     label: 银行监管
     children:
-      - key: 1104
-        label: 1104体系
-      - key: reports
-        label: G01 / G11 / G12
       - key: governance
         label: 数据治理
     slides:
