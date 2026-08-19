@@ -4,18 +4,19 @@ title: 项目
 nav_key: project
 ---
 
+{% assign menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
 <style>
 .xm-hero-arrow{position:absolute;top:50%;z-index:8;width:42px;height:64px;border:0;background:rgba(0,0,0,.25);color:#fff;font-size:40px;line-height:1;cursor:pointer;opacity:0;transform:translateY(-50%);transition:.2s}.xm-hero:hover .xm-hero-arrow{opacity:1}.xm-hero-arrow:hover{background:rgba(0,0,0,.48)}.xm-hero-arrow.prev{left:0}.xm-hero-arrow.next{right:0}.xm-category-empty{display:none;padding:34px 28px;background:#fff;color:#888;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}.xm-category-empty.show{display:block;animation:xmFade .32s ease both}.xm-slide-copy{z-index:3}.xm-slide img{position:absolute;inset:0}.xm-slide-overlay{z-index:2}.xm-dots{z-index:8}@media(max-width:760px){.xm-hero-arrow{opacity:.75;width:34px;height:52px;font-size:30px}}
 </style>
 
 <div class="xm-home-grid xm-module-grid" data-module="project">
   <aside class="xm-left-menu">
-    {% include collapsible-menu.html menu=site.data.project_categories %}
+    {% include collapsible-menu.html menu=menu_doc.items %}
   </aside>
 
   <main class="xm-center">
     <section class="xm-hero" id="xm-hero">
-      {% for category in site.data.project_categories %}
+      {% for category in menu_doc.items %}
         {% for slide in category.slides %}
         <a class="xm-slide{% if category.key == 'all' and forloop.first %} active{% endif %}" data-slide-category="{{ category.key }}" href="{{ slide.url | relative_url }}">
           <img src="{{ slide.image }}" alt="{{ slide.title }}">
