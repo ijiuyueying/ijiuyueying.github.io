@@ -3,7 +3,7 @@
   <div class="xm-shell xm-header-inner">
     <a class="xm-brand" href="{{ '/' | relative_url }}">
       {% if settings.avatar and settings.avatar != '' %}
-      <img class="xm-logo-image" src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}">
+      <img class="xm-logo-image" style="width:46px;height:46px;border-radius:50%;object-fit:cover;display:block" src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}">
       {% else %}
       <span class="xm-logo">九</span>
       {% endif %}
@@ -16,7 +16,12 @@
     <nav class="xm-nav" aria-label="主导航">
       {% assign top_modules = site.menu_defs | where: 'show_top', true | sort: 'top_order' %}
       {% for item in top_modules %}
-      <a href="{{ item.top_url | relative_url }}"{% if page.nav_key == item.module_key %} class="active"{% endif %}>{{ item.top_label }}</a>
+        {% assign is_active = false %}
+        {% if page.nav_key == item.module_key %}{% assign is_active = true %}{% endif %}
+        {% if item.module_key == 'project' and page.layout == 'post' %}{% assign is_active = true %}{% endif %}
+        {% if item.module_key == 'project' and page.layout == 'category' %}{% assign is_active = true %}{% endif %}
+        {% if item.module_key == 'project' and page.url == '/articles/' %}{% assign is_active = true %}{% endif %}
+      <a href="{{ item.top_url | relative_url }}"{% if is_active %} class="active"{% endif %}>{{ item.top_label }}</a>
       {% endfor %}
     </nav>
 
@@ -26,3 +31,19 @@
     </label>
   </div>
 </header>
+
+{% if page.layout == 'post' or page.layout == 'category' or page.url == '/articles/' %}
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var input=document.getElementById('xm-search-input');
+  if(!input)return;
+  input.placeholder='搜索项目文章';
+  input.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var q=(input.value||'').trim();
+    if(!q)return;
+    window.location.href='{{ '/' | relative_url }}?q='+encodeURIComponent(q)+'#xm-post-list';
+  });
+});
+</script>
+{% endif %}
