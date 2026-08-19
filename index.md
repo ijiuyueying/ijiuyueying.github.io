@@ -69,10 +69,12 @@ nav_key: project
     <section class="xm-side-card">
       <div class="xm-side-title">个人收藏</div>
       <div class="xm-collection-grid">
-        <a href="{{ '/gallery/' | relative_url }}"><b>图片收藏</b><span>学习图、截图、灵感</span></a>
-        <a href="{{ '/videos/' | relative_url }}"><b>视频收藏</b><span>教程、演示、项目视频</span></a>
-        <a href="{{ '/nav/' | relative_url }}"><b>网址导航</b><span>常用网站与工具</span></a>
-        <a href="{{ '/music/' | relative_url }}"><b>歌曲分类</b><span>个人音乐收藏</span></a>
+        {% for item in site.data.collections %}
+        <a href="{{ item.url | relative_url }}">
+          <b>{% if item.icon and item.icon != '' %}<span style="margin-right:5px">{{ item.icon }}</span>{% endif %}{{ item.title }}</b>
+          <span>{{ item.description }}</span>
+        </a>
+        {% endfor %}
       </div>
     </section>
   </aside>
