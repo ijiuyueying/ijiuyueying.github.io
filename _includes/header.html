@@ -1,18 +1,22 @@
-<header class="topbar-new">
-  <div class="site-container topbar-inner-new">
-    <a class="brand-new" href="{{ '/' | relative_url }}">
-      <span class="brand-name-new">九月影</span>
-      <span class="brand-tagline-new">数据开发 · 数据分析</span>
+<header class="xm-header">
+  <div class="xm-shell xm-header-inner">
+    <a class="xm-brand" href="{{ '/' | relative_url }}">
+      <span class="xm-logo">九</span>
+      <span class="xm-brand-text">九月影</span>
     </a>
 
-    <input class="nav-toggle-new" type="checkbox" id="nav-toggle-new">
-    <label class="nav-button-new" for="nav-toggle-new" aria-label="打开菜单"><span></span><span></span><span></span></label>
+    <input id="xm-nav-toggle" class="xm-nav-toggle" type="checkbox">
+    <label for="xm-nav-toggle" class="xm-nav-button" aria-label="打开导航"><span></span><span></span><span></span></label>
 
-    <nav class="nav-new" aria-label="主导航">
-      <a href="{{ '/' | relative_url }}">首页</a>
-      <a href="{{ '/articles/' | relative_url }}">文章归档</a>
-      <a href="{{ '/about/' | relative_url }}">关于</a>
-      <a class="nav-github-new" href="https://github.com/ijiuyueying/ijiuyueying.github.io">GitHub</a>
+    <nav class="xm-nav" aria-label="主导航">
+      {% for item in site.data.top_nav %}
+      <a href="{{ item.url | relative_url }}"{% if page.nav_key == item.key %} class="active"{% endif %}>{{ item.label }}</a>
+      {% endfor %}
     </nav>
+
+    <div class="xm-search">
+      <span>⌕</span>
+      <input id="xm-search-input" type="search" placeholder="搜索文章">
+    </div>
   </div>
 </header>
