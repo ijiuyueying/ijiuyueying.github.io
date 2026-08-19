@@ -1,33 +1,36 @@
 ---
 layout: default
 ---
-<section class="archive-head-new">
-  <span class="eyebrow-new">CATEGORY</span>
-  <h1>{{ page.title }}</h1>
-  {% if page.description %}<p>{{ page.description }}</p>{% endif %}
-</section>
 
-<div class="content-grid-new">
-  <main class="feed-new">
-    <div class="section-title-new">
-      <div><span>POSTS</span><h2>相关文章</h2></div>
-      <a href="{{ '/articles/' | relative_url }}">全部归档</a>
-    </div>
+<style>
+.category-three-grid{width:min(1420px,calc(100% - 36px));margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr) 330px;gap:20px;align-items:start}.category-left{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow:auto}.category-center{min-width:0;background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}.category-head{padding:24px 28px;border-bottom:1px solid #eceeef}.category-head h1{margin:0;font-size:30px}.category-head p{margin:6px 0 0;color:#858d95;font-size:13px}.category-post{padding:22px 26px;border-bottom:1px solid #eceeef}.category-post:last-child{border-bottom:0}.category-post h2{margin:0 0 6px;font-size:20px;font-weight:600}.category-post h2 a:hover{color:#2990df}.category-post-meta{color:#9aa1a8;font-size:12px}.category-post p{margin:9px 0 0;color:#65707a;font-size:13px;line-height:1.75}.category-post .read-more{display:inline-block;margin-top:10px;color:#2990df;font-size:12px}.persistent-project-nav{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}.persistent-nav-title{padding:14px 16px;border-bottom:1px solid #eceeef;font-size:16px;font-weight:800}.persistent-nav-item{border-bottom:1px solid #f0f1f2}.persistent-nav-parent-row{display:flex;align-items:stretch}.persistent-nav-parent{flex:1;padding:11px 12px;color:#4c535a;font-size:14px}.persistent-nav-parent:hover,.persistent-nav-parent.active{color:#d94b40;background:#fff7f6}.persistent-nav-toggle{width:34px;border:0;background:#fff;color:#8d959c;cursor:pointer;font-size:19px;transition:.18s}.persistent-nav-item.open .persistent-nav-toggle{transform:rotate(90deg)}.persistent-nav-children{display:none;padding:5px 0 8px;background:#fafafa}.persistent-nav-item.open .persistent-nav-children{display:block}.persistent-nav-child{display:block;padding:7px 12px 7px 25px;color:#737a81;font-size:12px}.persistent-nav-child:hover,.persistent-nav-child.active{color:#2990df;background:#f2f8fc}@media(max-width:1100px){.category-three-grid{grid-template-columns:170px minmax(0,1fr)}.category-three-grid>.xm-rightbar{display:none}}@media(max-width:760px){.category-three-grid{width:min(100% - 20px,1180px);grid-template-columns:1fr}.category-left{position:static;max-height:none}}
+</style>
+
+<div class="category-three-grid">
+  <div class="category-left">
+    {% include project-side-nav.html %}
+  </div>
+
+  <main class="category-center">
+    <header class="category-head">
+      <h1>{{ page.title }}</h1>
+      {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+    </header>
 
     {% assign category_posts = site.categories[page.category_key] %}
     {% if category_posts and category_posts.size > 0 %}
       {% for post in category_posts %}
-      <article class="post-row-new">
-        <div class="post-row-meta-new"><time>{{ post.date | date: "%Y.%m.%d" }}</time></div>
+      <article class="category-post">
+        <div class="category-post-meta">{{ post.date | date: "%Y-%m-%d" }}{% if post.subcategory %} · {{ post.subcategory }}{% endif %}</div>
         <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         <p>{% if post.excerpt %}{{ post.excerpt | strip_html | strip_newlines | truncate: 150 }}{% else %}点击进入文章查看完整内容。{% endif %}</p>
-        <a class="text-link-new" href="{{ post.url | relative_url }}">阅读全文 <span>→</span></a>
+        <a class="read-more" href="{{ post.url | relative_url }}">阅读全文 →</a>
       </article>
       {% endfor %}
     {% else %}
-      <div class="empty-new">这个分类暂时还没有公开文章。</div>
+      <div class="xm-empty">这个分类暂时还没有公开文章。</div>
     {% endif %}
   </main>
 
-  {% include blog-sidebar.html %}
+  {% include global-rightbar.html %}
 </div>
