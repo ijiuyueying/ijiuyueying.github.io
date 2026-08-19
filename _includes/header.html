@@ -1,8 +1,13 @@
+{% assign settings = site.data.site_settings %}
 <header class="xm-header">
   <div class="xm-shell xm-header-inner">
     <a class="xm-brand" href="{{ '/' | relative_url }}">
+      {% if settings.avatar and settings.avatar != '' %}
+      <span class="xm-logo xm-logo-image"><img src="{{ settings.avatar | relative_url }}" alt="{{ settings.site_name | default: '九月影' }}"></span>
+      {% else %}
       <span class="xm-logo">九</span>
-      <span class="xm-brand-text">九月影</span>
+      {% endif %}
+      <span class="xm-brand-text">{{ settings.site_name | default: '九月影' }}</span>
     </a>
 
     <input id="xm-nav-toggle" class="xm-nav-toggle" type="checkbox">
