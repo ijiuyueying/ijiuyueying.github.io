@@ -1,0 +1,20 @@
+site_name: 九月影
+avatar: ""
+
+colors:
+  page_background: "#f3f4f5"
+  header_background: "#ffffff"
+  left_menu_background: "#ffffff"
+  content_background: "#ffffff"
+  sidebar_background: "#ffffff"
+  accent: "#e14f43"
+
+backgrounds:
+  page_image: ""
+  header_image: ""
+  left_menu_image: ""
+  sidebar_image: ""
+
+# 图片路径既可以写仓库本地路径，例如：
+# /assets/images/background/site-bg.jpg
+# 也可以写 https:// 开头的网络图片地址。
