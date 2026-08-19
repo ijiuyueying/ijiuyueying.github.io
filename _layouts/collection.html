@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+{% assign menu_doc = site.menu_defs | where: 'module_key', page.module_key | first %}
+{% assign items = site.data[page.data_key] %}
+<style>
+.collection-three-grid{width:min(1420px,calc(100% - 36px));margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr) 300px;gap:20px;align-items:start}
+.collection-left{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow:auto}.collection-center{min-width:0}.collection-head{padding:24px 28px;margin-bottom:14px;background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}.collection-head h1{margin:0;font-size:30px}.collection-head p{margin:6px 0 0;color:#858d95;font-size:13px}.generic-collection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.generic-card{padding:18px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}.generic-card img{display:block;width:100%;max-height:320px;object-fit:contain;margin-bottom:12px;background:#f5f6f7}.generic-card h3{margin:0 0 8px;font-size:19px}.generic-card p{margin:0;color:#68717a;line-height:1.7;font-size:13px}.generic-card .generic-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.generic-card .generic-actions a{color:#2990df;font-size:13px}.generic-empty{padding:26px;background:#fff;color:#8a9198;text-align:center}@media(max-width:1050px){.collection-three-grid{grid-template-columns:170px minmax(0,1fr)}.collection-three-grid>.xm-rightbar{display:none}}@media(max-width:760px){.collection-three-grid{width:min(100% - 20px,1180px);grid-template-columns:1fr}.collection-left{position:static;max-height:none}.generic-collection-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="collection-three-grid xm-module-grid" data-module="{{ page.module_key }}">
+  <aside class="collection-left xm-left-menu">{% if menu_doc %}{% include collapsible-menu.html menu=menu_doc.items %}{% endif %}</aside>
+  <main class="collection-center">
+    {% include module-filter.html placeholder='筛选当前收藏' %}
+    <header class="collection-head"><h1>{{ page.title }}</h1>{% if page.description %}<p>{{ page.description }}</p>{% endif %}</header>
+    <section class="generic-collection-grid">
+      {% assign item_count = 0 %}
+      {% for item in items %}
+        {% assign item_count = item_count | plus: 1 %}
+        <article class="generic-card xm-filter-item" data-group="{{ item.group }}" data-subgroup="{{ item.subgroup }}" data-search="{{ item.title }} {{ item.description }} {{ item.tags | join: ' ' }}">
+          {% if item.image and item.image != '' %}<a href="{{ item.url | default: item.image }}"{% if item.url %} target="_blank" rel="noopener"{% endif %}><img src="{{ item.image | relative_url }}" alt="{{ item.title }}" loading="lazy"></a>{% endif %}
+          <h3>{{ item.title }}</h3>
+          {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+          <div class="generic-actions">
+            {% if item.url and item.url != '' %}<a href="{{ item.url }}" target="_blank" rel="noopener">打开链接 →</a>{% endif %}
+            {% if item.file and item.file != '' %}<a href="{{ item.file | relative_url }}" target="_blank" rel="noopener">打开文件 →</a>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+      {% if item_count == 0 %}<div class="generic-empty">这个收藏模块暂时还没有内容。</div>{% endif %}
+    </section>
+  </main>
+  {% include global-rightbar.html %}
+  {% include tree-filter-script.html %}
+</div>
