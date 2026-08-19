@@ -1,4 +1,25 @@
 {% assign settings = site.data.site_settings %}
+<style>
+body{
+  background-color:{{ settings.colors.page_background | default: '#f3f4f5' }};
+  {% if settings.backgrounds.page_image and settings.backgrounds.page_image != '' %}background-image:url('{{ settings.backgrounds.page_image | relative_url }}');background-size:cover;background-attachment:fixed;background-position:center;{% endif %}
+}
+.xm-header{
+  background-color:{{ settings.colors.header_background | default: '#ffffff' }};
+  {% if settings.backgrounds.header_image and settings.backgrounds.header_image != '' %}background-image:url('{{ settings.backgrounds.header_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
+}
+.xm-left-menu{
+  background-color:{{ settings.colors.left_menu_background | default: '#ffffff' }};
+  {% if settings.backgrounds.left_menu_image and settings.backgrounds.left_menu_image != '' %}background-image:url('{{ settings.backgrounds.left_menu_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
+}
+.xm-filter-btn{background:transparent}
+.xm-post-card,.xm-page,.article-head-new,.article-body-new{background-color:{{ settings.colors.content_background | default: '#ffffff' }}}
+.xm-side-card{
+  background-color:{{ settings.colors.sidebar_background | default: '#ffffff' }};
+  {% if settings.backgrounds.sidebar_image and settings.backgrounds.sidebar_image != '' %}background-image:url('{{ settings.backgrounds.sidebar_image | relative_url }}');background-size:cover;background-position:center;{% endif %}
+}
+.xm-logo-image{overflow:hidden;padding:0;background:none}.xm-logo-image img{width:100%;height:100%;object-fit:cover;display:block}
+</style>
 <header class="xm-header">
   <div class="xm-shell xm-header-inner">
     <a class="xm-brand" href="{{ '/' | relative_url }}">
