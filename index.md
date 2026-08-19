@@ -15,6 +15,8 @@ nav_key: project
   </aside>
 
   <main class="xm-center">
+    {% include module-filter.html placeholder='筛选当前项目文章' %}
+
     <section class="xm-hero" id="xm-hero">
       {% for category in menu_doc.items %}
         {% for slide in category.slides %}
@@ -32,7 +34,7 @@ nav_key: project
 
     <section class="xm-post-list" id="xm-post-list">
       {% for post in site.posts %}
-      <article class="xm-post-card xm-filter-item" data-group="{{ post.categories | first }}" data-subgroup="{{ post.subcategory | default: '' }}" data-search="{{ post.title | escape }} {{ post.excerpt | strip_html | strip_newlines | escape }}">
+      <article class="xm-post-card xm-filter-item" data-group="{{ post.categories | first }}" data-subgroup="{{ post.subcategory | default: '' }}" data-search="{{ post.title | escape }} {{ post.excerpt | strip_html | strip_newlines | escape }} {{ post.tags | join: ' ' | escape }}">
         {% if post.cover %}<a class="xm-post-cover" href="{{ post.url | relative_url }}"><img src="{{ post.cover | relative_url }}" alt="{{ post.title }}"></a>{% endif %}
         <div class="xm-post-content">
           <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
@@ -57,7 +59,7 @@ nav_key: project
   var treeItems=[].slice.call(root.querySelectorAll('[data-tree-item]'));
   var cards=[].slice.call(root.querySelectorAll('.xm-post-card'));
   var allSlides=[].slice.call(root.querySelectorAll('.xm-slide'));
-  var dots=document.getElementById('xm-dots'),prev=document.getElementById('xm-prev'),next=document.getElementById('xm-next'),search=document.getElementById('xm-search-input'),empty=document.getElementById('xm-category-empty');
+  var dots=document.getElementById('xm-dots'),prev=document.getElementById('xm-prev'),next=document.getElementById('xm-next'),search=root.querySelector('#xm-module-filter-input'),empty=document.getElementById('xm-category-empty');
   var params=new URLSearchParams(window.location.search);
   var group=params.get('category')||'all';
   var subgroup=params.get('subcategory')||'';
@@ -69,22 +71,10 @@ nav_key: project
   function rebuildSlides(){visibleSlides=allSlides.filter(function(slide){return slide.dataset.slideCategory===group;});if(!visibleSlides.length&&group!=='all'){visibleSlides=allSlides.filter(function(slide){return slide.dataset.slideCategory==='all';});}allSlides.forEach(function(slide){slide.classList.remove('active');});if(dots)dots.innerHTML='';current=0;if(!visibleSlides.length)return;visibleSlides.forEach(function(_,i){var b=document.createElement('button');b.type='button';b.onclick=function(e){e.preventDefault();showSlide(i);restart();};dots.appendChild(b);});showSlide(0);restart();}
   function closeOthers(holder){treeItems.forEach(function(item){if(item!==holder)item.classList.remove('open');});}
   function clearActive(){parents.forEach(function(x){x.classList.remove('active');});children.forEach(function(x){x.classList.remove('active');});}
-  function syncMenuState(){
-    clearActive();
-    var parent=parents.find(function(x){return (x.dataset.group||'all')===group;});
-    if(!parent){group='all';subgroup='';parent=parents.find(function(x){return (x.dataset.group||'all')==='all';});}
-    if(parent){var holder=parent.closest('[data-tree-item]');closeOthers(holder);parent.classList.add('active');if(holder&&holder.querySelector('.xm-tree-children'))holder.classList.add('open');}
-    if(subgroup){var child=children.find(function(x){return x.dataset.group===group&&x.dataset.subgroup===subgroup;});if(child)child.classList.add('active');else subgroup='';}
-  }
+  function syncMenuState(){clearActive();var parent=parents.find(function(x){return (x.dataset.group||'all')===group;});if(!parent){group='all';subgroup='';parent=parents.find(function(x){return (x.dataset.group||'all')==='all';});}if(parent){var holder=parent.closest('[data-tree-item]');closeOthers(holder);parent.classList.add('active');if(holder&&holder.querySelector('.xm-tree-children'))holder.classList.add('open');}if(subgroup){var child=children.find(function(x){return x.dataset.group===group&&x.dataset.subgroup===subgroup;});if(child)child.classList.add('active');else subgroup='';}}
 
-  parents.forEach(function(btn){btn.addEventListener('click',function(){
-    var holder=btn.closest('[data-tree-item]');var childBox=holder&&holder.querySelector('.xm-tree-children');var wasOpen=!!(holder&&holder.classList.contains('open'));closeOthers(holder);if(holder&&childBox){holder.classList.toggle('open',!wasOpen);}else if(holder){holder.classList.remove('open');}clearActive();btn.classList.add('active');group=btn.dataset.group||'all';subgroup='';applyPosts();rebuildSlides();
-  });});
-
-  children.forEach(function(btn){btn.addEventListener('click',function(e){
-    e.stopPropagation();var holder=btn.closest('[data-tree-item]');closeOthers(holder);if(holder)holder.classList.add('open');clearActive();var parent=holder&&holder.querySelector('[data-tree-parent]');if(parent)parent.classList.add('active');btn.classList.add('active');group=btn.dataset.group||'all';subgroup=btn.dataset.subgroup||'';applyPosts();rebuildSlides();
-  });});
-
+  parents.forEach(function(btn){btn.addEventListener('click',function(){var holder=btn.closest('[data-tree-item]');var childBox=holder&&holder.querySelector('.xm-tree-children');var wasOpen=!!(holder&&holder.classList.contains('open'));closeOthers(holder);if(holder&&childBox){holder.classList.toggle('open',!wasOpen);}else if(holder){holder.classList.remove('open');}clearActive();btn.classList.add('active');group=btn.dataset.group||'all';subgroup='';applyPosts();rebuildSlides();});});
+  children.forEach(function(btn){btn.addEventListener('click',function(e){e.stopPropagation();var holder=btn.closest('[data-tree-item]');closeOthers(holder);if(holder)holder.classList.add('open');clearActive();var parent=holder&&holder.querySelector('[data-tree-parent]');if(parent)parent.classList.add('active');btn.classList.add('active');group=btn.dataset.group||'all';subgroup=btn.dataset.subgroup||'';applyPosts();rebuildSlides();});});
   if(prev)prev.onclick=function(e){e.preventDefault();showSlide(current-1);restart();};if(next)next.onclick=function(e){e.preventDefault();showSlide(current+1);restart();};if(search)search.addEventListener('input',applyPosts);
   syncMenuState();applyPosts();rebuildSlides();
 })();
