@@ -2,4 +2,15 @@
 .xm-module-filter{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:11px 14px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .xm-module-filter-label{flex:none;color:#6f7780;font-size:13px;font-weight:700}
 .xm-module-filter-box{margin-left:auto;width:min(320px,55%);height:38px;border:1px solid #e1e5e8;border-radius:20px;background:#f7f8f9;display:flex;align-items:center;gap:8px;padding:0 12px}
-.xm-module-filter-box svg{width:17px;height:17px;flex:none
+.xm-module-filter-box svg{width:17px;height:17px;flex:none;color:#76808a}
+.xm-module-filter-box input{width:100%;border:0;outline:0;background:transparent;color:#444;font-size:13px}
+@media(max-width:760px){.xm-module-filter{align-items:flex-start;flex-direction:column}.xm-module-filter-box{margin-left:0;width:100%}}
+</style>
+
+<div class="xm-module-filter">
+  <span class="xm-module-filter-label">当前模块筛选</span>
+  <label class="xm-module-filter-box" for="xm-module-filter-input">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input id="xm-module-filter-input" type="search" placeholder="{{ include.placeholder | default: '筛选当前模块' }}" autocomplete="off">
+  </label>
+</div>
