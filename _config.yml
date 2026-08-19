@@ -34,6 +34,7 @@ exclude:
   - 同步博客.bat
   - 新建博客文章.bat
   - 新建博客文章.ps1
+  - 导入数仓流程图.bat
   - _scripts
   - .gitignore
   - assets/main.scss
