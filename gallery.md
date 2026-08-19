@@ -5,9 +5,10 @@ permalink: /gallery/
 module_key: gallery
 ---
 
+{% assign menu_doc = site.menu_defs | where: 'module_key', 'gallery' | first %}
 <div class="xm-home-grid xm-module-grid" data-module="gallery">
   <aside class="xm-left-menu">
-    {% include collapsible-menu.html menu=site.data.module_menus.gallery %}
+    {% include collapsible-menu.html menu=menu_doc.items %}
   </aside>
 
   <main class="xm-center">
