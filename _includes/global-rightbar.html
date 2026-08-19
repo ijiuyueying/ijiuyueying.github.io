@@ -28,7 +28,13 @@
     <div class="xm-collection-grid">
       {% assign collection_items = site.collection_defs | sort: 'order' %}
       {% for item in collection_items %}
-      <a href="{{ item.url | relative_url }}">
+        {% assign target_url = item.public_url %}
+        {% if target_url == nil or target_url == '' %}
+          {% if item.key == 'gallery' %}{% assign target_url = '/gallery/' %}
+          {% elsif item.key == 'videos' %}{% assign target_url = '/videos/' %}
+          {% else %}{% assign target_url = '/' %}{% endif %}
+        {% endif %}
+      <a href="{{ target_url | relative_url }}">
         {% if item.icon %}<i class="xm-collection-icon">{{ item.icon }}</i>{% endif %}
         <b>{{ item.title }}</b>
         <span>{{ item.description }}</span>
