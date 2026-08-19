@@ -1,8 +1,12 @@
 site_name: 九月影
-avatar: ""
+
+# 头像：当前使用 HoYoLAB 图片资源中的至冬女皇图。
+# 以后想换成本地头像时，把图片放到 assets/images/avatar/，再改成：
+# avatar: "/assets/images/avatar/avatar.jpg"
+avatar: "https://upload-os-bbs.hoyolab.com/upload/2026/01/08/373294830/fe5a69eecd4a80e60c8ab500376604a6_7968545385091145326.webp"
 
 colors:
-  page_background: "#f3f4f5"
+  page_background: "#eef2f5"
   header_background: "#ffffff"
   left_menu_background: "#ffffff"
   content_background: "#ffffff"
@@ -10,7 +14,8 @@ colors:
   accent: "#e14f43"
 
 backgrounds:
-  page_image: ""
+  # 全站背景：冷色山湖风景。正文卡片保留白底，避免影响阅读。
+  page_image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=82"
   header_image: ""
   left_menu_image: ""
   sidebar_image: ""
