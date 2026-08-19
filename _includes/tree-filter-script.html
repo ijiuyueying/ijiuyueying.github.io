@@ -19,27 +19,50 @@
     });
   }
 
-  function selectParent(btn){
-    var holder=btn.closest('[data-tree-item]');
+  function closeOthers(holder){
     treeItems.forEach(function(item){if(item!==holder)item.classList.remove('open');});
-    if(holder && holder.querySelector('.xm-tree-children'))holder.classList.add('open');
-    parents.forEach(function(x){x.classList.remove('active');});
-    children.forEach(function(x){x.classList.remove('active');});
-    btn.classList.add('active');
-    g=btn.dataset.group||'all';s='';apply();
   }
 
-  parents.forEach(function(btn){btn.addEventListener('click',function(){selectParent(btn);});});
+  function clearActive(){
+    parents.forEach(function(x){x.classList.remove('active');});
+    children.forEach(function(x){x.classList.remove('active');});
+  }
+
+  parents.forEach(function(btn){btn.addEventListener('click',function(){
+    var holder=btn.closest('[data-tree-item]');
+    var childBox=holder&&holder.querySelector('.xm-tree-children');
+    var wasOpen=!!(holder&&holder.classList.contains('open'));
+
+    closeOthers(holder);
+    if(holder&&childBox){
+      holder.classList.toggle('open',!wasOpen);
+    }else if(holder){
+      holder.classList.remove('open');
+    }
+
+    clearActive();
+    btn.classList.add('active');
+    g=btn.dataset.group||'all';
+    s='';
+    apply();
+  });});
+
   children.forEach(function(btn){btn.addEventListener('click',function(e){
     e.stopPropagation();
     var holder=btn.closest('[data-tree-item]');
-    treeItems.forEach(function(item){if(item!==holder)item.classList.remove('open');});
+    closeOthers(holder);
     if(holder)holder.classList.add('open');
-    parents.forEach(function(x){x.classList.remove('active');});
-    children.forEach(function(x){x.classList.remove('active');});
-    var parent=holder&&holder.querySelector('[data-tree-parent]');if(parent)parent.classList.add('active');
-    btn.classList.add('active');g=btn.dataset.group||'all';s=btn.dataset.subgroup||'';apply();
+
+    clearActive();
+    var parent=holder&&holder.querySelector('[data-tree-parent]');
+    if(parent)parent.classList.add('active');
+    btn.classList.add('active');
+
+    g=btn.dataset.group||'all';
+    s=btn.dataset.subgroup||'';
+    apply();
   });});
+
   if(search)search.addEventListener('input',apply);
   apply();
 })();
