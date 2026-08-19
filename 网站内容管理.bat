@@ -13,21 +13,21 @@ if errorlevel 1 (
     exit /b 1
 )
 
-if not exist "%~dp0content-manager.ps1" (
-    echo Content-manager PowerShell script was not found.
+if not exist "%~dp0blog-manager.ps1" (
+    echo blog-manager.ps1 was not found.
     echo Run the sync script first.
     pause
     exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0content-manager.ps1"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0blog-manager.ps1"
 set "exitcode=%errorlevel%"
 
 if not "%exitcode%"=="0" (
     echo.
     echo ========================================
     echo Content manager stopped. Error code: %exitcode%
-    echo Keep this window open and send the error to ChatGPT.
+    echo Keep this window open and send the error.
     echo ========================================
     pause
     exit /b %exitcode%
