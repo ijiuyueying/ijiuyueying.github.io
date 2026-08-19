@@ -13,18 +13,22 @@ nav_key: project
 
   <main class="xm-center">
     <section class="xm-hero" id="xm-hero">
-      {% assign hero_posts = site.posts | slice: 0, 3 %}
-      {% for post in hero_posts %}
-      <a class="xm-slide{% if forloop.first %} active{% endif %}" href="{{ post.url | relative_url }}">
-        {% if post.cover %}<img src="{{ post.cover | relative_url }}" alt="{{ post.title }}">{% endif %}
-        <div class="xm-slide-overlay"></div>
-        <div class="xm-slide-copy">
-          <span>{{ post.categories | first | default: '项目笔记' }}</span>
-          <h2>{{ post.title }}</h2>
-          <p>{{ post.excerpt | strip_html | strip_newlines | truncate: 80 }}</p>
-        </div>
-      </a>
+      {% for category in site.data.project_categories %}
+        {% for slide in category.slides %}
+        <a class="xm-slide{% if category.key == 'all' and forloop.first %} active{% endif %}" data-slide-category="{{ category.key }}" href="{{ slide.url | relative_url }}">
+          <img src="{{ slide.image }}" alt="{{ slide.title }}">
+          <div class="xm-slide-overlay"></div>
+          <div class="xm-slide-copy">
+            <span>{{ category.label }}</span>
+            <h2>{{ slide.title }}</h2>
+            <p>{{ slide.text }}</p>
+          </div>
+        </a>
+        {% endfor %}
       {% endfor %}
+
+      <button class="xm-hero-arrow prev" id="xm-prev" type="button" aria-label="上一张">‹</button>
+      <button class="xm-hero-arrow next" id="xm-next" type="button" aria-label="下一张">›</button>
       <div class="xm-dots" id="xm-dots"></div>
     </section>
 
@@ -73,10 +77,48 @@ nav_key: project
 (function(){
   var buttons=[].slice.call(document.querySelectorAll('.xm-filter-btn'));
   var cards=[].slice.call(document.querySelectorAll('.xm-post-card'));
+  var allSlides=[].slice.call(document.querySelectorAll('.xm-slide'));
+  var dots=document.getElementById('xm-dots');
+  var prev=document.getElementById('xm-prev');
+  var next=document.getElementById('xm-next');
   var search=document.getElementById('xm-search-input');
   var activeFilter='all';
+  var visibleSlides=[];
+  var current=0;
+  var timer=null;
 
-  function apply(){
+  function rebuildSlides(){
+    visibleSlides=allSlides.filter(function(slide){
+      return slide.getAttribute('data-slide-category')===activeFilter;
+    });
+    allSlides.forEach(function(slide){slide.classList.remove('active');});
+    if(dots) dots.innerHTML='';
+    current=0;
+    if(!visibleSlides.length) return;
+    visibleSlides.forEach(function(_,i){
+      var b=document.createElement('button');
+      b.type='button';
+      b.setAttribute('aria-label','切换到第 '+(i+1)+' 张');
+      b.addEventListener('click',function(){showSlide(i);restart();});
+      dots.appendChild(b);
+    });
+    showSlide(0);
+    restart();
+  }
+
+  function showSlide(i){
+    if(!visibleSlides.length) return;
+    current=(i+visibleSlides.length)%visibleSlides.length;
+    visibleSlides.forEach(function(slide,j){slide.classList.toggle('active',j===current);});
+    if(dots){[].slice.call(dots.children).forEach(function(d,j){d.classList.toggle('active',j===current);});}
+  }
+
+  function restart(){
+    clearInterval(timer);
+    if(visibleSlides.length>1){timer=setInterval(function(){showSlide(current+1);},5000);}
+  }
+
+  function applyPosts(){
     var q=(search && search.value || '').trim().toLowerCase();
     cards.forEach(function(card){
       var cat=card.getAttribute('data-category')||'';
@@ -94,24 +136,15 @@ nav_key: project
       buttons.forEach(function(b){b.classList.remove('active');});
       btn.classList.add('active');
       activeFilter=btn.getAttribute('data-filter');
-      apply();
+      applyPosts();
+      rebuildSlides();
     });
   });
-  if(search) search.addEventListener('input',apply);
 
-  var slides=[].slice.call(document.querySelectorAll('.xm-slide'));
-  var dots=document.getElementById('xm-dots');
-  var current=0,timer;
-  function show(i){
-    if(!slides.length)return;
-    current=(i+slides.length)%slides.length;
-    slides.forEach(function(s,j){s.classList.toggle('active',j===current);});
-    if(dots){[].slice.call(dots.children).forEach(function(d,j){d.classList.toggle('active',j===current);});}
-  }
-  if(dots&&slides.length){
-    slides.forEach(function(_,i){var b=document.createElement('button');b.type='button';b.addEventListener('click',function(){show(i);restart();});dots.appendChild(b);});
-    show(0);
-    function restart(){clearInterval(timer);timer=setInterval(function(){show(current+1);},5000);}restart();
-  }
+  if(prev) prev.addEventListener('click',function(){showSlide(current-1);restart();});
+  if(next) next.addEventListener('click',function(){showSlide(current+1);restart();});
+  if(search) search.addEventListener('input',applyPosts);
+
+  rebuildSlides();
 })();
 </script>
