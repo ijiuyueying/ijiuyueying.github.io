@@ -6,7 +6,7 @@
   var children=[].slice.call(root.querySelectorAll('[data-tree-child]'));
   var treeItems=[].slice.call(root.querySelectorAll('[data-tree-item]'));
   var items=[].slice.call(root.querySelectorAll('.xm-filter-item'));
-  var search=document.getElementById('xm-search-input');
+  var search=root.querySelector('#xm-module-filter-input');
   var g='all',s='';
 
   function apply(){
@@ -19,48 +19,22 @@
     });
   }
 
-  function closeOthers(holder){
-    treeItems.forEach(function(item){if(item!==holder)item.classList.remove('open');});
-  }
-
-  function clearActive(){
-    parents.forEach(function(x){x.classList.remove('active');});
-    children.forEach(function(x){x.classList.remove('active');});
-  }
+  function closeOthers(holder){treeItems.forEach(function(item){if(item!==holder)item.classList.remove('open');});}
+  function clearActive(){parents.forEach(function(x){x.classList.remove('active');});children.forEach(function(x){x.classList.remove('active');});}
 
   parents.forEach(function(btn){btn.addEventListener('click',function(){
     var holder=btn.closest('[data-tree-item]');
     var childBox=holder&&holder.querySelector('.xm-tree-children');
     var wasOpen=!!(holder&&holder.classList.contains('open'));
-
     closeOthers(holder);
-    if(holder&&childBox){
-      holder.classList.toggle('open',!wasOpen);
-    }else if(holder){
-      holder.classList.remove('open');
-    }
-
-    clearActive();
-    btn.classList.add('active');
-    g=btn.dataset.group||'all';
-    s='';
-    apply();
+    if(holder&&childBox)holder.classList.toggle('open',!wasOpen);else if(holder)holder.classList.remove('open');
+    clearActive();btn.classList.add('active');g=btn.dataset.group||'all';s='';apply();
   });});
 
   children.forEach(function(btn){btn.addEventListener('click',function(e){
-    e.stopPropagation();
-    var holder=btn.closest('[data-tree-item]');
-    closeOthers(holder);
-    if(holder)holder.classList.add('open');
-
-    clearActive();
-    var parent=holder&&holder.querySelector('[data-tree-parent]');
-    if(parent)parent.classList.add('active');
-    btn.classList.add('active');
-
-    g=btn.dataset.group||'all';
-    s=btn.dataset.subgroup||'';
-    apply();
+    e.stopPropagation();var holder=btn.closest('[data-tree-item]');closeOthers(holder);if(holder)holder.classList.add('open');
+    clearActive();var parent=holder&&holder.querySelector('[data-tree-parent]');if(parent)parent.classList.add('active');btn.classList.add('active');
+    g=btn.dataset.group||'all';s=btn.dataset.subgroup||'';apply();
   });});
 
   if(search)search.addEventListener('input',apply);
