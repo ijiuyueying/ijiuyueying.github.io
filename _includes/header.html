@@ -25,29 +25,24 @@
       {% endfor %}
     </nav>
 
-    <label class="xm-search" for="xm-search-input" style="align-self:center">
+    <label class="xm-search" for="xm-global-search-input" style="align-self:center">
       <svg class="xm-search-icon" style="display:block;width:20px;height:20px;flex:0 0 20px;color:#66717b" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="xm-search-input" type="search" placeholder="搜索当前模块" autocomplete="off">
+      <input id="xm-global-search-input" type="search" placeholder="搜索文章全文" autocomplete="off">
     </label>
   </div>
 </header>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-  var input=document.getElementById('xm-search-input');
+  var input=document.getElementById('xm-global-search-input');
   if(!input)return;
   var params=new URLSearchParams(window.location.search);
-  var q=params.get('q')||'';
-  if(q){input.value=q;setTimeout(function(){input.dispatchEvent(new Event('input',{bubbles:true}));},0);}
-
-  {% if page.layout == 'post' or page.layout == 'category' or page.url == '/articles/' %}
-  input.placeholder='搜索项目文章';
+  if(window.location.pathname.indexOf('/search/')>-1){input.value=params.get('q')||'';}
   input.addEventListener('keydown',function(e){
     if(e.key!=='Enter')return;
     var keyword=(input.value||'').trim();
     if(!keyword)return;
-    window.location.href='{{ '/' | relative_url }}?q='+encodeURIComponent(keyword)+'#xm-post-list';
+    window.location.href='{{ '/search/' | relative_url }}?q='+encodeURIComponent(keyword);
   });
-  {% endif %}
 });
 </script>
