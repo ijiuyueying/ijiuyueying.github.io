@@ -3,21 +3,29 @@
   bvid: BV1D44y1z7GS
   url: "https://www.bilibili.com/video/BV1D44y1z7GS/"
   description: 竹业篇相关剪辑，东方淮竹 / 王权霸业。
+  group: anime
+  subgroup: huaizhu
 
 - title: 竹业篇 · 意难平混剪
   platform: bilibili
   bvid: BV1JKd6Y4Ep1
   url: "https://www.bilibili.com/video/BV1JKd6Y4Ep1/"
   description: 东方淮竹与王权霸业相关混剪。
+  group: anime
+  subgroup: huaizhu
 
 - title: 人间白首 · 七月初七淮水竹亭
   platform: bilibili
   bvid: BV1VG411v7BN
   url: "https://www.bilibili.com/video/BV1VG411v7BN/"
   description: 淮竹 / 王权霸业主题混剪。
+  group: anime
+  subgroup: huaizhu
 
 - title: 竹业篇 OP《满庭芳》完整版 MV
   platform: bilibili
   bvid: BV1Q5411P73k
   url: "https://www.bilibili.com/video/BV1Q5411P73k/"
   description: 《狐妖小红娘·竹业篇》相关音乐视频。
+  group: anime
+  subgroup: fox-spirit
