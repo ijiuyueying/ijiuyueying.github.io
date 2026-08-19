@@ -1,4 +1,6 @@
-{% assign project_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
+{% assign current_module_key = page.module | default: 'project' %}
+{% assign current_menu_doc = site.menu_defs | where: 'module_key', current_module_key | first %}
+{% if current_menu_doc == nil %}{% assign current_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}{% endif %}
 {% assign current_category = page.categories | first | default: page.category_key | default: '' %}
 {% assign current_subcategory = page.subcategory | default: '' %}
 
@@ -20,10 +22,10 @@
 @keyframes persistentOpen{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
 </style>
 
-<aside class="persistent-project-nav" aria-label="项目分类">
-  <div class="persistent-nav-title">项目分类</div>
+<aside class="persistent-project-nav" aria-label="{{ current_menu_doc.top_label | default: '文章' }}分类">
+  <div class="persistent-nav-title">{{ current_menu_doc.top_label | default: '文章' }}分类</div>
   <div class="persistent-nav-list">
-    {% for item in project_menu_doc.items %}
+    {% for item in current_menu_doc.items %}
       {% assign item_active = false %}
       {% if item.key == current_category %}{% assign item_active = true %}{% endif %}
       {% if item.key == 'all' and current_category == '' %}{% assign item_active = true %}{% endif %}
@@ -36,11 +38,11 @@
         </div>
         <div class="persistent-nav-children">
           {% for child in item.children %}
-          <a class="persistent-nav-child{% if item_active and current_subcategory == child.key %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}&subcategory={{ child.key }}#xm-post-list">{{ child.label }}</a>
+          <a class="persistent-nav-child{% if item_active and current_subcategory == child.key %} active{% endif %}" href="{{ current_menu_doc.top_url | default: '/' | relative_url }}?category={{ item.key }}&subcategory={{ child.key }}#xm-post-list">{{ child.label }}</a>
           {% endfor %}
         </div>
         {% else %}
-        <a class="persistent-nav-link{% if item_active %} active{% endif %}" href="{{ '/' | relative_url }}?category={{ item.key }}#xm-post-list">{{ item.label }}</a>
+        <a class="persistent-nav-link{% if item_active %} active{% endif %}" href="{{ current_menu_doc.top_url | default: '/' | relative_url }}?category={{ item.key }}#xm-post-list">{{ item.label }}</a>
         {% endif %}
       </div>
     {% endfor %}
@@ -52,7 +54,6 @@
   var script=document.currentScript;
   var nav=script&&script.previousElementSibling;
   if(!nav||!nav.classList.contains('persistent-project-nav'))return;
-
   var rows=[].slice.call(nav.querySelectorAll('[data-persistent-item]'));
 
   function toggleRow(row){
