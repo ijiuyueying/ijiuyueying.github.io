@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $postsDir = Join-Path $repoRoot '_posts'
-$categoriesFile = Join-Path $repoRoot '_data\project_categories.yml'
+$categoriesFile = Join-Path $repoRoot '_menu_defs\project.md'
 
 function Make-Text([int[]]$codes) {
     return -join ($codes | ForEach-Object { [char]$_ })
@@ -10,7 +10,7 @@ function Make-Text([int[]]$codes) {
 
 function Load-ProjectCategories {
     if (-not (Test-Path $categoriesFile)) {
-        throw 'Cannot find _data/project_categories.yml. Run sync first.'
+        throw 'Cannot find _menu_defs/project.md. Run sync first.'
     }
 
     $text = [System.IO.File]::ReadAllText($categoriesFile, [System.Text.Encoding]::UTF8)
@@ -18,9 +18,17 @@ function Load-ProjectCategories {
     $result = New-Object System.Collections.ArrayList
     $current = $null
     $inChildren = $false
+    $inItems = $false
 
     foreach ($line in $lines) {
-        if ($line -match '^- key:\s*(.+?)\s*$') {
+        if ($line -match '^items:\s*$') {
+            $inItems = $true
+            continue
+        }
+        if (-not $inItems) { continue }
+        if ($line -match '^---\s*$') { break }
+
+        if ($line -match '^  - key:\s*(.+?)\s*$') {
             if ($null -ne $current) { [void]$result.Add($current) }
             $current = [ordered]@{ key = $Matches[1].Trim(); label = ''; children = New-Object System.Collections.ArrayList }
             $inChildren = $false
@@ -28,24 +36,24 @@ function Load-ProjectCategories {
         }
         if ($null -eq $current) { continue }
 
-        if ($line -match '^  label:\s*(.+?)\s*$' -and -not $inChildren) {
+        if ($line -match '^    label:\s*(.+?)\s*$' -and -not $inChildren) {
             $current.label = $Matches[1].Trim()
             continue
         }
-        if ($line -match '^  children:\s*$') {
+        if ($line -match '^    children:\s*$') {
             $inChildren = $true
             continue
         }
-        if ($line -match '^  slides:\s*$') {
+        if ($line -match '^    slides:\s*$') {
             $inChildren = $false
             continue
         }
-        if ($inChildren -and $line -match '^    - key:\s*(.+?)\s*$') {
+        if ($inChildren -and $line -match '^      - key:\s*(.+?)\s*$') {
             $child = [ordered]@{ key = $Matches[1].Trim(); label = '' }
             [void]$current.children.Add($child)
             continue
         }
-        if ($inChildren -and $line -match '^      label:\s*(.+?)\s*$' -and $current.children.Count -gt 0) {
+        if ($inChildren -and $line -match '^        label:\s*(.+?)\s*$' -and $current.children.Count -gt 0) {
             $current.children[$current.children.Count - 1].label = $Matches[1].Trim()
             continue
         }
