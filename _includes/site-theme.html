@@ -1,0 +1,60 @@
+{% assign s = site.data.site_settings %}
+<style>
+:root{
+  --xm-page-bg: {{ s.colors.page_background | default: '#f3f4f5' }};
+  --xm-header-bg: {{ s.colors.header_background | default: '#ffffff' }};
+  --xm-left-bg: {{ s.colors.left_menu_background | default: '#ffffff' }};
+  --xm-content-bg: {{ s.colors.content_background | default: '#ffffff' }};
+  --xm-sidebar-bg: {{ s.colors.sidebar_background | default: '#ffffff' }};
+  --xm-accent: {{ s.colors.accent | default: '#e14f43' }};
+}
+html,body{max-width:100%;overflow-x:hidden}
+body{
+  background-color:var(--xm-page-bg);
+  {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
+  background-image:url('{{ s.backgrounds.page_image }}');
+  background-size:cover;background-position:center;background-attachment:fixed;
+  {% endif %}
+}
+.xm-header{
+  background-color:var(--xm-header-bg)!important;
+  {% if s.backgrounds.header_image and s.backgrounds.header_image != '' %}
+  background-image:url('{{ s.backgrounds.header_image }}');
+  background-size:cover;background-position:center;
+  {% endif %}
+}
+.xm-left-menu,.xm-tree-menu,.persistent-project-nav{
+  background-color:var(--xm-left-bg)!important;
+  {% if s.backgrounds.left_menu_image and s.backgrounds.left_menu_image != '' %}
+  background-image:url('{{ s.backgrounds.left_menu_image }}');
+  background-size:cover;background-position:center;
+  {% endif %}
+}
+.xm-side-card{
+  background-color:var(--xm-sidebar-bg)!important;
+  {% if s.backgrounds.sidebar_image and s.backgrounds.sidebar_image != '' %}
+  background-image:url('{{ s.backgrounds.sidebar_image }}');
+  background-size:cover;background-position:center;
+  {% endif %}
+}
+.xm-post-card,.xm-page,.article-head-new,.article-body-new,.archive-center,.category-center,.search-panel{background-color:var(--xm-content-bg)!important}
+
+/* old search icon rule used span and also affected the article match counter */
+.xm-search span{transform:none!important}
+#xm-article-search-count{font-size:12px!important;color:#7d858d!important;transform:none!important}
+
+/* prevent sidebars and long article content from creating page-level horizontal scrollbars */
+.xm-center,.post-center,.article-body-new,.archive-center,.category-center{min-width:0}
+.post-left-sticky,.post-toc-sticky,.archive-left,.category-left{overflow-y:auto!important;overflow-x:hidden!important}
+.persistent-project-nav,.persistent-nav-list,.persistent-nav-item{max-width:100%;overflow-x:hidden}
+.persistent-nav-parent,.persistent-nav-link,.persistent-nav-child,.article-toc-new a{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.article-body-new{overflow-wrap:anywhere;word-break:normal}
+.article-body-new pre{max-width:100%;overflow:auto}
+.article-body-new table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
+.article-body-new th,.article-body-new td{padding:9px 11px;border:1px solid #dfe3e8;white-space:nowrap}
+.article-body-new th{background:#f6f7f8}
+.article-body-new img,.article-body-new iframe,.article-body-new video{max-width:100%}
+
+/* compact, consistent scrollbars on persistent side columns */
+.post-left-sticky,.post-toc-sticky,.archive-left,.category-left{scrollbar-width:thin;scrollbar-color:#c8cdd2 transparent}
+</style>
