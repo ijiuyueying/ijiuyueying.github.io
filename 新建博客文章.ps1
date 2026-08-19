@@ -2,34 +2,50 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $postsDir = Join-Path $repoRoot '_posts'
-$categoriesFile = Join-Path $repoRoot '_menu_defs\project.md'
+$menuDir = Join-Path $repoRoot '_menu_defs'
 
 function Make-Text([int[]]$codes) {
     return -join ($codes | ForEach-Object { [char]$_ })
 }
 
-function Load-ProjectCategories {
-    if (-not (Test-Path $categoriesFile)) {
-        throw 'Cannot find _menu_defs/project.md. Run sync first.'
-    }
-
-    $text = [System.IO.File]::ReadAllText($categoriesFile, [System.Text.Encoding]::UTF8)
+function Read-MenuDefinition([string]$filePath) {
+    $text = [System.IO.File]::ReadAllText($filePath, [System.Text.Encoding]::UTF8)
     $lines = $text -split "`r?`n"
-    $result = New-Object System.Collections.ArrayList
+
+    $moduleKey = ''
+    $topLabel = ''
+    $articleEnabled = $false
+    $topOrder = 9999
+    $items = New-Object System.Collections.ArrayList
     $current = $null
     $inChildren = $false
     $inItems = $false
+    $insideFrontMatter = $false
+    $frontMatterEnded = $false
 
     foreach ($line in $lines) {
-        if ($line -match '^items:\s*$') {
-            $inItems = $true
+        if (-not $insideFrontMatter -and -not $frontMatterEnded -and $line -match '^---\s*$') {
+            $insideFrontMatter = $true
             continue
         }
-        if (-not $inItems) { continue }
-        if ($line -match '^---\s*$') { break }
+        if ($insideFrontMatter -and $line -match '^---\s*$') {
+            if ($null -ne $current) { [void]$items.Add($current); $current = $null }
+            $frontMatterEnded = $true
+            break
+        }
+        if (-not $insideFrontMatter) { continue }
+
+        if (-not $inItems) {
+            if ($line -match '^module_key:\s*(.+?)\s*$') { $moduleKey = $Matches[1].Trim(); continue }
+            if ($line -match '^top_label:\s*(.+?)\s*$') { $topLabel = $Matches[1].Trim(); continue }
+            if ($line -match '^article_enabled:\s*(true|false)\s*$') { $articleEnabled = ($Matches[1].ToLower() -eq 'true'); continue }
+            if ($line -match '^top_order:\s*(\d+)\s*$') { $topOrder = [int]$Matches[1]; continue }
+            if ($line -match '^items:\s*$') { $inItems = $true; continue }
+            continue
+        }
 
         if ($line -match '^  - key:\s*(.+?)\s*$') {
-            if ($null -ne $current) { [void]$result.Add($current) }
+            if ($null -ne $current) { [void]$items.Add($current) }
             $current = [ordered]@{ key = $Matches[1].Trim(); label = ''; children = New-Object System.Collections.ArrayList }
             $inChildren = $false
             continue
@@ -40,14 +56,9 @@ function Load-ProjectCategories {
             $current.label = $Matches[1].Trim()
             continue
         }
-        if ($line -match '^    children:\s*$') {
-            $inChildren = $true
-            continue
-        }
-        if ($line -match '^    slides:\s*$') {
-            $inChildren = $false
-            continue
-        }
+        if ($line -match '^    children:\s*$') { $inChildren = $true; continue }
+        if ($line -match '^    slides:\s*$') { $inChildren = $false; continue }
+
         if ($inChildren -and $line -match '^      - key:\s*(.+?)\s*$') {
             $child = [ordered]@{ key = $Matches[1].Trim(); label = '' }
             [void]$current.children.Add($child)
@@ -59,25 +70,69 @@ function Load-ProjectCategories {
         }
     }
 
-    if ($null -ne $current) { [void]$result.Add($current) }
-    return @($result | Where-Object { $_.key -ne 'all' })
+    if ($null -ne $current) { [void]$items.Add($current) }
+
+    if ([string]::IsNullOrWhiteSpace($moduleKey)) { return $null }
+    if ([string]::IsNullOrWhiteSpace($topLabel)) { $topLabel = $moduleKey }
+
+    return [pscustomobject]@{
+        module_key = $moduleKey
+        label = $topLabel
+        article_enabled = $articleEnabled
+        top_order = $topOrder
+        file = $filePath
+        items = @($items | Where-Object { $_.key -ne 'all' })
+    }
+}
+
+function Load-ArticleModules {
+    if (-not (Test-Path $menuDir)) {
+        throw 'Cannot find _menu_defs directory. Run sync first.'
+    }
+
+    $modules = New-Object System.Collections.ArrayList
+    Get-ChildItem -Path $menuDir -Filter '*.md' -File | ForEach-Object {
+        $def = Read-MenuDefinition $_.FullName
+        if ($null -ne $def -and $def.article_enabled) { [void]$modules.Add($def) }
+    }
+
+    return @($modules | Sort-Object top_order, label)
 }
 
 try {
-    if (-not (Test-Path $postsDir)) {
-        New-Item -ItemType Directory -Path $postsDir -Force | Out-Null
-    }
+    if (-not (Test-Path $postsDir)) { New-Item -ItemType Directory -Path $postsDir -Force | Out-Null }
 
-    $categories = @(Load-ProjectCategories)
-    if ($categories.Count -eq 0) { throw 'No project categories found.' }
+    $modules = @(Load-ArticleModules)
+    if ($modules.Count -eq 0) {
+        throw 'No article-enabled modules found. Add article_enabled: true to a _menu_defs/*.md file.'
+    }
 
     Clear-Host
     Write-Host '========================================' -ForegroundColor Cyan
-    Write-Host 'Jiuyueying Blog - New Project Post' -ForegroundColor Cyan
+    Write-Host 'Jiuyueying Blog - New Post' -ForegroundColor Cyan
     Write-Host '========================================' -ForegroundColor Cyan
     Write-Host ''
-    Write-Host 'Level 1 Module: Project' -ForegroundColor DarkGray
+    Write-Host 'Choose Level 1 module:' -ForegroundColor Yellow
+
+    for ($i = 0; $i -lt $modules.Count; $i++) {
+        Write-Host (('{0}. {1}   [{2}]' -f ($i + 1), $modules[$i].label, $modules[$i].module_key))
+    }
+
+    $moduleText = Read-Host ('Enter 1-' + $modules.Count)
+    $moduleChoice = 0
+    if (-not [int]::TryParse($moduleText, [ref]$moduleChoice) -or $moduleChoice -lt 1 -or $moduleChoice -gt $modules.Count) {
+        throw 'Invalid Level 1 module.'
+    }
+
+    $selectedModule = $modules[$moduleChoice - 1]
+    $moduleKey = $selectedModule.module_key
+    $moduleLabel = $selectedModule.label
+    $categories = @($selectedModule.items)
+
+    if ($categories.Count -eq 0) { throw ('No Level 2 categories found in module: ' + $moduleLabel) }
+
     Write-Host ''
+    Write-Host ('Level 1 selected: ' + $moduleLabel) -ForegroundColor Green
     Write-Host 'Choose Level 2 category:' -ForegroundColor Yellow
 
     for ($i = 0; $i -lt $categories.Count; $i++) {
@@ -149,6 +204,7 @@ try {
     [void]$lines.Add('layout: post')
     [void]$lines.Add("title: '$safeTitle'")
     [void]$lines.Add("date: $timeText +0800")
+    [void]$lines.Add("module: $moduleKey")
     [void]$lines.Add("categories: [$category]")
     if (-not [string]::IsNullOrWhiteSpace($subcategory)) { [void]$lines.Add("subcategory: $subcategory") }
     [void]$lines.Add('tags: []')
@@ -176,7 +232,7 @@ try {
 
     Write-Host ''
     Write-Host 'Post created successfully.' -ForegroundColor Green
-    Write-Host 'Level 1: Project' -ForegroundColor Green
+    Write-Host ('Level 1: ' + $moduleLabel + ' [' + $moduleKey + ']') -ForegroundColor Green
     Write-Host ('Level 2: ' + $categoryLabel + ' [' + $category + ']') -ForegroundColor Green
     if ($subcategory) { Write-Host ('Level 3: ' + $subcategoryLabel + ' [' + $subcategory + ']') -ForegroundColor Green }
     Write-Host ('File: ' + $filePath) -ForegroundColor Green
