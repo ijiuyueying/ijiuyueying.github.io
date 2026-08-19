@@ -4,6 +4,10 @@ $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $postsDir = Join-Path $repoRoot '_posts'
 $categoriesFile = Join-Path $repoRoot '_data\project_categories.yml'
 
+function Make-Text([int[]]$codes) {
+    return -join ($codes | ForEach-Object { [char]$_ })
+}
+
 function Load-ProjectCategories {
     if (-not (Test-Path $categoriesFile)) {
         throw 'Cannot find _data/project_categories.yml. Run sync first.'
@@ -46,8 +50,8 @@ function Load-ProjectCategories {
             continue
         }
     }
-    if ($null -ne $current) { [void]$result.Add($current) }
 
+    if ($null -ne $current) { [void]$result.Add($current) }
     return @($result | Where-Object { $_.key -ne 'all' })
 }
 
@@ -89,6 +93,7 @@ try {
         Write-Host ('Level 2 selected: ' + $categoryLabel) -ForegroundColor Green
         Write-Host 'Choose Level 3 category:' -ForegroundColor Yellow
         Write-Host '0. No Level 3 category'
+
         for ($i = 0; $i -lt $selected.children.Count; $i++) {
             Write-Host (('{0}. {1}   [{2}]' -f ($i + 1), $selected.children[$i].label, $selected.children[$i].key))
         }
@@ -98,6 +103,7 @@ try {
         if (-not [int]::TryParse($subText, [ref]$subChoice) -or $subChoice -lt 0 -or $subChoice -gt $selected.children.Count) {
             throw 'Invalid Level 3 category.'
         }
+
         if ($subChoice -gt 0) {
             $subcategory = $selected.children[$subChoice - 1].key
             $subcategoryLabel = $selected.children[$subChoice - 1].label
@@ -117,10 +123,17 @@ try {
     $timeText = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $fileName = $dateText + '-' + $slug + '.md'
     $filePath = Join-Path $postsDir $fileName
+
     if (Test-Path $filePath) {
         $fileName = $dateText + '-' + $slug + '-' + (Get-Date -Format 'HHmmss') + '.md'
         $filePath = Join-Path $postsDir $fileName
     }
+
+    $headingBackground = (Make-Text @(0x80CC,0x666F)) + ' / ' + (Make-Text @(0x95EE,0x9898))
+    $headingCore = Make-Text @(0x6838,0x5FC3,0x6982,0x5FF5)
+    $headingImplementation = (Make-Text @(0x5B9E,0x73B0)) + ' / ' + (Make-Text @(0x6848,0x4F8B))
+    $headingInterview = Make-Text @(0x9762,0x8BD5,0x600E,0x4E48,0x56DE,0x7B54)
+    $headingSummary = Make-Text @(0x603B,0x7ED3)
 
     $safeTitle = $title.Replace("'", "''")
     $lines = New-Object System.Collections.ArrayList
@@ -134,19 +147,19 @@ try {
     [void]$lines.Add('typora-copy-images-to: ../assets/images/${filename}')
     [void]$lines.Add('---')
     [void]$lines.Add('')
-    [void]$lines.Add('## 背景 / 问题')
+    [void]$lines.Add('## ' + $headingBackground)
     [void]$lines.Add('')
     [void]$lines.Add('')
-    [void]$lines.Add('## 核心概念')
+    [void]$lines.Add('## ' + $headingCore)
     [void]$lines.Add('')
     [void]$lines.Add('')
-    [void]$lines.Add('## 实现 / 案例')
+    [void]$lines.Add('## ' + $headingImplementation)
     [void]$lines.Add('')
     [void]$lines.Add('')
-    [void]$lines.Add('## 面试怎么回答')
+    [void]$lines.Add('## ' + $headingInterview)
     [void]$lines.Add('')
     [void]$lines.Add('')
-    [void]$lines.Add('## 总结')
+    [void]$lines.Add('## ' + $headingSummary)
     [void]$lines.Add('')
 
     $content = $lines -join [Environment]::NewLine
@@ -155,7 +168,7 @@ try {
 
     Write-Host ''
     Write-Host 'Post created successfully.' -ForegroundColor Green
-    Write-Host ('Level 1: Project') -ForegroundColor Green
+    Write-Host 'Level 1: Project' -ForegroundColor Green
     Write-Host ('Level 2: ' + $categoryLabel + ' [' + $category + ']') -ForegroundColor Green
     if ($subcategory) { Write-Host ('Level 3: ' + $subcategoryLabel + ' [' + $subcategory + ']') -ForegroundColor Green }
     Write-Host ('File: ' + $filePath) -ForegroundColor Green
@@ -164,11 +177,13 @@ try {
     $typoraPath = $null
     $candidate1 = Join-Path $env:LOCALAPPDATA 'Programs\Typora\Typora.exe'
     $candidate2 = Join-Path $env:ProgramFiles 'Typora\Typora.exe'
+
     if (Test-Path $candidate1) { $typoraPath = $candidate1 }
     elseif (Test-Path $candidate2) { $typoraPath = $candidate2 }
 
     if ($typoraPath) { Start-Process -FilePath $typoraPath -ArgumentList $filePath }
     else { Start-Process $filePath }
+
     exit 0
 }
 catch {
