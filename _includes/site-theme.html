@@ -8,14 +8,18 @@
   --xm-sidebar-bg: {{ s.colors.sidebar_background | default: '#ffffff' }};
   --xm-accent: {{ s.colors.accent | default: '#e14f43' }};
 }
-html,body{max-width:100%;overflow-x:hidden}
+
+/* clip 只裁剪横向溢出，不创建新的滚动容器，避免破坏 position: sticky */
+html,body{max-width:100%;overflow-x:clip}
 body{
   background-color:var(--xm-page-bg);
   {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
-  background-image:url('{{ s.backgrounds.page_image }}');
+  background-image:linear-gradient(rgba(243,244,245,.86),rgba(243,244,245,.86)),url('{{ s.backgrounds.page_image }}');
   background-size:cover;background-position:center;background-attachment:fixed;
   {% endif %}
 }
+.site-main{overflow:visible!important}
+
 .xm-header{
   background-color:var(--xm-header-bg)!important;
   {% if s.backgrounds.header_image and s.backgrounds.header_image != '' %}
@@ -39,13 +43,24 @@ body{
 }
 .xm-post-card,.xm-page,.article-head-new,.article-body-new,.archive-center,.category-center,.search-panel{background-color:var(--xm-content-bg)!important}
 
-/* old search icon rule used span and also affected the article match counter */
 .xm-search span{transform:none!important}
 #xm-article-search-count{font-size:12px!important;color:#7d858d!important;transform:none!important}
 
-/* prevent sidebars and long article content from creating page-level horizontal scrollbars */
+/* 文章页左右栏常驻 */
+.post-three-grid,.archive-three-grid,.category-three-grid{overflow:visible!important}
+.post-left-sticky,.post-toc-sticky,.archive-left,.category-left{
+  align-self:start!important;
+  position:sticky!important;
+  top:96px!important;
+  max-height:calc(100vh - 116px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scrollbar-width:thin;
+  scrollbar-color:#c8cdd2 transparent;
+}
+
+/* 防止长内容撑宽整个页面 */
 .xm-center,.post-center,.article-body-new,.archive-center,.category-center{min-width:0}
-.post-left-sticky,.post-toc-sticky,.archive-left,.category-left{overflow-y:auto!important;overflow-x:hidden!important}
 .persistent-project-nav,.persistent-nav-list,.persistent-nav-item{max-width:100%;overflow-x:hidden}
 .persistent-nav-parent,.persistent-nav-link,.persistent-nav-child,.article-toc-new a{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .article-body-new{overflow-wrap:anywhere;word-break:normal}
@@ -55,6 +70,9 @@ body{
 .article-body-new th{background:#f6f7f8}
 .article-body-new img,.article-body-new iframe,.article-body-new video{max-width:100%}
 
-/* compact, consistent scrollbars on persistent side columns */
-.post-left-sticky,.post-toc-sticky,.archive-left,.category-left{scrollbar-width:thin;scrollbar-color:#c8cdd2 transparent}
+@media(max-width:920px){
+  .post-left-sticky,.post-toc-sticky,.archive-left,.category-left{
+    position:static!important;max-height:none!important;overflow:visible!important;
+  }
+}
 </style>
