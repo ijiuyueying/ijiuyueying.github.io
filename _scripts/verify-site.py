@@ -8,7 +8,6 @@ from urllib.parse import urlparse
 
 SITE = Path(sys.argv[1] if len(sys.argv) > 1 else "_site").resolve()
 
-# 这些页面属于站点骨架。任何一个缺失，都不允许覆盖当前线上版本。
 REQUIRED = [
     "/",
     "/404.html",
@@ -26,8 +25,12 @@ REQUIRED = [
     "/search/",
 ]
 
-IGNORE_PREFIXES = (
-    "/assets/",
+IGNORE_PREFIXES = ("/assets/",)
+FORBIDDEN_PUBLIC_PREFIXES = (
+    "/collection_defs/",
+    "/menu_defs/",
+    "/_collection_defs/",
+    "/_menu_defs/",
 )
 
 
@@ -45,26 +48,19 @@ class LinkParser(HTMLParser):
 
 
 def route_candidates(route: str) -> list[Path]:
-    """Return possible generated files for a Jekyll-style URL."""
     parsed = urlparse(route)
     path = parsed.path or "/"
-
     if path == "/":
         return [SITE / "index.html"]
 
     clean = path.lstrip("/")
-
     if path.endswith("/"):
         return [SITE / clean / "index.html"]
 
     candidates = [SITE / clean]
-
-    # Jekyll/page links may be extensionless while output is either
-    # /name/index.html or /name.html.
     if "." not in Path(clean).name:
         candidates.append(SITE / clean / "index.html")
         candidates.append(SITE / (clean + ".html"))
-
     return candidates
 
 
@@ -91,9 +87,7 @@ def main() -> int:
             fatal_errors.append(f"Missing required route: {route} ({pretty})")
             print(f"  ERR {route} -> {pretty}")
 
-    # 普通站内链接只做告警，不阻断发布。
-    # 原因：历史文章、锚点、Jekyll permalink 和浏览器路径写法可能产生合理差异。
-    print("[VERIFY] Checking internal page links (warning only)...")
+    print("[VERIFY] Checking internal page links...")
     html_files = list(SITE.rglob("*.html"))
 
     for html_file in html_files:
@@ -119,6 +113,12 @@ def main() -> int:
             if not path or not path.startswith("/"):
                 continue
 
+            if any(path.startswith(prefix) for prefix in FORBIDDEN_PUBLIC_PREFIXES):
+                fatal_errors.append(
+                    f"Internal configuration path exposed in {html_file.relative_to(SITE)}: {href}"
+                )
+                continue
+
             if any(path.startswith(prefix) for prefix in IGNORE_PREFIXES):
                 continue
 
@@ -135,8 +135,8 @@ def main() -> int:
             print(f" - ... and {len(warnings) - 50} more")
 
     if fatal_errors:
-        print("\n[VERIFY] FAILED - required site routes are missing")
-        for item in fatal_errors:
+        print("\n[VERIFY] FAILED")
+        for item in fatal_errors[:100]:
             print(" - " + item)
         return 1
 
