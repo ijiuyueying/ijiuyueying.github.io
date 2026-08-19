@@ -14,14 +14,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
-if not exist "%~dp0content-manager.ps1" (
+if not exist "%~dp0网站内容管理.ps1" (
     echo Content-manager PowerShell script was not found.
     echo Run the sync script first.
     pause
     exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$p=Join-Path $env:BLOG_ROOT 'content-manager.ps1'; $code=[IO.File]::ReadAllText($p,[Text.Encoding]::UTF8); Invoke-Expression $code"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0网站内容管理.ps1"
 set "exitcode=%errorlevel%"
 
 if not "%exitcode%"=="0" (
