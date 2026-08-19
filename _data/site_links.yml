@@ -1,9 +1,11 @@
 - title: GitHub
   url: https://github.com/
   description: 代码托管与开源项目
-  group: 开发工具
+  group: dev
+  subgroup: code-hosting
 
 - title: ChatGPT
   url: https://chatgpt.com/
   description: AI 学习与辅助工具
-  group: AI
+  group: ai
+  subgroup: llm
