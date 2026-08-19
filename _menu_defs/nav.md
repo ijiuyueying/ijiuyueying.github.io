@@ -1,5 +1,9 @@
 ---
 module_key: nav
+show_top: true
+top_label: 网址导航
+top_url: /nav/
+top_order: 20
 items:
   - key: all
     label: 推荐
