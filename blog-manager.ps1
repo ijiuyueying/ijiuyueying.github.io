@@ -9,7 +9,7 @@ $script:BlogRoot = $script:BlogRoot.TrimEnd('\')
 $moduleFiles = @(
     '_scripts\blog-manager-common.ps1',
     '_scripts\article-manager.ps1',
-    '_scripts\collection-manager-final.ps1',
+    '_scripts\collection-manager.ps1',
     '_scripts\media-manager.ps1',
     '_scripts\check-manager.ps1'
 )
