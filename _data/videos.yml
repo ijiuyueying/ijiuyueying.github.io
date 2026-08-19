@@ -2,6 +2,7 @@
   platform: bilibili
   bvid: BV1D44y1z7GS
   url: "https://www.bilibili.com/video/BV1D44y1z7GS/"
+  cover: "https://5b0988e595225.cdn.sohucs.com/images/20200220/3914f25235854f3fb5dc3cf87228196f.jpeg"
   description: 竹业篇相关剪辑，东方淮竹 / 王权霸业。
   group: fox-spirit
   subgroup: huaizhu
@@ -10,6 +11,7 @@
   platform: bilibili
   bvid: BV1JKd6Y4Ep1
   url: "https://www.bilibili.com/video/BV1JKd6Y4Ep1/"
+  cover: "https://5b0988e595225.cdn.sohucs.com/images/20200220/2ded294aeba64875bc5e1104ef2eb4b1.jpeg"
   description: 东方淮竹与王权霸业相关混剪。
   group: fox-spirit
   subgroup: huaizhu
@@ -18,6 +20,7 @@
   platform: bilibili
   bvid: BV1VG411v7BN
   url: "https://www.bilibili.com/video/BV1VG411v7BN/"
+  cover: "https://5b0988e595225.cdn.sohucs.com/images/20200220/731f9172da0d4df2b717d2799f1d1950.jpeg"
   description: 淮竹 / 王权霸业主题混剪。
   group: fox-spirit
   subgroup: huaizhu
@@ -26,6 +29,7 @@
   platform: bilibili
   bvid: BV1Q5411P73k
   url: "https://www.bilibili.com/video/BV1Q5411P73k/"
+  cover: "https://5b0988e595225.cdn.sohucs.com/images/20200220/9e52f226003e4442b254dcbc7c509fce.jpeg"
   description: 《狐妖小红娘·竹业篇》相关音乐视频。
   group: fox-spirit
   subgroup: mixed
