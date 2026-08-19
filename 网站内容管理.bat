@@ -1,7 +1,6 @@
 @echo off
 cd /d "%~dp0"
 setlocal EnableExtensions
-set "BLOG_ROOT=%~dp0"
 
 echo ========================================
 echo Jiuyueying Blog - Content Manager
@@ -14,14 +13,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
-if not exist "%~dp0网站内容管理.ps1" (
+if not exist "%~dp0content-manager.ps1" (
     echo Content-manager PowerShell script was not found.
     echo Run the sync script first.
     pause
     exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0网站内容管理.ps1"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0content-manager.ps1"
 set "exitcode=%errorlevel%"
 
 if not "%exitcode%"=="0" (
