@@ -5,9 +5,10 @@ permalink: /videos/
 module_key: videos
 ---
 
+{% assign menu_doc = site.menu_defs | where: 'module_key', 'videos' | first %}
 <div class="xm-home-grid xm-module-grid" data-module="videos">
   <aside class="xm-left-menu">
-    {% include collapsible-menu.html menu=site.data.module_menus.videos %}
+    {% include collapsible-menu.html menu=menu_doc.items %}
   </aside>
 
   <main class="xm-center">
