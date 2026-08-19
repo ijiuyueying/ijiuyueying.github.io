@@ -2,9 +2,11 @@
 layout: default
 ---
 
-{% assign project_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
+{% assign module_key = page.module | default: 'project' %}
+{% assign module_menu_doc = site.menu_defs | where: 'module_key', module_key | first %}
+{% if module_menu_doc == nil %}{% assign module_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}{% endif %}
 {% assign category_key = page.categories | first %}
-{% assign category_item = project_menu_doc.items | where: 'key', category_key | first %}
+{% assign category_item = module_menu_doc.items | where: 'key', category_key | first %}
 {% assign subcategory_item = nil %}
 {% if category_item and page.subcategory %}{% assign subcategory_item = category_item.children | where: 'key', page.subcategory | first %}{% endif %}
 
@@ -26,10 +28,15 @@ pre .xm-find-mark,code .xm-find-mark{color:inherit}
 
   <article class="post-center">
     <header class="article-head-new">
-      <div class="article-breadcrumb-new"><a href="{{ '/' | relative_url }}">项目</a><span>/</span><a href="{{ '/articles/' | relative_url }}">文章归档</a></div>
+      <div class="article-breadcrumb-new">
+        <a href="{{ module_menu_doc.top_url | default: '/' | relative_url }}">{{ module_menu_doc.top_label | default: '文章' }}</a>
+        <span>/</span>
+        <a href="{{ '/articles/' | relative_url }}">文章归档</a>
+      </div>
       <h1>{{ page.title }}</h1>
       <div class="article-meta-new">
         <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
+        <span>{{ module_menu_doc.top_label | default: module_key }}</span>
         {% if category_item %}<span>{{ category_item.label }}</span>{% elsif category_key %}<span>{{ category_key }}</span>{% endif %}
         {% if subcategory_item %}<span>{{ subcategory_item.label }}</span>{% elsif page.subcategory %}<span>{{ page.subcategory }}</span>{% endif %}
         <span id="reading-time-new">预计阅读 -- 分钟</span>
