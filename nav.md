@@ -12,8 +12,9 @@ nav_key: nav
   </aside>
 
   <main class="xm-center">
+    {% include module-filter.html placeholder='筛选当前网址' %}
     <section class="xm-page" style="width:100%">
-      <header class="xm-page-head"><h1>网址导航</h1><p>点击左侧二级分类后，再展开对应三级分类。</p></header>
+      <header class="xm-page-head"><h1>网址导航</h1><p>左侧负责分类，下面的筛选框只筛当前网址；顶部搜索用于全文搜索文章。</p></header>
       <div class="xm-page-body">
         <div class="xm-nav-grid xm-filter-content">
           {% for item in site.data.site_links %}
