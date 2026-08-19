@@ -10,6 +10,12 @@ markdown: kramdown
 permalink: /articles/:title.html
 show_excerpts: true
 
+collections:
+  menu_defs:
+    output: false
+  collection_defs:
+    output: false
+
 kramdown:
   input: GFM
   syntax_highlighter: rouge
