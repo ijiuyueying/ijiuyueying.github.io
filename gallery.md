@@ -12,8 +12,9 @@ module_key: gallery
   </aside>
 
   <main class="xm-center">
+    {% include module-filter.html placeholder='筛选当前图片' %}
     <section class="xm-page" style="width:100%">
-      <header class="xm-page-head"><h1>图片收藏</h1><p>点击二级分类后，再展开对应三级分类。</p></header>
+      <header class="xm-page-head"><h1>图片收藏</h1><p>左侧负责图片分类，下面的筛选框只筛图片；顶部搜索用于全文搜索文章。</p></header>
       <div class="xm-page-body"><div class="xm-media-grid">
         {% for item in site.data.gallery %}
         <article class="xm-media-item xm-filter-item" data-group="{{ item.group }}" data-subgroup="{{ item.subgroup }}" data-search="{{ item.title }} {{ item.description }}">
