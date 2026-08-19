@@ -32,8 +32,10 @@ exclude:
   - docs
   - 发布博客.bat
   - 同步博客.bat
+  - 网站内容管理.bat
   - 新建博客文章.bat
   - 新建博客文章.ps1
   - 导入数仓流程图.bat
+  - blog-manager.ps1
   - _scripts
   - .gitignore
