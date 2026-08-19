@@ -2,18 +2,34 @@
 layout: default
 ---
 
-<article class="article-new">
-  <header class="article-head-new">
-    <div class="article-breadcrumb-new"><a href="{{ '/' | relative_url }}">首页</a><span>/</span><a href="{{ '/articles/' | relative_url }}">文章归档</a></div>
-    <h1>{{ page.title }}</h1>
-    <div class="article-meta-new">
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
-      {% if page.categories and page.categories.size > 0 %}<span>{{ page.categories | join: " / " }}</span>{% endif %}
-      <span id="reading-time-new">预计阅读 -- 分钟</span>
-    </div>
-  </header>
+<style>
+.post-three-grid{width:min(1420px,calc(100% - 36px));margin:0 auto;display:grid;grid-template-columns:190px minmax(0,1fr) 280px;gap:20px;align-items:start}
+.post-left-sticky,.post-toc-sticky{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow:auto;scrollbar-width:thin}
+.post-center{min-width:0}.post-center .article-head-new{margin-bottom:14px}.post-center .article-body-new{box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.article-toc-new{position:static!important;top:auto!important;max-height:none!important;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.article-toc-new a.active{color:#2990df;font-weight:700}.article-body-new h2,.article-body-new h3{scroll-margin-top:100px}
+.persistent-project-nav{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}.persistent-nav-title{padding:14px 16px;border-bottom:1px solid #eceeef;font-size:16px;font-weight:800}.persistent-nav-item{border-bottom:1px solid #f0f1f2}.persistent-nav-parent-row{display:flex;align-items:stretch}.persistent-nav-parent{flex:1;padding:11px 12px;color:#4c535a;font-size:14px}.persistent-nav-parent:hover,.persistent-nav-parent.active{color:#d94b40;background:#fff7f6}.persistent-nav-toggle{width:34px;border:0;background:#fff;color:#8d959c;cursor:pointer;font-size:19px;transition:.18s}.persistent-nav-item.open .persistent-nav-toggle{transform:rotate(90deg)}.persistent-nav-children{display:none;padding:5px 0 8px;background:#fafafa}.persistent-nav-item.open .persistent-nav-children{display:block}.persistent-nav-child{display:block;padding:7px 12px 7px 25px;color:#737a81;font-size:12px}.persistent-nav-child:hover,.persistent-nav-child.active{color:#2990df;background:#f2f8fc}
+@media(max-width:1180px){.post-three-grid{grid-template-columns:170px minmax(0,1fr) 240px}}
+@media(max-width:920px){.post-three-grid{grid-template-columns:1fr}.post-left-sticky,.post-toc-sticky{position:static;max-height:none;overflow:visible}.post-left-sticky{order:1}.post-center{order:2}.post-toc-sticky{order:3}}
+</style>
 
-  <div class="article-layout-new">
+<div class="post-three-grid">
+  <div class="post-left-sticky">
+    {% include project-side-nav.html %}
+  </div>
+
+  <article class="post-center">
+    <header class="article-head-new">
+      <div class="article-breadcrumb-new"><a href="{{ '/' | relative_url }}">项目</a><span>/</span><a href="{{ '/articles/' | relative_url }}">文章归档</a></div>
+      <h1>{{ page.title }}</h1>
+      <div class="article-meta-new">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
+        {% if page.categories and page.categories.size > 0 %}<span>{{ page.categories | join: " / " }}</span>{% endif %}
+        {% if page.subcategory %}<span>{{ page.subcategory }}</span>{% endif %}
+        <span id="reading-time-new">预计阅读 -- 分钟</span>
+      </div>
+    </header>
+
     <div class="article-body-new" id="article-body-new">
       {{ content }}
 
@@ -22,14 +38,16 @@ layout: default
         {% if page.next %}<a class="next" href="{{ page.next.url | relative_url }}"><small>下一篇</small><strong>{{ page.next.title }}</strong></a>{% endif %}
       </nav>
     </div>
+  </article>
 
+  <div class="post-toc-sticky">
     <aside class="article-toc-new" id="article-toc-new">
       <div class="article-toc-title-new">本文目录</div>
       <ul id="article-toc-list-new"></ul>
       <a class="toc-back-new" href="{{ '/articles/' | relative_url }}">← 返回文章归档</a>
     </aside>
   </div>
-</article>
+</div>
 
 <button class="backtop-new" id="backtop-new" aria-label="回到顶部">↑</button>
 
@@ -38,13 +56,34 @@ layout: default
   var body=document.getElementById('article-body-new');
   var reading=document.getElementById('reading-time-new');
   if(body&&reading){var text=(body.innerText||'').replace(/\s+/g,'');reading.textContent='预计阅读 '+Math.max(1,Math.ceil(text.length/500))+' 分钟';}
+
   var toc=document.getElementById('article-toc-new');
   var list=document.getElementById('article-toc-list-new');
+  var links=[];
+  var headings=[];
   if(body&&toc&&list){
-    var hs=body.querySelectorAll('h2,h3');
-    if(!hs.length){toc.style.display='none';}
-    else{hs.forEach(function(h,i){if(!h.id)h.id='section-'+(i+1);var li=document.createElement('li');if(h.tagName==='H3')li.className='sub';var a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;li.appendChild(a);list.appendChild(li);});}
+    headings=[].slice.call(body.querySelectorAll('h2,h3'));
+    if(!headings.length){toc.style.display='none';}
+    else{
+      headings.forEach(function(h,i){
+        if(!h.id)h.id='section-'+(i+1);
+        var li=document.createElement('li');if(h.tagName==='H3')li.className='sub';
+        var a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent;
+        li.appendChild(a);list.appendChild(li);links.push(a);
+      });
+    }
   }
+
+  function updateActiveToc(){
+    if(!headings.length)return;
+    var current=0;
+    for(var i=0;i<headings.length;i++){
+      if(headings[i].getBoundingClientRect().top<=125)current=i;else break;
+    }
+    links.forEach(function(a,i){a.classList.toggle('active',i===current);});
+  }
+  window.addEventListener('scroll',updateActiveToc,{passive:true});updateActiveToc();
+
   var btn=document.getElementById('backtop-new');
   if(btn){window.addEventListener('scroll',function(){btn.classList.toggle('show',window.scrollY>500);},{passive:true});btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
 })();
