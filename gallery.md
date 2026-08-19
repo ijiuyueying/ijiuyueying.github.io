@@ -14,11 +14,16 @@ module_key: gallery
   <main class="xm-center">
     {% include module-filter.html placeholder='筛选当前图片' %}
     <section class="xm-page" style="width:100%">
-      <header class="xm-page-head"><h1>图片收藏</h1><p>左侧负责图片分类，下面的筛选框只筛图片；顶部搜索用于全文搜索文章。</p></header>
+      <header class="xm-page-head"><h1>图片收藏</h1><p>左侧负责图片分类；流程图点击后可查看原尺寸。</p></header>
       <div class="xm-page-body"><div class="xm-media-grid">
         {% for item in site.data.gallery %}
         <article class="xm-media-item xm-filter-item" data-group="{{ item.group }}" data-subgroup="{{ item.subgroup }}" data-search="{{ item.title }} {{ item.description }}">
-          {% if item.image and item.image != '' %}<a href="{{ item.image }}" target="_blank" rel="noopener"><img src="{{ item.image }}" alt="{{ item.title }}"></a>{% endif %}
+          {% if item.image and item.image != '' %}
+          <a href="{{ item.image }}" target="_blank" rel="noopener" class="gallery-image-link">
+            <img src="{{ item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.nextElementSibling.style.display='flex'">
+          </a>
+          <div class="gallery-missing" style="display:none;min-height:150px;align-items:center;justify-content:center;background:#f5f6f7;color:#8a9198;padding:18px;text-align:center">本地图片尚未导入，请运行“导入数仓流程图.bat”。</div>
+          {% endif %}
           <h3>{{ item.title }}</h3><p>{{ item.description }}</p>
           {% if item.source %}<p style="margin-top:8px"><a href="{{ item.source }}" target="_blank" rel="noopener" style="color:#2990df">查看来源 →</a></p>{% endif %}
         </article>
