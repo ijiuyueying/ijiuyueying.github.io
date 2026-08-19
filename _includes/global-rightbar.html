@@ -1,0 +1,38 @@
+<aside class="xm-rightbar">
+  <section class="xm-side-card">
+    <div class="xm-side-title">
+      {% if page.nav_key == 'nav' %}常用网址
+      {% elsif page.nav_key == 'music' %}最近歌曲
+      {% elsif page.module_key == 'gallery' %}图片推荐
+      {% elsif page.module_key == 'videos' %}视频推荐
+      {% else %}好文推荐{% endif %}
+    </div>
+
+    <div class="xm-recommend-list">
+      {% if page.nav_key == 'nav' %}
+        {% for item in site.data.site_links limit:8 %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>{% endfor %}
+      {% elsif page.nav_key == 'music' %}
+        {% for item in site.data.music limit:8 %}<a{% if item.url and item.url != '' %} href="{{ item.url }}" target="_blank" rel="noopener"{% endif %}>{{ item.title }} · {{ item.artist }}</a>{% endfor %}
+      {% elsif page.module_key == 'gallery' %}
+        {% for item in site.data.gallery limit:8 %}<a href="{{ '/gallery/' | relative_url }}">{{ item.title }}</a>{% endfor %}
+      {% elsif page.module_key == 'videos' %}
+        {% for item in site.data.videos limit:8 %}<a href="{{ item.url | default: '/videos/' }}" target="_blank" rel="noopener">{{ item.title }}</a>{% endfor %}
+      {% else %}
+        {% for post in site.posts limit:8 %}<a href="{{ post.url | relative_url }}">{{ post.title }}</a>{% endfor %}
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="xm-side-card">
+    <div class="xm-side-title">个人收藏</div>
+    <div class="xm-collection-grid">
+      {% for item in site.data.collections %}
+      <a href="{{ item.url | relative_url }}">
+        {% if item.icon %}<i class="xm-collection-icon">{{ item.icon }}</i>{% endif %}
+        <b>{{ item.title }}</b>
+        <span>{{ item.description }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+</aside>
