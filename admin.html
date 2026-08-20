@@ -17,18 +17,36 @@ permalink: /admin/
 
     <main class="admin-content">
       <h2>分类管理</h2>
-      <p>第一阶段：读取并管理 _menu_defs 分类配置。</p>
+      <p>当前读取 Jekyll 配置中的 _menu_defs 分类。</p>
 
       <div class="category-panel">
-        <label>
-          <input type="checkbox"> 银行监管
-        </label>
-        <label>
-          <input type="checkbox"> 制造业数仓
-        </label>
-        <label>
-          <input type="checkbox"> 电商分析
-        </label>
+        {% assign project_menu = site.menu_defs | where: "module_key", "project" | first %}
+
+        {% if project_menu %}
+          {% for item in project_menu.items %}
+            {% if item.key != "all" %}
+            <div class="category-item">
+              <label>
+                <input type="checkbox" name="category" value="{{ item.key }}">
+                {{ item.label }}
+              </label>
+
+              {% if item.children %}
+              <div class="children">
+                {% for child in item.children %}
+                <label>
+                  <input type="checkbox" name="child" value="{{ child.key }}">
+                  └ {{ child.label }}
+                </label>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p>未读取到项目分类配置。</p>
+        {% endif %}
       </div>
 
       <button>新增分类</button>
@@ -54,5 +72,12 @@ permalink: /admin/
 .category-panel label{
   display:block;
   margin:10px 0;
+}
+.children{
+  margin-left:30px;
+}
+.category-item{
+  padding:10px;
+  border-bottom:1px solid #eee;
 }
 </style>
