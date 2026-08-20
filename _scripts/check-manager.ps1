@@ -1,77 +1,106 @@
-function Test-BlogConfiguration {
-    $errors=New-Object System.Collections.ArrayList
-    $warnings=New-Object System.Collections.ArrayList
-
-    try{$menus=Get-Menus}catch{[void]$errors.Add($_.Exception.Message);$menus=@()}
-
-    $moduleKeys=@{}
-    foreach($m in $menus){
-        if($moduleKeys.ContainsKey($m.module_key)){[void]$errors.Add('重复 module_key: '+$m.module_key)}else{$moduleKeys[$m.module_key]=$true}
-
-        $keys=@{}
-        foreach($it in @($m.items)){
-            if($keys.ContainsKey($it.key)){[void]$errors.Add($m.module_key+' 重复二级 key: '+$it.key)}else{$keys[$it.key]=$true}
-            $childKeys=@{}
-            foreach($ch in @($it.children)){
-                if($childKeys.ContainsKey($ch.key)){[void]$errors.Add($m.module_key+'/'+$it.key+' 重复三级 key: '+$ch.key)}else{$childKeys[$ch.key]=$true}
-            }
+function Test-GitStatus {
+    try{
+        $branch=(git branch --show-current 2>$null)
+        $status=@(git status --porcelain 2>$null)
+        if($branch -ne 'main'){
+            return '当前Git分支不是main: '+$branch
         }
-
-        if($m.article_enabled){
-            if($m.module_key -ne 'project'){
-                $page=Join-Path $script:BlogRoot ($m.module_key+'.md')
-                if(-not(Test-Path $page)){[void]$errors.Add('一级文章大类缺少入口页面: '+$m.module_key+'.md')}
-            }
+        if($status.Count -gt 0){
+            return '存在未提交修改: '+$status.Count+' 个文件'
         }
+        return 'Git状态正常'
+    }catch{
+        return 'Git检查失败: '+$_.Exception.Message
     }
+}
 
+function Test-Encoding {
+    $bad=@()
+    foreach($file in Get-ChildItem $script:BlogRoot -Recurse -Include *.md,*.yml,*.yaml -File -ErrorAction SilentlyContinue){
+        try{
+            $bytes=[System.IO.File]::ReadAllBytes($file.FullName)
+            $text=[System.Text.Encoding]::UTF8.GetString($bytes)
+            if($text -match '�'){
+                [void]$bad.Add($file.FullName.Substring($script:BlogRoot.Length+1))
+            }
+        }catch{}
+    }
+    return $bad
+}
+
+function Test-OrphanPosts {
+    $result=@()
+    $menus=Get-Menus
     foreach($p in Get-PostRefs){
         $m=@($menus|Where-Object{$_.module_key -eq $p.module})
-        if($m.Count -eq 0){[void]$errors.Add($p.file+' 的 module 不存在: '+$p.module);continue}
-        if($p.category){
-            $it=@($m[0].items|Where-Object{$_.key -eq $p.category})
-            if($it.Count -eq 0){[void]$warnings.Add($p.file+' 的二级分类不存在: '+$p.category)}
-            elseif($p.subcategory -and @($it[0].children|Where-Object{$_.key -eq $p.subcategory}).Count -eq 0){[void]$warnings.Add($p.file+' 的三级分类不存在: '+$p.subcategory)}
-        }
+        if($m.Count -eq 0){$result+=$p.file+' module不存在';continue}
+        $cat=@($m[0].items|Where-Object{$_.key -eq $p.category})
+        if($cat.Count -eq 0){$result+=$p.file+' 分类不存在: '+$p.category}
     }
+    return $result
+}
 
-    $defs=Get-CollectionDefs
-    foreach($d in $defs){
-        $pageKey=$d.key
-        $page=Join-Path $script:BlogRoot ($pageKey+'.md')
-        if(-not(Test-Path $page)){[void]$warnings.Add('收藏模块缺少入口页面: '+$pageKey+'.md')}
-        if($d.managed){
-            $menu=Join-Path $script:MenuDir ($pageKey+'.md')
-            if(-not(Test-Path $menu)){[void]$errors.Add('自建收藏模块缺少分类配置: _menu_defs/'+$pageKey+'.md')}
-            $data=Join-Path $script:DataDir ($pageKey+'.yml')
-            if(-not(Test-Path $data)){[void]$errors.Add('自建收藏模块缺少数据文件: _data/'+$pageKey+'.yml')}
-        }
-    }
-
-    foreach($pair in @(@('gallery.yml','image'),@('music.yml','file'),@('videos.yml','video'))){
-        $path=Join-Path $script:DataDir $pair[0]
-        if(Test-Path $path){
-            foreach($line in (Read-Utf8 $path)-split "`r?`n"){
-                if($line -match ('^\s*'+$pair[1]+':\s*["'']?(/[^"'']+)["'']?\s*$')){
-                    $web=$Matches[1]
-                    $local=Join-Path $script:BlogRoot ($web.TrimStart('/').Replace('/','\'))
-                    if(-not(Test-Path $local)){[void]$warnings.Add($pair[0]+' 本地文件不存在: '+$web)}
-                }
+function Test-AssetReferences {
+    $missing=@()
+    foreach($file in Get-ChildItem $script:BlogRoot -Recurse -Include *.md,*.yml,*.yaml -File -ErrorAction SilentlyContinue){
+        foreach($line in Get-Content $file.FullName -Encoding UTF8){
+            if($line -match '(\/assets\/[^\s"'']+)'){
+                $path=Join-Path $script:BlogRoot ($Matches[1].TrimStart('/').Replace('/','\'))
+                if(-not(Test-Path $path)){$missing+=$file.Name+' -> '+$Matches[1]}
             }
         }
     }
+    return $missing
+}
+
+function Test-BlogConfiguration {
+    $errors=@()
+    $warnings=@()
+
+    try{$menus=Get-Menus}catch{$errors+='分类配置读取失败: '+$_.Exception.Message;$menus=@()}
+
+    $modules=@{}
+    foreach($m in $menus){
+        if($modules.ContainsKey($m.module_key)){$errors+='重复module_key: '+$m.module_key}else{$modules[$m.module_key]=$true}
+        $keys=@{}
+        foreach($item in @($m.items)){
+            if($keys.ContainsKey($item.key)){$errors+=$m.module_key+'重复二级key: '+$item.key}else{$keys[$item.key]=$true}
+            $children=@{}
+            foreach($c in @($item.children)){
+                if($children.ContainsKey($c.key)){$errors+=$m.module_key+'/'+$item.key+'重复三级key: '+$c.key}else{$children[$c.key]=$true}
+            }
+        }
+    }
+
+    foreach($x in Test-OrphanPosts){$warnings+=$x}
+    foreach($x in Test-AssetReferences){$warnings+='资源缺失: '+$x}
+    foreach($x in Test-Encoding){$warnings+='疑似编码异常: '+$x}
+
+    $git=Test-GitStatus
 
     foreach($file in Get-ChildItem $script:BlogRoot -Recurse -File -ErrorAction SilentlyContinue){
         if($file.Length -gt 90MB -and $file.FullName -notmatch '\\.git\\'){
-            [void]$warnings.Add(('大文件超过90MB: '+$file.FullName.Substring($script:BlogRoot.Length+1)))
+            $warnings+='大文件超过90MB: '+$file.Name
         }
     }
 
     Clear-Host
-    Write-Host '=== 配置检查结果 ===' -ForegroundColor Cyan
-    if($errors.Count -eq 0){Write-Host '错误：0' -ForegroundColor Green}else{Write-Host ('错误：'+$errors.Count) -ForegroundColor Red;$errors|ForEach-Object{Write-Host ('  - '+$_)-ForegroundColor Red}}
-    if($warnings.Count -eq 0){Write-Host '警告：0' -ForegroundColor Green}else{Write-Host ('警告：'+$warnings.Count) -ForegroundColor Yellow;$warnings|ForEach-Object{Write-Host ('  - '+$_)-ForegroundColor Yellow}}
+    Write-Host '=== 网站健康检查 ===' -ForegroundColor Cyan
     Write-Host ''
-    if($errors.Count -eq 0){Write-Host '核心配置检查通过。' -ForegroundColor Green}else{Write-Host '请先修复错误再发布。' -ForegroundColor Red}
+    Write-Host '【分类检查】'
+    Write-Host ('错误数量: '+$errors.Count)
+    $errors|ForEach-Object{Write-Host (' - '+$_) -ForegroundColor Red}
+
+    Write-Host ''
+    Write-Host '【内容/资源检查】'
+    Write-Host ('警告数量: '+$warnings.Count)
+    $warnings|ForEach-Object{Write-Host (' - '+$_) -ForegroundColor Yellow}
+
+    Write-Host ''
+    Write-Host '【Git检查】'
+    Write-Host $git
+
+    Write-Host ''
+    if($errors.Count -eq 0){Write-Host '核心检查通过，可以发布。' -ForegroundColor Green}else{Write-Host '存在错误，请修复后发布。' -ForegroundColor Red}
     Pause-Menu
 }
