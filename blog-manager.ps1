@@ -12,6 +12,7 @@ $moduleFiles = @(
     '_scripts\article-manager.ps1',
     '_scripts\collection-manager.ps1',
     '_scripts\media-manager.ps1',
+    '_scripts\backup-manager.ps1',
     '_scripts\check-manager.ps1'
 )
 
@@ -37,6 +38,7 @@ function Show-MainMenu {
     Write-Host '6. 网址导航管理'
     Write-Host '7. 给自建收藏模块新增内容'
     Write-Host '8. 检查网站配置'
+    Write-Host '9. 备份管理'
     Write-Host '0. 退出'
 }
 
@@ -53,6 +55,7 @@ while ($true) {
             '6' { Manage-Links }
             '7' { Add-GenericCollectionItem; Pause-Menu }
             '8' { Test-BlogConfiguration }
+            '9' { Show-BackupMenu }
             '0' { exit 0 }
             default { Write-Host '无效选项。' -ForegroundColor Yellow; Pause-Menu }
         }
