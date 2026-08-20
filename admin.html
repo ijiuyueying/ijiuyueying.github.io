@@ -1,0 +1,58 @@
+---
+layout: default
+title: 知识库管理后台
+permalink: /admin/
+---
+
+<div class="admin-page">
+  <h1>九月影知识库管理后台</h1>
+
+  <div class="admin-layout">
+    <aside class="admin-menu">
+      <button class="active">分类管理</button>
+      <button>文章管理</button>
+      <button>图片管理</button>
+      <button>系统日志</button>
+    </aside>
+
+    <main class="admin-content">
+      <h2>分类管理</h2>
+      <p>第一阶段：读取并管理 _menu_defs 分类配置。</p>
+
+      <div class="category-panel">
+        <label>
+          <input type="checkbox"> 银行监管
+        </label>
+        <label>
+          <input type="checkbox"> 制造业数仓
+        </label>
+        <label>
+          <input type="checkbox"> 电商分析
+        </label>
+      </div>
+
+      <button>新增分类</button>
+      <button>编辑分类</button>
+      <button>批量删除</button>
+    </main>
+  </div>
+</div>
+
+<style>
+.admin-layout{
+  display:flex;
+  gap:30px;
+}
+.admin-menu{
+  width:180px;
+}
+.admin-menu button{
+  display:block;
+  width:100%;
+  margin-bottom:10px;
+}
+.category-panel label{
+  display:block;
+  margin:10px 0;
+}
+</style>
