@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pyyaml
+python-frontmatter
+python-dotenv
+requests
