@@ -49,12 +49,14 @@ permalink: /admin/
         {% endif %}
       </div>
 
+      <button onclick="adminCategory.beforeDelete()">批量删除</button>
       <button>新增分类</button>
       <button>编辑分类</button>
-      <button>批量删除</button>
     </main>
   </div>
 </div>
+
+<script src="{{ '/assets/js/admin.js' | relative_url }}"></script>
 
 <style>
 .admin-layout{
