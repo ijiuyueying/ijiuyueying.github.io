@@ -1,78 +1,279 @@
 {% assign s = site.data.site_settings %}
+{% assign c = s.colors %}
+{% assign d = s.colors_dark %}
+
+{%- comment -%} 防闪烁：在渲染前同步主题，避免暗色模式下的白屏闪一下 {%- endcomment -%}
+<script>
+(function(){
+  try{
+    var saved=localStorage.getItem('xm-theme');
+    var dark=saved?saved==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if(dark)document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
+
 <style>
+/* ============================================================
+   设计令牌 · 墨青（Teal & Ink）
+   所有颜色都走变量，改这里就能整体换肤。
+   用户可在 _data/site_settings.yml 里覆盖 colors / colors_dark。
+   ============================================================ */
 :root{
-  --xm-page-bg: {{ s.colors.page_background | default: '#f3f4f5' }};
-  --xm-header-bg: {{ s.colors.header_background | default: '#ffffff' }};
-  --xm-left-bg: {{ s.colors.left_menu_background | default: '#ffffff' }};
-  --xm-content-bg: {{ s.colors.content_background | default: '#ffffff' }};
-  --xm-sidebar-bg: {{ s.colors.sidebar_background | default: '#ffffff' }};
-  --xm-accent: {{ s.colors.accent | default: '#e14f43' }};
+  /* —— 亮色：表面 —— */
+  --xm-page-bg:        {{ c.page_background     | default: '#f4f6f9' }};
+  --xm-surface:        {{ c.surface             | default: '#ffffff' }};
+  --xm-surface-soft:   {{ c.surface_soft        | default: '#f8fafc' }};
+  --xm-surface-alt:    {{ c.surface_alt         | default: '#eef2f7' }};
+  --xm-hero-bg:        {{ c.hero_background     | default: '#0f172a' }};
+
+  /* —— 亮色：文字 —— */
+  --xm-ink:            {{ c.ink                 | default: '#0f172a' }};
+  --xm-text:           {{ c.text                | default: '#1e293b' }};
+  --xm-muted:          {{ c.muted               | default: '#64748b' }};
+  --xm-faint:          {{ c.faint               | default: '#94a3b8' }};
+
+  /* —— 亮色：强调 —— */
+  --xm-accent:         {{ c.accent              | default: '#0d9488' }};
+  --xm-accent-strong:  {{ c.accent_strong       | default: '#0f766e' }};
+  --xm-accent-soft:    {{ c.accent_soft         | default: '#e6f5f3' }};
+  --xm-accent-ring:    {{ c.accent_ring         | default: 'rgba(13,148,136,.16)' }};
+
+  /* —— 亮色：描边 —— */
+  --xm-border:         {{ c.border              | default: '#e3e8ef' }};
+  --xm-border-soft:    {{ c.border_soft         | default: '#eef1f6' }};
+
+  /* —— 形状 —— */
+  --xm-radius-xs: 6px;
+  --xm-radius-sm: 9px;
+  --xm-radius:    14px;
+  --xm-radius-lg: 20px;
+  --xm-radius-pill: 999px;
+
+  /* —— 阴影：三层，营造层次而非一团灰 —— */
+  --xm-shadow-xs: 0 1px 2px rgba(15,23,42,.04);
+  --xm-shadow-sm: 0 1px 2px rgba(15,23,42,.05), 0 2px 6px rgba(15,23,42,.04);
+  --xm-shadow-md: 0 1px 3px rgba(15,23,42,.06), 0 8px 22px rgba(15,23,42,.06);
+  --xm-shadow-lg: 0 6px 16px rgba(15,23,42,.09), 0 22px 48px rgba(15,23,42,.11);
+
+  /* —— 排版 —— */
+  --xm-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                  "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", sans-serif;
+  --xm-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas,
+                  "Liberation Mono", "Courier New", monospace;
+
+  /* —— 尺寸 —— */
+  --xm-shell: 1360px;
+  --xm-header-h: 66px;
+  --xm-sticky-top: 84px;
+
+  --xm-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ============================================================
+   暗色模式
+   ============================================================ */
+html[data-theme="dark"]{
+  --xm-page-bg:        {{ d.page_background     | default: '#0b1220' }};
+  --xm-surface:        {{ d.surface             | default: '#111a2b' }};
+  --xm-surface-soft:   {{ d.surface_soft        | default: '#162035' }};
+  --xm-surface-alt:    {{ d.surface_alt         | default: '#1b2740' }};
+  --xm-hero-bg:        {{ d.hero_background     | default: '#060c17' }};
+
+  --xm-ink:            {{ d.ink                 | default: '#f1f5f9' }};
+  --xm-text:           {{ d.text                | default: '#dbe3ee' }};
+  --xm-muted:          {{ d.muted               | default: '#94a3b8' }};
+  --xm-faint:          {{ d.faint               | default: '#64748b' }};
+
+  --xm-accent:         {{ d.accent              | default: '#2dd4bf' }};
+  --xm-accent-strong:  {{ d.accent_strong       | default: '#5eead4' }};
+  --xm-accent-soft:    {{ d.accent_soft         | default: '#123833' }};
+  --xm-accent-ring:    {{ d.accent_ring         | default: 'rgba(45,212,191,.20)' }};
+
+  --xm-border:         {{ d.border              | default: '#223049' }};
+  --xm-border-soft:    {{ d.border_soft         | default: '#1a2537' }};
+
+  --xm-shadow-xs: 0 1px 2px rgba(0,0,0,.3);
+  --xm-shadow-sm: 0 1px 2px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+  --xm-shadow-md: 0 2px 6px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.32);
+  --xm-shadow-lg: 0 8px 20px rgba(0,0,0,.45), 0 26px 54px rgba(0,0,0,.4);
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   全站背景：用极淡的网格代替原来那张压白的大图 —— 更干净、零请求
+   ============================================================ */
+html{
+  {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
+  background-image:linear-gradient(180deg,var(--xm-page-bg),var(--xm-page-bg)),url('{{ s.backgrounds.page_image }}');
+  background-size:auto,cover;
+  background-position:center;
+  background-attachment:fixed,fixed;
+  {% endif %}
+}
+body{
+  background-color:var(--xm-page-bg);
+  {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
+  background-image:linear-gradient(180deg,var(--xm-page-bg),var(--xm-page-bg)),url('{{ s.backgrounds.page_image }}');
+  background-size:auto,cover;
+  background-position:center;
+  background-attachment:fixed,fixed;
+  {% else %}
+  /* 极细网格 + 顶部一抹强调色光晕，克制但有质感 */
+  background-image:
+    radial-gradient(900px 420px at 50% -180px, var(--xm-accent-ring), transparent 70%),
+    linear-gradient(var(--xm-border-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--xm-border-soft) 1px, transparent 1px);
+  background-size:100% 100%, 46px 46px, 46px 46px;
+  background-position:0 0, -1px -1px, -1px -1px;
+  background-attachment:fixed;
+  {% endif %}
+  color:var(--xm-text);
+}
+
+html[data-theme="dark"] body{
+  {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
+  background-image:linear-gradient(180deg,var(--xm-page-bg),var(--xm-page-bg)),url('{{ s.backgrounds.page_image }}');
+  {% else %}
+  background-image:
+    radial-gradient(900px 420px at 50% -180px, var(--xm-accent-ring), transparent 70%),
+    linear-gradient(var(--xm-border-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--xm-border-soft) 1px, transparent 1px);
+  {% endif %}
 }
 
 /* clip 只裁剪横向溢出，不创建新的滚动容器，避免破坏 position: sticky */
 html,body{max-width:100%;overflow-x:clip}
-body{
-  background-color:var(--xm-page-bg);
-  {% if s.backgrounds.page_image and s.backgrounds.page_image != '' %}
-  background-image:linear-gradient(rgba(243,244,245,.86),rgba(243,244,245,.86)),url('{{ s.backgrounds.page_image }}');
-  background-size:cover;background-position:center;background-attachment:fixed;
-  {% endif %}
-}
 .site-main{overflow:visible!important}
 
-.xm-header{
-  background-color:var(--xm-header-bg)!important;
-  {% if s.backgrounds.header_image and s.backgrounds.header_image != '' %}
-  background-image:url('{{ s.backgrounds.header_image }}');
-  background-size:cover;background-position:center;
-  {% endif %}
+/* ============================================================
+   主题切换按钮
+   ============================================================ */
+.xm-theme-btn{
+  flex:none;width:38px;height:38px;margin-left:10px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--xm-border);border-radius:var(--xm-radius-pill);
+  background:var(--xm-surface);color:var(--xm-muted);
+  cursor:pointer;font-size:15px;line-height:1;
+  transition:color .2s var(--xm-ease),border-color .2s var(--xm-ease),
+             background-color .2s var(--xm-ease),transform .2s var(--xm-ease);
 }
-.xm-left-menu,.xm-tree-menu,.persistent-project-nav{
-  background-color:var(--xm-left-bg)!important;
-  {% if s.backgrounds.left_menu_image and s.backgrounds.left_menu_image != '' %}
-  background-image:url('{{ s.backgrounds.left_menu_image }}');
-  background-size:cover;background-position:center;
-  {% endif %}
+.xm-theme-btn:hover{
+  color:var(--xm-accent);border-color:var(--xm-accent);
+  background:var(--xm-accent-soft);transform:translateY(-1px);
 }
-.xm-side-card{
-  background-color:var(--xm-sidebar-bg)!important;
-  {% if s.backgrounds.sidebar_image and s.backgrounds.sidebar_image != '' %}
-  background-image:url('{{ s.backgrounds.sidebar_image }}');
-  background-size:cover;background-position:center;
-  {% endif %}
-}
-.xm-post-card,.xm-page,.article-head-new,.article-body-new,.archive-center,.category-center,.search-panel{background-color:var(--xm-content-bg)!important}
+.xm-theme-btn .xm-icon-moon{display:inline-block}
+.xm-theme-btn .xm-icon-sun{display:none}
+html[data-theme="dark"] .xm-theme-btn .xm-icon-moon{display:none}
+html[data-theme="dark"] .xm-theme-btn .xm-icon-sun{display:inline-block}
 
+/* ============================================================
+   阅读进度条（文章页）
+   ============================================================ */
+.xm-progress{
+  position:fixed;left:0;top:0;z-index:200;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--xm-accent),var(--xm-accent-strong));
+  transition:width .1s linear;
+}
+
+/* ============================================================
+   统一的表面：卡片 / 面板
+   ============================================================ */
+.xm-post-card,.xm-page,.article-head-new,.article-body-new,
+.archive-center,.category-center,.search-panel,
+.xm-tree-menu,.persistent-project-nav,.xm-side-card,.article-toc-new{
+  background-color:var(--xm-surface)!important;
+  border:1px solid var(--xm-border);
+  border-radius:var(--xm-radius);
+  box-shadow:var(--xm-shadow-sm);
+  transition:box-shadow .25s var(--xm-ease),transform .25s var(--xm-ease),
+             border-color .25s var(--xm-ease),background-color .25s var(--xm-ease);
+}
+
+/* 选中文本 */
+::selection{background:var(--xm-accent-ring);color:var(--xm-ink)}
+
+/* 滚动条（细一点，更精致） */
+.post-left-sticky,.post-toc-sticky,.archive-left,.category-left,
+.xm-tree-menu,.article-toc-new{scrollbar-width:thin;scrollbar-color:var(--xm-border) transparent}
+.post-left-sticky::-webkit-scrollbar,.post-toc-sticky::-webkit-scrollbar,
+.archive-left::-webkit-scrollbar,.category-left::-webkit-scrollbar,
+.xm-tree-menu::-webkit-scrollbar,.article-toc-new::-webkit-scrollbar{width:6px;height:6px}
+.post-left-sticky::-webkit-scrollbar-thumb,.post-toc-sticky::-webkit-scrollbar-thumb,
+.archive-left::-webkit-scrollbar-thumb,.category-left::-webkit-scrollbar-thumb,
+.xm-tree-menu::-webkit-scrollbar-thumb,.article-toc-new::-webkit-scrollbar-thumb{
+  background:var(--xm-border);border-radius:var(--xm-radius-pill)}
+.post-left-sticky::-webkit-scrollbar-track,.post-toc-sticky::-webkit-scrollbar-track,
+.archive-left::-webkit-scrollbar-track,.category-left::-webkit-scrollbar-track,
+.xm-tree-menu::-webkit-scrollbar-track,.article-toc-new::-webkit-scrollbar-track{background:transparent}
+
+/* 搜索计数 */
 .xm-search span{transform:none!important}
-#xm-article-search-count{font-size:12px!important;color:#7d858d!important;transform:none!important}
+#xm-article-search-count{font-size:12px!important;color:var(--xm-faint)!important;transform:none!important}
 
 /* 文章页左右栏常驻 */
 .post-three-grid,.archive-three-grid,.category-three-grid{overflow:visible!important}
 .post-left-sticky,.post-toc-sticky,.archive-left,.category-left{
   align-self:start!important;
   position:sticky!important;
-  top:96px!important;
-  max-height:calc(100vh - 116px)!important;
+  top:var(--xm-sticky-top)!important;
+  max-height:calc(100vh - 104px)!important;
   overflow-y:auto!important;
   overflow-x:hidden!important;
-  scrollbar-width:thin;
-  scrollbar-color:#c8cdd2 transparent;
 }
 
 /* 防止长内容撑宽整个页面 */
 .xm-center,.post-center,.article-body-new,.archive-center,.category-center{min-width:0}
 .persistent-project-nav,.persistent-nav-list,.persistent-nav-item{max-width:100%;overflow-x:hidden}
-.persistent-nav-parent,.persistent-nav-link,.persistent-nav-child,.article-toc-new a{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.persistent-nav-parent,.persistent-nav-link,.persistent-nav-child,.article-toc-new a{
+  white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .article-body-new{overflow-wrap:anywhere;word-break:normal}
 .article-body-new pre{max-width:100%;overflow:auto}
-.article-body-new table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
-.article-body-new th,.article-body-new td{padding:9px 11px;border:1px solid #dfe3e8;white-space:nowrap}
-.article-body-new th{background:#f6f7f8}
-.article-body-new img,.article-body-new iframe,.article-body-new video{max-width:100%}
+
+/* ============================================================
+   正文排版：表格 / 图片 / 媒体
+   ============================================================ */
+.article-body-new table{
+  display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;
+  margin:1.6em 0;font-size:15px;
+}
+.article-body-new th,.article-body-new td{
+  padding:10px 14px;border:1px solid var(--xm-border);white-space:nowrap;
+}
+.article-body-new th{
+  background:var(--xm-surface-alt);color:var(--xm-ink);font-weight:700;
+  text-align:left;
+}
+.article-body-new tbody tr:nth-child(even) td{background:var(--xm-surface-soft)}
+.article-body-new img,.article-body-new iframe,.article-body-new video{
+  max-width:100%;height:auto;border-radius:var(--xm-radius-sm);
+}
+
+/* 失效的本地图片：给个柔和占位，别让页面裂开 */
+.article-body-new img{
+  background:var(--xm-surface-alt);
+  border:1px solid var(--xm-border);
+}
+.article-body-new img[src^="file:"],
+.article-body-new img[src*="D:/desktop"]{
+  min-height:60px;padding:14px 18px;
+  border:1px dashed var(--xm-border);
+  border-radius:var(--xm-radius-sm);
+  background:var(--xm-surface-soft);
+}
 
 @media(max-width:920px){
   .post-left-sticky,.post-toc-sticky,.archive-left,.category-left{
     position:static!important;max-height:none!important;overflow:visible!important;
+  }
+}
+
+/* 尊重系统的「减少动态效果」设置 */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
   }
 }
 </style>

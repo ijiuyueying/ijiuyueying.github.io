@@ -5,21 +5,65 @@
 {% assign current_subcategory = page.subcategory | default: '' %}
 
 <style>
-.persistent-project-nav{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}
-.persistent-nav-title{padding:16px 16px;border-bottom:1px solid #eceeef;font-size:18px;font-weight:800}
-.persistent-nav-item{border-bottom:1px solid #f0f1f2}
+/* 文章页左侧分类导航：配色全部走 --xm-* 变量 */
+.persistent-project-nav{overflow:hidden}
+.persistent-nav-title{
+  padding:15px 16px;border-bottom:1px solid var(--xm-border);
+  font-size:15px;font-weight:800;color:var(--xm-ink);
+  display:flex;align-items:center;gap:8px;
+}
+.persistent-nav-title::before{
+  content:"";width:3px;height:14px;border-radius:2px;background:var(--xm-accent);
+}
+.persistent-nav-item{border-bottom:1px solid var(--xm-border-soft)}
+.persistent-nav-item:last-child{border-bottom:0}
 .persistent-nav-parent-row{display:flex;align-items:stretch}
-.persistent-nav-parent{flex:1;min-height:48px;padding:12px 14px;border:0;background:#fff;color:#444b52;font-size:16px;text-align:left;cursor:pointer;display:flex;align-items:center;transition:.18s}
-.persistent-nav-parent:hover,.persistent-nav-parent.active{color:#d94b40;background:#fff7f6}
-.persistent-nav-link{display:flex;align-items:center;min-height:48px;padding:12px 14px;color:#444b52;font-size:16px;transition:.18s}
-.persistent-nav-link:hover,.persistent-nav-link.active{color:#d94b40;background:#fff7f6}
-.persistent-nav-toggle{width:38px;border:0;background:#fff;color:#8d959c;cursor:pointer;font-size:21px;transition:.18s}
-.persistent-nav-item.open .persistent-nav-toggle{transform:rotate(90deg)}
-.persistent-nav-children{display:none;padding:5px 0 9px;background:#fafafa}
-.persistent-nav-item.open .persistent-nav-children{display:block;animation:persistentOpen .18s ease both}
-.persistent-nav-child{display:block;padding:9px 14px 9px 28px;color:#68717a;font-size:14px;line-height:1.45}
-.persistent-nav-child:hover,.persistent-nav-child.active{color:#2990df;background:#f2f8fc}
-@keyframes persistentOpen{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+
+.persistent-nav-parent{
+  flex:1;min-height:46px;padding:12px 14px;
+  border:0;border-left:3px solid transparent;background:transparent;
+  color:var(--xm-text);font-size:14.5px;font-weight:600;text-align:left;
+  cursor:pointer;display:flex;align-items:center;
+  transition:background-color .18s var(--xm-ease),color .18s var(--xm-ease),
+             border-color .18s var(--xm-ease);
+}
+.persistent-nav-parent:hover{color:var(--xm-accent);background:var(--xm-surface-soft)}
+.persistent-nav-parent.active{
+  color:var(--xm-accent);background:var(--xm-accent-soft);font-weight:700;
+  border-left-color:var(--xm-accent);
+}
+
+.persistent-nav-link{
+  display:flex;align-items:center;min-height:46px;padding:12px 14px;
+  border-left:3px solid transparent;
+  color:var(--xm-text);font-size:14.5px;font-weight:600;
+  transition:background-color .18s var(--xm-ease),color .18s var(--xm-ease),
+             border-color .18s var(--xm-ease);
+}
+.persistent-nav-link:hover{color:var(--xm-accent);background:var(--xm-surface-soft)}
+.persistent-nav-link.active{
+  color:var(--xm-accent);background:var(--xm-accent-soft);font-weight:700;
+  border-left-color:var(--xm-accent);
+}
+
+.persistent-nav-toggle{
+  width:36px;border:0;background:transparent;color:var(--xm-faint);
+  cursor:pointer;font-size:19px;
+  transition:transform .2s var(--xm-ease),color .18s var(--xm-ease);
+}
+.persistent-nav-toggle:hover{color:var(--xm-accent)}
+.persistent-nav-item.open .persistent-nav-toggle{transform:rotate(90deg);color:var(--xm-accent)}
+
+.persistent-nav-children{display:none;padding:5px 0 9px;background:var(--xm-surface-soft)}
+.persistent-nav-item.open .persistent-nav-children{display:block;animation:persistentOpen .2s var(--xm-ease) both}
+.persistent-nav-child{
+  display:block;padding:8px 14px 8px 28px;color:var(--xm-muted);
+  font-size:13px;line-height:1.5;
+  transition:color .15s var(--xm-ease),background-color .15s var(--xm-ease);
+}
+.persistent-nav-child:hover{color:var(--xm-accent);background:var(--xm-accent-soft)}
+.persistent-nav-child.active{color:var(--xm-accent);font-weight:700;background:var(--xm-accent-soft)}
+@keyframes persistentOpen{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 </style>
 
 <aside class="persistent-project-nav" aria-label="{{ current_menu_doc.top_label | default: '文章' }}分类">

@@ -12,8 +12,8 @@ module_key: videos
   aspect-ratio:16/9;
   margin-bottom:10px;
   overflow:hidden;
-  background:#e9edf1;
-  border:1px solid #e2e6ea;
+  background:var(--xm-surface-alt);
+  border:1px solid var(--xm-border);
   cursor:pointer;
   isolation:isolate;
 }
@@ -28,10 +28,10 @@ module_key: videos
 .video-lite:hover .video-lite-bg{transform:scale(1.035)}
 .video-lite-mask{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,18,28,.05),rgba(12,18,28,.28))}
 .video-lite-inner{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
-.video-lite-play{display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:25px;color:#e14f43;padding-left:3px}
-.video-lite-loading{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(238,242,246,.86);backdrop-filter:blur(2px);color:#66717b;font-size:13px}
+.video-lite-play{display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:25px;color:var(--xm-accent);padding-left:3px}
+.video-lite-loading{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(238,242,246,.86);backdrop-filter:blur(2px);color:var(--xm-muted);font-size:13px}
 .video-lite.loading .video-lite-loading{display:flex}
-.video-lite-spinner{width:30px;height:30px;border:3px solid #d7dde3;border-top-color:#2990df;border-radius:50%;animation:videoSpin .8s linear infinite}
+.video-lite-spinner{width:30px;height:30px;border:3px solid var(--xm-border);border-top-color:var(--xm-accent);border-radius:50%;animation:videoSpin .8s linear infinite}
 .video-lite iframe{position:absolute;inset:0;z-index:5;width:100%;height:100%;border:0;background:transparent;opacity:0;transition:opacity .18s ease}
 .video-lite.ready iframe{opacity:1}
 .video-lite.ready .video-lite-bg,.video-lite.ready .video-lite-mask,.video-lite.ready .video-lite-inner,.video-lite.ready .video-lite-loading{display:none}
@@ -63,7 +63,7 @@ module_key: videos
           <video controls preload="none"{% if item.poster and item.poster != '' %} poster="{{ item.poster }}"{% endif %}><source src="{{ item.video }}"></video>
           {% endif %}
           <h3>{{ item.title }}</h3><p>{{ item.description }}</p>
-          {% if item.url %}<p style="margin-top:8px"><a href="{{ item.url }}" target="_blank" rel="noopener" style="color:#2990df">在原网站打开 →</a></p>{% endif %}
+          {% if item.url %}<p style="margin-top:8px"><a href="{{ item.url }}" target="_blank" rel="noopener" style="color:var(--xm-accent)">在原网站打开 →</a></p>{% endif %}
         </article>
         {% endfor %}
       </div></div>

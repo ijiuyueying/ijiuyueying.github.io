@@ -1,15 +1,56 @@
 <style>
-.xm-tree-menu{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.08);overflow:hidden}
-.xm-tree-item{border-bottom:1px solid #f1f2f3}.xm-tree-item:last-child{border-bottom:0}
-.xm-tree-parent{width:100%;min-height:48px;padding:11px 14px;border:0;background:#fff;color:#42474d;font-size:15px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:.18s}
-.xm-tree-parent:hover{background:#f7f8f9}.xm-tree-parent.active{background:#f8d6d2;color:#d94b40;font-weight:800;box-shadow:inset 3px 0 0 #e14f43}
-.xm-tree-arrow{font-size:17px;color:#92989f;transition:transform .2s}.xm-tree-item.open>.xm-tree-parent .xm-tree-arrow{transform:rotate(90deg)}
-.xm-tree-children{display:none;padding:4px 0 7px;background:#fafafa}.xm-tree-item.open>.xm-tree-children{display:block;animation:xmTreeOpen .2s ease both}
-.xm-tree-child{width:100%;padding:8px 14px 8px 28px;border:0;background:transparent;color:#71777e;font-size:13px;text-align:left;cursor:pointer;position:relative;transition:.15s}
-.xm-tree-child:before{content:"";position:absolute;left:17px;top:50%;width:5px;height:5px;border-radius:50%;background:#c7ccd1;transform:translateY(-50%)}
-.xm-tree-child:hover{color:#2990df;background:#f4f8fb}.xm-tree-child.active{color:#2990df;font-weight:700;background:#eef7fd}.xm-tree-child.active:before{background:#2990df}
-@keyframes xmTreeOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:760px){.xm-tree-menu{display:flex;overflow:auto}.xm-tree-item{min-width:max-content;border-bottom:0}.xm-tree-parent{min-height:42px;padding:8px 12px}.xm-tree-children{position:absolute;z-index:30;box-shadow:0 6px 16px rgba(0,0,0,.12)}}
+/* 分类树：配色全部取自 --xm-* 变量，跟随主题与 site_settings.yml */
+.xm-tree-menu{overflow:hidden}
+.xm-tree-item{border-bottom:1px solid var(--xm-border-soft)}
+.xm-tree-item:last-child{border-bottom:0}
+
+.xm-tree-parent{
+  width:100%;min-height:46px;padding:11px 15px;
+  border:0;border-left:3px solid transparent;background:transparent;
+  color:var(--xm-text);font-size:14.5px;font-weight:600;text-align:left;
+  cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  transition:background-color .18s var(--xm-ease),color .18s var(--xm-ease),
+             border-color .18s var(--xm-ease);
+}
+.xm-tree-parent:hover{background:var(--xm-surface-soft);color:var(--xm-ink)}
+.xm-tree-parent.active{
+  background:var(--xm-accent-soft);color:var(--xm-accent);font-weight:800;
+  border-left-color:var(--xm-accent);
+}
+
+.xm-tree-arrow{
+  font-size:16px;color:var(--xm-faint);
+  transition:transform .2s var(--xm-ease),color .18s var(--xm-ease);
+}
+.xm-tree-item.open>.xm-tree-parent .xm-tree-arrow{transform:rotate(90deg);color:var(--xm-accent)}
+
+.xm-tree-children{
+  display:none;padding:4px 0 8px;background:var(--xm-surface-soft);
+}
+.xm-tree-item.open>.xm-tree-children{display:block;animation:xmTreeOpen .2s var(--xm-ease) both}
+
+.xm-tree-child{
+  width:100%;padding:8px 15px 8px 31px;border:0;background:transparent;
+  color:var(--xm-muted);font-size:13px;text-align:left;cursor:pointer;position:relative;
+  transition:color .15s var(--xm-ease),background-color .15s var(--xm-ease);
+}
+.xm-tree-child:before{
+  content:"";position:absolute;left:19px;top:50%;
+  width:5px;height:5px;border-radius:50%;background:var(--xm-border);
+  transform:translateY(-50%);transition:background-color .15s var(--xm-ease);
+}
+.xm-tree-child:hover{color:var(--xm-accent);background:var(--xm-accent-soft)}
+.xm-tree-child.active{color:var(--xm-accent);font-weight:700;background:var(--xm-accent-soft)}
+.xm-tree-child.active:before{background:var(--xm-accent)}
+
+@keyframes xmTreeOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+@media(max-width:760px){
+  .xm-tree-menu{display:flex;overflow:auto}
+  .xm-tree-item{min-width:max-content;border-bottom:0}
+  .xm-tree-parent{min-height:40px;padding:8px 12px}
+  .xm-tree-children{position:absolute;z-index:30;box-shadow:var(--xm-shadow-md);border-radius:var(--xm-radius-sm)}
+}
 </style>
 
 <div class="xm-tree-menu" data-tree-menu>

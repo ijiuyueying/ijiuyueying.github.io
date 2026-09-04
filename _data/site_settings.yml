@@ -1,25 +1,71 @@
 site_name: 九月影
 
-# 头像：当前使用 HoYoLAB 图片资源中的至冬女皇图。
-# 以后想换成本地头像时，把图片放到 assets/images/avatar/，再改成：
+# 头像：建议换成本地图片，避免外链失效。
+# 把图片放到 assets/images/avatar/ 后改成：
 # avatar: "/assets/images/avatar/avatar.jpg"
 avatar: "https://upload-os-bbs.hoyolab.com/upload/2026/01/08/373294830/fe5a69eecd4a80e60c8ab500376604a6_7968545385091145326.webp"
 
+# ============================================================
+# 配色 —— 墨青（Teal & Ink）
+# 改这里就能整体换肤，无需动 CSS。留空则回落到主题内置默认值。
+# ============================================================
 colors:
-  page_background: "#eef2f5"
-  header_background: "#ffffff"
-  left_menu_background: "#ffffff"
-  content_background: "#ffffff"
-  sidebar_background: "#ffffff"
-  accent: "#e14f43"
+  # 表面
+  page_background: "#f4f6f9"      # 页面底色
+  surface: "#ffffff"              # 卡片 / 面板
+  surface_soft: "#f8fafc"         # 次级表面（悬浮、内嵌块）
+  surface_alt: "#eef2f7"          # 三级表面（表头、代码块底）
+  hero_background: "#0f172a"      # 轮播 / 代码块底色
 
+  # 文字
+  ink: "#0f172a"                  # 标题
+  text: "#1e293b"                 # 正文
+  muted: "#64748b"                # 辅助文字
+  faint: "#94a3b8"                # 更弱的信息（日期、角标）
+
+  # 强调色（全站唯一，不再红蓝混用）
+  accent: "#0d9488"               # 主强调：导航选中、链接、按钮
+  accent_strong: "#0f766e"        # 强调色的深一档，用于渐变
+  accent_soft: "#e6f5f3"          # 强调色的浅底，用于选中背景
+  accent_ring: "rgba(13,148,136,.16)"  # 焦点环 / 光晕
+
+  # 描边
+  border: "#e3e8ef"
+  border_soft: "#eef1f6"
+
+# ============================================================
+# 暗色模式配色
+# ============================================================
+colors_dark:
+  page_background: "#0b1220"
+  surface: "#111a2b"
+  surface_soft: "#162035"
+  surface_alt: "#1b2740"
+  hero_background: "#060c17"
+
+  ink: "#f1f5f9"
+  text: "#dbe3ee"
+  muted: "#94a3b8"
+  faint: "#64748b"
+
+  accent: "#2dd4bf"
+  accent_strong: "#5eead4"
+  accent_soft: "#123833"
+  accent_ring: "rgba(45,212,191,.20)"
+
+  border: "#223049"
+  border_soft: "#1a2537"
+
+# ============================================================
+# 背景
+# page_image 留空时，会使用内置的极细网格 + 顶部强调色光晕（零图片请求，加载更快）。
+# 想用背景图，填图片地址即可，例：
+#   page_image: "/assets/images/background/site-bg.jpg"
+#   也可以是 https:// 开头的网络图片。
+# 注意：图片会被一层主题底色覆盖，只作淡淡纹理，不影响阅读。
+# ============================================================
 backgrounds:
-  # 全站背景：冷色山湖风景。正文卡片保留白底，避免影响阅读。
-  page_image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=82"
+  page_image: ""
   header_image: ""
   left_menu_image: ""
   sidebar_image: ""
-
-# 图片路径既可以写仓库本地路径，例如：
-# /assets/images/background/site-bg.jpg
-# 也可以写 https:// 开头的网络图片地址。

@@ -30,8 +30,13 @@
     <label class="xm-search" for="xm-global-search-input" style="align-self:center">
       <svg class="xm-search-icon" style="display:block;width:20px;height:20px;flex:0 0 20px;color:#66717b" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="xm-global-search-input" type="search" {% if page.layout == 'post' %}placeholder="搜索本文内容" data-search-mode="article"{% else %}placeholder="搜索文章全文" data-search-mode="global"{% endif %} autocomplete="off">
-      {% if page.layout == 'post' %}<span id="xm-article-search-count" style="display:none;flex:none;color:#8a9198;font-size:12px;white-space:nowrap"></span>{% endif %}
+      {% if page.layout == 'post' %}<span id="xm-article-search-count" style="display:none;flex:none;color:var(--xm-faint);font-size:12px;white-space:nowrap"></span>{% endif %}
     </label>
+
+    <button class="xm-theme-btn" id="xm-theme-btn" type="button" aria-label="切换主题">
+      <span class="xm-icon-moon" aria-hidden="true">🌙</span>
+      <span class="xm-icon-sun" aria-hidden="true">☀️</span>
+    </button>
   </div>
 </header>
 

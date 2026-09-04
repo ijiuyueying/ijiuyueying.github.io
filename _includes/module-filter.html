@@ -1,10 +1,32 @@
 <style>
-.xm-module-filter{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:11px 14px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.xm-module-filter-label{flex:none;color:#6f7780;font-size:13px;font-weight:700}
-.xm-module-filter-box{margin-left:auto;width:min(320px,55%);height:38px;border:1px solid #e1e5e8;border-radius:20px;background:#f7f8f9;display:flex;align-items:center;gap:8px;padding:0 12px}
-.xm-module-filter-box svg{width:17px;height:17px;flex:none;color:#76808a}
-.xm-module-filter-box input{width:100%;border:0;outline:0;background:transparent;color:#444;font-size:13px}
-@media(max-width:760px){.xm-module-filter{align-items:flex-start;flex-direction:column}.xm-module-filter-box{margin-left:0;width:100%}}
+.xm-module-filter{
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:11px 14px;
+  background:var(--xm-surface);border:1px solid var(--xm-border);
+  border-radius:var(--xm-radius);box-shadow:var(--xm-shadow-sm);
+}
+.xm-module-filter-label{flex:none;color:var(--xm-muted);font-size:13px;font-weight:700}
+.xm-module-filter-box{
+  margin-left:auto;width:min(320px,55%);height:38px;
+  border:1px solid var(--xm-border);border-radius:var(--xm-radius-pill);
+  background:var(--xm-surface-soft);display:flex;align-items:center;gap:8px;padding:0 13px;
+  transition:border-color .2s var(--xm-ease),background-color .2s var(--xm-ease),
+             box-shadow .2s var(--xm-ease);
+}
+.xm-module-filter-box:focus-within{
+  border-color:var(--xm-accent);background:var(--xm-surface);
+  box-shadow:0 0 0 3px var(--xm-accent-ring);
+}
+.xm-module-filter-box svg{width:16px;height:16px;flex:none;color:var(--xm-faint)}
+.xm-module-filter-box input{
+  width:100%;border:0;outline:0;background:transparent;
+  color:var(--xm-text);font-size:13.5px;font-family:inherit;
+}
+.xm-module-filter-box input::placeholder{color:var(--xm-faint)}
+.xm-module-filter-box input::-webkit-search-cancel-button{filter:grayscale(1);opacity:.5;cursor:pointer}
+@media(max-width:760px){
+  .xm-module-filter{align-items:flex-start;flex-direction:column}
+  .xm-module-filter-box{margin-left:0;width:100%}
+}
 </style>
 
 <div class="xm-module-filter">

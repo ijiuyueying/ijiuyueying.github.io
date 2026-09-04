@@ -6,7 +6,12 @@ nav_key: project
 
 {% assign menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
 <style>
-.xm-hero-arrow{position:absolute;top:50%;z-index:8;width:42px;height:64px;border:0;background:rgba(0,0,0,.25);color:#fff;font-size:40px;line-height:1;cursor:pointer;opacity:0;transform:translateY(-50%);transition:.2s}.xm-hero:hover .xm-hero-arrow{opacity:1}.xm-hero-arrow:hover{background:rgba(0,0,0,.48)}.xm-hero-arrow.prev{left:0}.xm-hero-arrow.next{right:0}.xm-category-empty{display:none;padding:34px 28px;background:#fff;color:#888;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07)}.xm-category-empty.show{display:block;animation:xmFade .32s ease both}.xm-slide-copy{z-index:3}.xm-slide img{position:absolute;inset:0}.xm-slide-overlay{z-index:2}.xm-dots{z-index:8}@media(max-width:760px){.xm-hero-arrow{opacity:.75;width:34px;height:52px;font-size:30px}}
+/* 只保留层级与定位，视觉表现统一交给主题（default.html + site-theme.html） */
+.xm-slide-copy{z-index:3}
+.xm-slide img{position:absolute;inset:0}
+.xm-slide-overlay{z-index:2}
+.xm-dots{z-index:8}
+.xm-hero-arrow{z-index:8}
 </style>
 
 <div class="xm-home-grid xm-module-grid" data-module="project">

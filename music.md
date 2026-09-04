@@ -20,7 +20,7 @@ nav_key: music
         <div class="xm-music-row xm-filter-item" data-group="{{ item.group }}" data-subgroup="{{ item.subgroup }}" data-search="{{ item.title }} {{ item.artist }} {{ item.category }} {{ item.description }}">
           <span>♫</span>
           <div><b>{{ item.title }}</b><span>{{ item.artist }} · {{ item.category }}{% if item.platform %} · {{ item.platform }}{% endif %}</span>{% if item.description %}<span style="display:block;margin-top:3px">{{ item.description }}</span>{% endif %}{% if item.file and item.file != '' %}<audio controls preload="none" style="width:min(520px,100%);margin-top:10px"><source src="{{ item.file | relative_url }}"></audio>{% endif %}</div>
-          {% if item.url and item.url != '' %}<a href="{{ item.url }}" target="_blank" rel="noopener" style="color:#2990df">正版入口</a>{% endif %}
+          {% if item.url and item.url != '' %}<a href="{{ item.url }}" target="_blank" rel="noopener" style="color:var(--xm-accent)">正版入口</a>{% endif %}
         </div>
         {% endfor %}
       </div></div>

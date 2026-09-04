@@ -12,8 +12,8 @@ module_key: gallery
   min-height:180px;
   margin-bottom:10px;
   overflow:hidden;
-  background:#eef1f4;
-  border:1px solid #e5e8eb;
+  background:var(--xm-surface-alt);
+  border:1px solid var(--xm-border);
 }
 .gallery-image-link::before{
   content:"图片加载中…";
@@ -22,9 +22,9 @@ module_key: gallery
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#9aa2aa;
+  color:var(--xm-faint);
   font-size:13px;
-  background:linear-gradient(100deg,#eef1f4 20%,#f7f8f9 40%,#eef1f4 60%);
+  background:linear-gradient(100deg,var(--xm-surface-alt) 20%,var(--xm-surface-soft) 40%,var(--xm-surface-alt) 60%);
   background-size:200% 100%;
   animation:gallerySkeleton 1.35s linear infinite;
 }
@@ -37,7 +37,7 @@ module_key: gallery
   max-height:420px;
   object-fit:contain;
   opacity:0;
-  background:#fff;
+  background:var(--xm-surface);
   transition:opacity .22s ease;
 }
 .gallery-image-link.loaded img{opacity:1}
@@ -62,10 +62,10 @@ module_key: gallery
           <a href="{{ item.image }}" target="_blank" rel="noopener" class="gallery-image-link">
             <img src="{{ item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async" fetchpriority="low" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='flex'">
           </a>
-          <div class="gallery-missing" style="display:none;min-height:150px;align-items:center;justify-content:center;background:#f5f6f7;color:#8a9198;padding:18px;text-align:center">图片暂时无法加载，请稍后重试或检查本地图片是否已发布。</div>
+          <div class="gallery-missing" style="display:none;min-height:150px;align-items:center;justify-content:center;background:var(--xm-surface-alt);color:var(--xm-muted);padding:18px;text-align:center">图片暂时无法加载，请稍后重试或检查本地图片是否已发布。</div>
           {% endif %}
           <h3>{{ item.title }}</h3><p>{{ item.description }}</p>
-          {% if item.source %}<p style="margin-top:8px"><a href="{{ item.source }}" target="_blank" rel="noopener" style="color:#2990df">查看来源 →</a></p>{% endif %}
+          {% if item.source %}<p style="margin-top:8px"><a href="{{ item.source }}" target="_blank" rel="noopener" style="color:var(--xm-accent)">查看来源 →</a></p>{% endif %}
         </article>
         {% endfor %}
       </div></div>

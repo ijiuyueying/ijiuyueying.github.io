@@ -8,7 +8,35 @@ nav_key: project
 {% assign project_menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
 
 <style>
-.search-page{width:min(1180px,calc(100% - 36px));margin:0 auto}.search-panel{background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07)}.search-head{padding:24px 28px;border-bottom:1px solid #eceeef}.search-head h1{margin:0;font-size:30px}.search-head p{margin:6px 0 0;color:#858d95;font-size:14px}.search-summary{padding:14px 28px;background:#f7f8f9;color:#707880;font-size:14px}.search-results{display:grid}.search-result{padding:22px 28px;border-bottom:1px solid #eceeef}.search-result:last-child{border-bottom:0}.search-result h2{margin:0 0 6px;font-size:22px}.search-result h2 a:hover{color:#2990df}.search-result-meta{display:flex;flex-wrap:wrap;gap:8px;color:#969da4;font-size:12px}.search-result p{margin:10px 0 0;color:#5e6770;font-size:14px;line-height:1.8}.search-empty{display:none;padding:42px 28px;text-align:center;color:#8d959c}.search-empty.show{display:block}
+/* 搜索页：配色全部走 --xm-* 变量 */
+.search-page{width:min(1120px,calc(100% - 40px));margin:0 auto}
+.search-panel{
+  background:var(--xm-surface);border:1px solid var(--xm-border);
+  border-radius:var(--xm-radius);box-shadow:var(--xm-shadow-sm);overflow:hidden;
+}
+.search-head{
+  padding:26px 30px;border-bottom:1px solid var(--xm-border);
+  background:var(--xm-surface-soft);
+}
+.search-head h1{margin:0;font-size:26px;font-weight:800;color:var(--xm-ink)}
+.search-head p{margin:6px 0 0;color:var(--xm-muted);font-size:13.5px}
+.search-summary{
+  padding:14px 30px;background:var(--xm-surface-alt);
+  color:var(--xm-muted);font-size:13.5px;
+}
+.search-results{display:grid}
+.search-result{
+  padding:22px 30px;border-bottom:1px solid var(--xm-border-soft);
+  transition:background-color .2s var(--xm-ease);
+}
+.search-result:last-child{border-bottom:0}
+.search-result:hover{background:var(--xm-surface-soft)}
+.search-result h2{margin:0 0 6px;font-size:19px;font-weight:700;color:var(--xm-ink)}
+.search-result h2 a:hover{color:var(--xm-accent)}
+.search-result-meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--xm-faint);font-size:12px}
+.search-result p{margin:10px 0 0;color:var(--xm-muted);font-size:14px;line-height:1.8}
+.search-empty{display:none;padding:46px 28px;text-align:center;color:var(--xm-faint)}
+.search-empty.show{display:block}
 </style>
 
 <div class="search-page">
