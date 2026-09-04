@@ -25,6 +25,7 @@
         {% if item.module_key == 'project' and page.url == '/articles/' %}{% assign is_active = true %}{% endif %}
       <a href="{{ item.top_url | relative_url }}"{% if is_active %} class="active"{% endif %}>{{ item.top_label }}</a>
       {% endfor %}
+      <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} class="active"{% endif %}>关于</a>
     </nav>
 
     <label class="xm-search" for="xm-global-search-input" style="align-self:center">

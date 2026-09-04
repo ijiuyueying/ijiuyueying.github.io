@@ -1,9 +1,9 @@
 ---
 module_key: music
 show_top: true
-top_label: 歌曲分类
+top_label: 歌曲
 top_url: /music/
-top_order: 30
+top_order: 50
 items:
   - key: all
     label: 全部歌曲

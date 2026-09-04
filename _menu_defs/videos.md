@@ -1,5 +1,9 @@
 ---
 module_key: videos
+show_top: true
+top_label: 视频
+top_url: /videos/
+top_order: 40
 items:
   - key: all
     label: 全部视频

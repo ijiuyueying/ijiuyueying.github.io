@@ -4,7 +4,7 @@ show_top: true
 article_enabled: true
 top_label: 学习笔记
 top_url: /xuexibiji/
-top_order: 40
+top_order: 20
 items:
   - key: all
     label: 全部文章

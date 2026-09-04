@@ -2,7 +2,7 @@
 module_key: project
 show_top: true
 article_enabled: true
-top_label: 项目
+top_label: 首页
 top_url: /
 top_order: 10
 items:

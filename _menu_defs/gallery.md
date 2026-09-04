@@ -1,5 +1,9 @@
 ---
 module_key: gallery
+show_top: true
+top_label: 图库
+top_url: /gallery/
+top_order: 30
 items:
   - key: all
     label: 全部图片
