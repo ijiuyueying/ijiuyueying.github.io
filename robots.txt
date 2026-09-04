@@ -6,5 +6,7 @@ Allow: /
 
 # 不需要被索引的路径
 Disallow: /assets/
+Disallow: /admin/
+Disallow: /knowledge-admin/
 
 Sitemap: {{ '/sitemap.xml' | absolute_url }}

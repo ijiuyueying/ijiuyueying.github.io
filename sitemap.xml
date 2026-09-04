@@ -9,7 +9,7 @@ sitemap:
   {%- assign t = p.title | strip -%}
   {%- assign u = p.url | downcase -%}
   {%- unless t == nil or t == empty -%}
-  {%- unless u contains '.xml' or u contains '.txt' or u contains '404' or u contains 'search' -%}
+  {%- unless u contains '.xml' or u contains '.txt' or u contains '404' or u contains 'search' or u contains 'admin' -%}
   <url>
     <loc>{{ p.url | absolute_url }}</loc>
     {%- if p.date -%}<lastmod>{{ p.date | date_to_xmlschema }}</lastmod>{%- endif -%}
