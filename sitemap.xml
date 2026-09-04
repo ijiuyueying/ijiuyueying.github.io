@@ -5,16 +5,19 @@ sitemap:
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{%- assign pages = site.pages | where_exp: "p", "p.title != nil and p.title != ''" -%}
-{%- for p in pages -%}
+{%- for p in site.pages -%}
+  {%- assign t = p.title | strip -%}
   {%- assign u = p.url | downcase -%}
-  {%- if u contains '.xml' or u contains '.txt' or u contains '404' or u contains 'search' -%}{%- continue -%}{%- endif -%}
+  {%- unless t == nil or t == empty -%}
+  {%- unless u contains '.xml' or u contains '.txt' or u contains '404' or u contains 'search' -%}
   <url>
     <loc>{{ p.url | absolute_url }}</loc>
     {%- if p.date -%}<lastmod>{{ p.date | date_to_xmlschema }}</lastmod>{%- endif -%}
     <changefreq>weekly</changefreq>
     <priority>{% if p.url == '/' %}1.0{% else %}0.6{% endif %}</priority>
   </url>
+  {%- endunless -%}
+  {%- endunless -%}
 {%- endfor -%}
 {%- for post in site.posts -%}
   <url>
