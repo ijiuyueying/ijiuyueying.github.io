@@ -1,7 +1,8 @@
 ---
 layout: default
-title: 项目
+title: 首页
 nav_key: project
+description: 九月影 —— 数据开发笔记与兴趣收藏，覆盖银行监管报送、制造业数仓、电商分析、SQL / Hive、Python 与 Git。
 ---
 
 {% assign menu_doc = site.menu_defs | where: 'module_key', 'project' | first %}
@@ -18,13 +19,28 @@ nav_key: project
   <aside class="xm-left-menu">{% include collapsible-menu.html menu=menu_doc.items %}</aside>
 
   <main class="xm-center">
-    {% include module-filter.html placeholder='筛选当前项目文章' %}
 
+    <!-- 站点定位 -->
+    <section class="xm-intro">
+      <h1 class="xm-intro-lead">数据开发笔记 · 项目实操复盘</h1>
+      <p class="xm-intro-desc">
+        把银行监管报送、制造业数仓、电商分析中的真实问题、数据链路、异常排查和调优方法沉淀下来，
+        也顺手收藏一些喜欢的视频、音乐和网址。不为堆概念，只为以后还能直接复用。
+      </p>
+      <div class="xm-stats">
+        <div class="xm-stat"><b>{{ site.posts.size }}</b><span>篇文章</span></div>
+        <div class="xm-stat"><b>{{ site.data.gallery.size }}</b><span>张流程图</span></div>
+        <div class="xm-stat"><b>{{ site.data.videos.size }}</b><span>个收藏视频</span></div>
+        <div class="xm-stat"><b>{{ menu_doc.items | size | minus: 1 }}</b><span>个技术方向</span></div>
+      </div>
+    </section>
+
+    <!-- 分类轮播 -->
     <section class="xm-hero" id="xm-hero">
       {% for category in menu_doc.items %}
         {% for slide in category.slides %}
         <a class="xm-slide{% if category.key == 'all' and forloop.first %} active{% endif %}" data-slide-category="{{ category.key }}" href="{{ slide.url | relative_url }}">
-          <img src="{{ slide.image }}" alt="{{ slide.title }}" decoding="async" {% if category.key == 'all' and forloop.first %}fetchpriority="high"{% else %}loading="lazy" fetchpriority="low"{% endif %}>
+          <img src="{{ slide.image | relative_url }}" alt="{{ slide.title }}" decoding="async" {% if category.key == 'all' and forloop.first %}fetchpriority="high"{% else %}loading="lazy" fetchpriority="low"{% endif %}>
           <div class="xm-slide-overlay"></div>
           <div class="xm-slide-copy"><span>{{ category.label }}</span><h2>{{ slide.title }}</h2><p>{{ slide.text }}</p></div>
         </a>
@@ -34,6 +50,29 @@ nav_key: project
       <button class="xm-hero-arrow next" id="xm-next" type="button" aria-label="下一张">›</button>
       <div class="xm-dots" id="xm-dots"></div>
     </section>
+
+    <!-- 内容规划：每个方向准备覆盖哪些主题 -->
+    <section class="xm-plan">
+      <div class="xm-plan-head">
+        <h2>内容方向</h2>
+        <span>点击左侧分类可筛选，数字为该方向已发布文章数，持续补充中</span>
+      </div>
+      <div class="xm-plan-grid">
+        {% for category in menu_doc.items %}
+          {% if category.key == 'all' %}{% continue %}{% endif %}
+          {% assign cat_posts = 0 %}
+          {% for p in site.posts %}{% assign pk = p.categories | first %}{% if pk == category.key %}{% assign cat_posts = cat_posts | plus: 1 %}{% endif %}{% endfor %}
+          <a class="xm-plan-item" href="{{ category.slides.first.url | default: '/' | relative_url }}">
+            <h3>{{ category.label }}<em>{{ cat_posts }} 篇</em></h3>
+            <div class="xm-plan-tags">
+              {% for child in category.children %}<i>{{ child.label }}</i>{% endfor %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% include module-filter.html placeholder='筛选文章标题 / 摘要 / 标签' %}
 
     <section class="xm-post-list" id="xm-post-list">
       {% for post in site.posts %}
@@ -53,6 +92,25 @@ nav_key: project
       {% endfor %}
     </section>
     <div class="xm-category-empty" id="xm-category-empty">这个分类暂时还没有文章。</div>
+
+    <!-- 精选流程图 -->
+    {% if site.data.gallery.size > 0 %}
+    <section class="xm-showcase">
+      <div class="xm-showcase-head">
+        <h2>精选流程图</h2>
+        <a href="{{ '/gallery/' | relative_url }}">查看全部 {{ site.data.gallery.size }} 张 →</a>
+      </div>
+      <div class="xm-showcase-grid">
+        {% for item in site.data.gallery limit:6 %}
+        <a class="xm-showcase-item" href="{{ '/gallery/' | relative_url }}">
+          <img src="{{ item.image | relative_url }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+          <b>{{ item.title }}</b>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
   </main>
 
   {% include global-rightbar.html %}

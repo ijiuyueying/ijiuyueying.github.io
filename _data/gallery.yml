@@ -124,26 +124,15 @@
   subgroup: troubleshooting
 
 # =========================
-# 原神图片收藏
+# 新增图集说明
+# -------------------------
+# 1. 把图片放进 assets/images/gallery/<分组名>/
+# 2. 在下面追加一条，字段含义：
+#    title       图集标题（页面卡片上显示）
+#    image       站内路径，必须以 /assets/ 开头
+#    description 一句话说明这张图讲什么
+#    group       一级分组（对应左侧菜单）
+#    subgroup    二级分组（对应子菜单）
+#    source      可选，图片出处或参考资料链接
+# 注意：不要使用外链图片，第三方图床随时可能失效。
 # =========================
-
-- title: 原神官方壁纸 · 春日角色插画
-  image: "https://upload-bbs.mihoyo.com/upload/2021/04/30/75276550/e38a0f9f012b33cb20e15e4df6ea144a_7920913315883374580.jpg"
-  description: 原神官方发布素材收藏。
-  group: game
-  subgroup: genshin
-  source: "https://www.hoyolab.com/article/383753"
-
-- title: 原神官方壁纸 · 春日角色插画 02
-  image: "https://upload-bbs.mihoyo.com/upload/2021/04/30/75276550/0ef9b5d77953e4e8d33be0a9812898b8_3388430387023172241.jpeg"
-  description: 原神官方发布素材收藏。
-  group: game
-  subgroup: genshin
-  source: "https://www.hoyolab.com/article/383753"
-
-- title: 原神官方壁纸 · 稻妻主题
-  image: "https://webstatic.mihoyo.com/upload/static-resource/2021/09/20/643cacffcc31f2eb5b6111f0813f3c68_568289746311594279.jpg"
-  description: 原神官方壁纸素材收藏。
-  group: game
-  subgroup: genshin
-  source: "https://www.hoyolab.com/article/383753"

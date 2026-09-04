@@ -6,6 +6,23 @@
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
   <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
+
+  <!-- 社交分享卡片 -->
+  {% assign og_image = page.cover | default: '/assets/images/gallery/data-warehouse/01-overview.jpg' %}
+  {% unless og_image contains 'http' %}{% assign og_image = og_image | absolute_url %}{% endunless %}
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}">
+  <meta property="og:description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}">
+  <meta name="twitter:description" content="{{ page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 }}">
+  <meta name="twitter:image" content="{{ og_image }}">
 
   <style>
   /* ============================================================
@@ -505,6 +522,50 @@
     .article-pager-new{grid-template-columns:1fr}
     .article-pager-new .next{text-align:left}
     .xm-theme-btn{width:34px;height:34px;margin-left:6px}
+  }
+
+  /* ---------- 首页：站点定位概览 ---------- */
+  .xm-intro{padding:22px 26px;margin-bottom:14px;background:var(--xm-surface);border:1px solid var(--xm-border-soft);border-radius:var(--xm-radius);box-shadow:var(--xm-shadow-sm)}
+  .xm-intro-lead{margin:0 0 7px;font-size:19px;font-weight:700;color:var(--xm-ink);letter-spacing:.2px}
+  .xm-intro-desc{margin:0;color:var(--xm-muted);font-size:14px;line-height:1.85}
+  .xm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:10px;margin-top:18px;padding-top:16px;border-top:1px dashed var(--xm-border)}
+  .xm-stat{padding:9px 4px;text-align:center;border-radius:var(--xm-radius-sm);background:var(--xm-surface-soft)}
+  .xm-stat b{display:block;font-size:22px;font-weight:800;line-height:1.35;color:var(--xm-accent);font-variant-numeric:tabular-nums}
+  .xm-stat span{font-size:12px;color:var(--xm-muted)}
+
+  /* ---------- 首页：内容规划 ---------- */
+  .xm-plan{margin-bottom:14px;padding:20px 24px;background:var(--xm-surface);border:1px solid var(--xm-border-soft);border-radius:var(--xm-radius);box-shadow:var(--xm-shadow-sm)}
+  .xm-plan-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .xm-plan-head h2{margin:0;font-size:16px;font-weight:700;color:var(--xm-ink)}
+  .xm-plan-head span{font-size:12.5px;color:var(--xm-faint)}
+  .xm-plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(208px,1fr));gap:12px}
+  .xm-plan-item{padding:13px 15px;border:1px solid var(--xm-border-soft);border-radius:var(--xm-radius-sm);background:var(--xm-surface-soft);transition:.2s var(--xm-ease)}
+  .xm-plan-item:hover{border-color:var(--xm-accent);background:var(--xm-accent-soft);transform:translateY(-2px)}
+  .xm-plan-item h3{margin:0 0 9px;font-size:14px;font-weight:700;color:var(--xm-ink);display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .xm-plan-item h3 em{font-style:normal;font-size:11px;font-weight:600;color:var(--xm-faint);font-variant-numeric:tabular-nums}
+  .xm-plan-tags{display:flex;flex-wrap:wrap;gap:5px}
+  .xm-plan-tags i{font-style:normal;font-size:11.5px;padding:2px 9px;border-radius:var(--xm-radius-pill);background:var(--xm-surface);color:var(--xm-muted);border:1px solid var(--xm-border-soft)}
+
+  /* ---------- 首页：精选图集 ---------- */
+  .xm-showcase{margin-top:20px}
+  .xm-showcase-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .xm-showcase-head h2{margin:0;font-size:16px;font-weight:700;color:var(--xm-ink)}
+  .xm-showcase-head a{font-size:13px;color:var(--xm-accent)}
+  .xm-showcase-head a:hover{color:var(--xm-accent-strong)}
+  .xm-showcase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:12px}
+  .xm-showcase-item{display:block;padding:8px;background:var(--xm-surface);border:1px solid var(--xm-border-soft);border-radius:var(--xm-radius);box-shadow:var(--xm-shadow-xs);transition:.22s var(--xm-ease)}
+  .xm-showcase-item:hover{transform:translateY(-3px);box-shadow:var(--xm-shadow-md);border-color:var(--xm-accent)}
+  .xm-showcase-item img{display:block;width:100%;height:118px;object-fit:cover;border-radius:var(--xm-radius-xs);background:var(--xm-surface-alt)}
+  .xm-showcase-item b{display:block;margin-top:9px;padding:0 4px 3px;font-size:13px;font-weight:600;color:var(--xm-text);line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* ---------- 空状态 ---------- */
+  .xm-empty-note{margin-top:14px;padding:28px 24px;text-align:center;background:var(--xm-surface);border:1px dashed var(--xm-border);border-radius:var(--xm-radius);color:var(--xm-muted);font-size:13.5px;line-height:1.9}
+  .xm-empty-note b{display:block;margin-bottom:6px;color:var(--xm-ink);font-size:15px}
+
+  @media(max-width:760px){
+    .xm-intro{padding:18px}
+    .xm-plan{padding:16px}
+    .xm-showcase-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
   }
   </style>
   {% include site-theme.html %}

@@ -3,7 +3,7 @@ site_name: 九月影
 # 头像：建议换成本地图片，避免外链失效。
 # 把图片放到 assets/images/avatar/ 后改成：
 # avatar: "/assets/images/avatar/avatar.jpg"
-avatar: "https://upload-os-bbs.hoyolab.com/upload/2026/01/08/373294830/fe5a69eecd4a80e60c8ab500376604a6_7968545385091145326.webp"
+avatar: "/assets/images/avatar/avatar.svg"
 
 # ============================================================
 # 配色 —— 墨青（Teal & Ink）

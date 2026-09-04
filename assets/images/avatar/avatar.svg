@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="九月影">
+  <defs>
+    <linearGradient id="av" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#134e4a"/>
+    </linearGradient>
+    <linearGradient id="moon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#av)"/>
+  <circle cx="150" cy="46" r="3" fill="#5eead4" opacity=".85"/>
+  <circle cx="168" cy="76" r="2" fill="#5eead4" opacity=".6"/>
+  <circle cx="46" cy="152" r="2.5" fill="#5eead4" opacity=".5"/>
+  <path d="M104 42 a58 58 0 1 0 40 100 a46 46 0 1 1 -40 -100 Z" fill="url(#moon)"/>
+</svg>

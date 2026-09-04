@@ -11,15 +11,15 @@ items:
     slides:
       - title: 项目知识库
         text: 银行监管、制造业数仓、电商分析与开发笔记持续整理。
-        image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/all-01.svg"
         url: /articles/
       - title: 项目实操记录
         text: 从业务需求、数据开发到问题排查，把完整链路沉淀下来。
-        image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/all-02.svg"
         url: /articles/
       - title: 技术与面试整理
         text: SQL、Python、数仓开发和项目面试问题的持续复盘。
-        image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/all-03.svg"
         url: /articles/
 
   - key: bank
@@ -30,11 +30,11 @@ items:
     slides:
       - title: 银行监管报送
         text: 1104体系、监管指标、Mapping、数据清洗与数据治理。
-        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/bank-01.svg"
         url: /bank/
       - title: 监管数据与风险
         text: 从核心、信贷、财务数据到监管口径和报送文件。
-        image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/bank-02.svg"
         url: /bank/
 
   - key: manufacturing
@@ -49,11 +49,11 @@ items:
     slides:
       - title: 制造业数仓项目
         text: ERP、SRM、WMS 多业务系统数据进入数仓后的建模与分析。
-        image: "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/manufacturing-01.svg"
         url: /manufacturing/
       - title: 生产与仓储数据链路
         text: 采购、库存、生产、设备与调度任务的完整数据链路。
-        image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/manufacturing-02.svg"
         url: /manufacturing/
 
   - key: ecommerce
@@ -68,11 +68,11 @@ items:
     slides:
       - title: 电商经营分析
         text: 多平台 GMV、订单、用户、流量和商品经营分析。
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/ecommerce-01.svg"
         url: /ecommerce/
       - title: 商品与用户分析
         text: 转化漏斗、RFM、商品库存和活动效果分析。
-        image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/ecommerce-02.svg"
         url: /ecommerce/
 
   - key: sql-hive
@@ -87,11 +87,11 @@ items:
     slides:
       - title: SQL / Hive
         text: SQL、Hive SQL、窗口函数、数据清洗与性能优化。
-        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/sql-hive-01.svg"
         url: /sql-hive/
       - title: SQL 性能优化
         text: 执行计划、Join、分区、数据倾斜与常见调优方法。
-        image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/sql-hive-02.svg"
         url: /sql-hive/
 
   - key: python
@@ -104,11 +104,11 @@ items:
     slides:
       - title: Python 数据处理
         text: Pandas、数据清洗、分析脚本和自动化处理。
-        image: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/python-01.svg"
         url: /python/
       - title: Python 数据分析
         text: 数据处理、指标计算、专题分析和自动化脚本。
-        image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/python-02.svg"
         url: /python/
 
   - key: git
@@ -121,11 +121,11 @@ items:
     slides:
       - title: Git / GitHub
         text: Git 常用操作、GitHub Pages 与个人博客维护。
-        image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/git-01.svg"
         url: /git/
       - title: 版本管理与发布
         text: 分支、提交、远程仓库与自动部署工作流。
-        image: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=1600&q=82"
+        image: "/assets/images/banner/git-02.svg"
         url: /git/
 ---
 

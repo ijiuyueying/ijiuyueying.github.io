@@ -45,6 +45,28 @@ layout: default
 }
 .category-post .read-more:hover{transform:translateX(3px)}
 
+/* 分类概览：统计 + 主题方向 */
+.category-stat{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.category-stat span{
+  padding:3px 11px;border-radius:var(--xm-radius-pill);
+  background:var(--xm-accent-soft);color:var(--xm-accent);
+  font-size:12px;font-weight:600;
+}
+.category-topics{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.category-topics i{
+  font-style:normal;padding:3px 10px;border-radius:var(--xm-radius-pill);
+  border:1px solid var(--xm-border);background:var(--xm-surface);
+  color:var(--xm-muted);font-size:12px;
+}
+
+/* 空状态：说明该方向规划了哪些主题 */
+.category-empty{
+  padding:40px 28px;text-align:center;
+}
+.category-empty b{display:block;margin-bottom:8px;color:var(--xm-ink);font-size:16px}
+.category-empty p{margin:0 auto 18px;max-width:520px;color:var(--xm-muted);font-size:13.5px;line-height:1.9}
+.category-empty .xm-plan-tags{justify-content:center}
+
 @media(max-width:1100px){
   .category-three-grid{grid-template-columns:170px minmax(0,1fr)}
   .category-three-grid>.xm-rightbar{display:none}
@@ -59,12 +81,27 @@ layout: default
   <div class="category-left">{% include project-side-nav.html %}</div>
 
   <main class="category-center">
+    {% assign category_posts = site.categories[page.category_key] %}
+    {% assign category_size = 0 %}
+    {% if category_posts %}{% assign category_size = category_posts.size %}{% endif %}
+    {% assign topic_items = current_category_item.children %}
+    {% assign topic_size = 0 %}
+    {% if topic_items %}{% assign topic_size = topic_items.size %}{% endif %}
+
     <header class="category-head">
       <h1>{{ page.title }}</h1>
       {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+      <div class="category-stat">
+        <span>{{ category_size }} 篇文章</span>
+        {% if topic_items.size > 0 %}<span>{{ topic_items.size }} 个主题方向</span>{% endif %}
+      </div>
+      {% if topic_items.size > 0 %}
+      <div class="category-topics">
+        {% for child in topic_items %}<i>{{ child.label }}</i>{% endfor %}
+      </div>
+      {% endif %}
     </header>
 
-    {% assign category_posts = site.categories[page.category_key] %}
     {% if category_posts and category_posts.size > 0 %}
       {% for post in category_posts %}
         {% assign subcategory_item = nil %}
@@ -80,7 +117,15 @@ layout: default
       </article>
       {% endfor %}
     {% else %}
-      <div class="xm-empty">这个分类暂时还没有公开文章。</div>
+      <div class="category-empty">
+        <b>这个方向正在整理中</b>
+        <p>已经规划好要覆盖的主题，正在陆续补上。先把下面这些方向记在这里，写完一篇就挂一篇。</p>
+        {% if topic_items.size > 0 %}
+        <div class="xm-plan-tags">
+          {% for child in topic_items %}<i>{{ child.label }}</i>{% endfor %}
+        </div>
+        {% endif %}
+      </div>
     {% endif %}
   </main>
 

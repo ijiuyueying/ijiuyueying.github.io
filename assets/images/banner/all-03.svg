@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" role="img" aria-label="推荐">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="scrim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1220" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#0b1220" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#0b1220" stop-opacity=".92"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0 H0 V48" fill="none" stroke="#ffffff" stroke-opacity=".045" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="420" fill="url(#bg)"/>
+  <rect width="1200" height="420" fill="url(#grid)"/>
+  <ellipse cx="960" cy="120" rx="520" ry="330" fill="url(#glow)"/>
+
+  <circle cx="196" cy="118" r="150" fill="#14b8a6" opacity=".22"/>
+  <circle cx="196" cy="118" r="150" fill="none" stroke="#14b8a6" stroke-opacity=".45" stroke-width="1.5"/>
+  <g opacity=".26" fill="#14b8a6">
+    <circle cx="880" cy="150" r="9"/><circle cx="948" cy="150" r="9"/><circle cx="1016" cy="150" r="9"/>
+    <circle cx="948" cy="218" r="9"/><circle cx="1016" cy="218" r="9"/><circle cx="880" cy="218" r="9"/>
+  </g>
+  <path d="M0 118 H1200" stroke="#14b8a6" stroke-opacity=".20" stroke-width="1"/>
+  <rect width="1200" height="420" fill="url(#scrim)"/>
+</svg>
